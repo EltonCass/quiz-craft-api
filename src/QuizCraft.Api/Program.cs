@@ -1,3 +1,5 @@
+// Copyright (c) 2023 Elton Cassas. All rights reserved.
+// See LICENSE.txt
 
 using QuizCraft.Api.QuizManagement;
 

@@ -6,15 +6,21 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+
 WORKDIR /src
-COPY ["QuizCraft.Api/QuizCraft.Api.csproj", "QuizCraft.Api/"]
-RUN dotnet restore "QuizCraft.Api/QuizCraft.Api.csproj"
-COPY . .
+COPY ["src/QuizCraft.Api.Models/QuizCraft.Api.Models.csproj", "."]
+RUN dotnet restore "QuizCraft.Api.Models.csproj"
+COPY ["src/QuizCraft.Api/QuizCraft.Api.csproj", "."]
+RUN dotnet restore "QuizCraft.Api.csproj"
+COPY ["src/.", "."]
+WORKDIR "/src/QuizCraft.Api.Models"
+RUN dotnet build "QuizCraft.Api.Models.csproj" -c Release -o /app/build
 WORKDIR "/src/QuizCraft.Api"
 RUN dotnet build "QuizCraft.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "QuizCraft.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+WORKDIR "/src/QuizCraft.Api"
+RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
