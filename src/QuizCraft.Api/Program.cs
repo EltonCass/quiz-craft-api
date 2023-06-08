@@ -1,6 +1,8 @@
 // Copyright (c) 2023 Elton Cassas. All rights reserved.
 // See LICENSE.txt
 
+using QuizCraft.Api.ApiDocumentation;
+using QuizCraft.Api.Middlewares;
 using QuizCraft.Api.QuizManagement;
 
 namespace QuizCraft.Api
@@ -23,20 +25,20 @@ namespace QuizCraft.Api
                     Title = "QuizCraft Api",
                     Version = "v1",
                 });
+                c.OperationFilter<SecurityOperationFilter>();
             });
             builder.Services.AddScoped<IQuizGeneration, QuizGeneration>();
 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint(
-                    "/swagger/v1/swagger.json", "QuizCraft Api"));
-            }
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint(
+                "/swagger/v1/swagger.json", "QuizCraft Api"));
 
             app.UseHttpsRedirection();
+
+            app.UseMiddleware<SecurityMiddleware>();
 
             app.UseAuthorization();
 
