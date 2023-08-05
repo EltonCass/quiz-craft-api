@@ -2,19 +2,18 @@
 // See LICENSE.txt
 
 using Bogus;
-using QuizCraft.Api.Models;
+using QuizCraft.Models.Entities;
 
-namespace QuizCraft.Api.Tests
+namespace QuizCraft.Api.Tests;
+
+public class QuizFaker : Faker<Quiz>
 {
-    public class QuizFaker : Faker<Quiz>
+    public QuizFaker() 
     {
-        public QuizFaker() 
-        {
-            RuleFor(a => a.Category, f => f.Commerce.Categories(1)[1]);
-            //RuleFor(a => a.Questions, f => f.makMake<IQuestion>(
-            //    f.Random.Int(2, 5),
-            //    () => new MultipleOptionQuestion(
-            //        f.Lorem.Word(),new List<string>(),f.Lorem.Word())
-        }
+        //RuleFor(a => a.Categories, f => f.Commerce.Categories(1)[1]);
+        //RuleFor(a => a.Questions, f => f.makMake<IQuestion>(
+        //    f.Random.Int(2, 5),
+        //    () => new MultipleOptionQuestion(
+        //        f.Lorem.Word(),new List<string>(),f.Lorem.Word())
     }
 }
