@@ -3,6 +3,8 @@
 
 using QuizCraft.Api.Middlewares;
 using QuizCraft.Api.QuizManagement;
+using QuizCraft.Application;
+using System.Text.Json;
 
 namespace QuizCraft.Api
 {
@@ -14,23 +16,29 @@ namespace QuizCraft.Api
                 .CreateBuilder(args);
             builder = ConfigureMiddlewarePipelines(builder);
             var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint(
-                "/swagger/v1/swagger.json", "QuizCraft Api"));
-
-            app.UseMiddleware<SecurityMiddleware>();
-            app.UseAuthorization();
-            app.MapControllers();
-            app.Run();
+            ConfigureMiddleware(app);
         }
 
         private static WebApplicationBuilder ConfigureMiddlewarePipelines(WebApplicationBuilder builder)
         {
-            builder.Services.AddControllers();
-            
+            builder.Services.AddControllers(options =>
+            {
+                options.ReturnHttpNotAcceptable = true;
+            }).AddJsonOptions(options =>
+            {
+                // Set the JSON serializer options here
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                // Add other options as needed...
+            });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            /*
+             .AddOptions<ConfigurationOptions>()
+            .Bind(builder.Configuration.GetSection(ConfigurationOptions.SectionName))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+             */
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
@@ -43,8 +51,28 @@ namespace QuizCraft.Api
             });
 
             builder.Services.AddScoped<IQuizGeneration, QuizGeneration>();
+            builder.Services.AddApplicationServices();
+            builder.Services.AddApiVersioning(setupAction =>
+            {
+                setupAction.AssumeDefaultVersionWhenUnspecified = true;
+                setupAction.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+                setupAction.ReportApiVersions = true;
+            });
 
             return builder;
+        }
+
+        private static void ConfigureMiddleware(WebApplication app)
+        {
+            // Configure the HTTP request pipeline.
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint(
+                "/swagger/v1/swagger.json", "QuizCraft Api"));
+
+            app.UseMiddleware<SecurityMiddleware>();
+            app.UseAuthorization();
+            app.MapControllers();
+            app.Run();
         }
     }
 }

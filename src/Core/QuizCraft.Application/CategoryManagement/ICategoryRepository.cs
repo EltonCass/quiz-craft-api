@@ -1,6 +1,8 @@
 ﻿// Copyright (c) 2023 Elton Cassas. All rights reserved.
 // See LICENSE.txt
 
+using OneOf;
+using QuizCraft.Application.QuizManagement;
 using QuizCraft.Models.Entities;
 
 namespace QuizCraft.Application.CategoryManagement;
@@ -8,8 +10,8 @@ namespace QuizCraft.Application.CategoryManagement;
 public interface ICategoryRepository
 {
     Task<IEnumerable<Quiz>> RetrieveCategories(CancellationToken cancellationToken);
-    Task<Quiz> RetrieveCategory(int id, CancellationToken cancellationToken);
-    Task<Quiz> CreateCategory(Quiz newQuiz, CancellationToken cancellationToken);
-    Task<Quiz> UpdateCategory(Quiz quiz, CancellationToken cancellationToken);
-    Task<Quiz> DeleteCategory(int id, CancellationToken cancellationToken);
+    Task<OneOf<Category, RequestError>> RetrieveCategory(int id, CancellationToken cancellationToken);
+    Task<OneOf<Category, RequestError>> CreateCategory(Category newCategory, CancellationToken cancellationToken);
+    Task<OneOf<Category, RequestError>> UpdateCategory(Category category, CancellationToken cancellationToken);
+    Task<OneOf<Category, RequestError>> DeleteCategory(int id, CancellationToken cancellationToken);
 }

@@ -2,94 +2,94 @@
 // See LICENSE.txt
 
 using Microsoft.AspNetCore.Mvc;
-using QuizCraft.Api.CollectionsManagement;
+using QuizCraft.Application.QuizManagement;
+using QuizCraft.Application.QuizManagement.QuestionManagement;
 using QuizCraft.Models;
 using QuizCraft.Models.Entities;
 
 namespace QuizCraft.Api.QuizManagement;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1.0")]
 public class QuizzesController : ControllerBase
 {
     private readonly ILogger<QuizzesController> _logger;
-    private readonly IQuizGeneration _quizGenerationService;
+    private readonly IQuizRepository _quizRepository;
+    private readonly IQuestionRepository _questionRepository;
 
     public QuizzesController(
         ILogger<QuizzesController> logger,
-        IQuizGeneration quizGeneration)
+        IQuizRepository quizRepository,
+        IQuestionRepository questionRepository)
     {
+        ArgumentNullException.ThrowIfNull(logger, nameof(logger));
+        ArgumentNullException.ThrowIfNull(quizRepository, nameof(quizRepository));
+        ArgumentNullException.ThrowIfNull(questionRepository, nameof(questionRepository));
         _logger = logger;
-        _quizGenerationService = quizGeneration;
+        _quizRepository = quizRepository;
+        _questionRepository = questionRepository;
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Quiz>> GetQuizzes(CancellationToken cancellationToken)
+    public async Task<ActionResult<IEnumerable<Quiz>>> GetQuizzes(CancellationToken cancellationToken)
     {
-        if (QuizzesStub.Records.Any())
-        {
-            return Ok(QuizzesStub.Records);
-        }
-        return NoContent();
+        return Ok(await _quizRepository.RetrieveQuizzes(cancellationToken));
     }
 
     [HttpGet("{id}")]
-    public ActionResult<IEnumerable<Quiz>> GetQuiz(
+    public async Task<ActionResult<Quiz>> GetQuiz(
         int id, CancellationToken cancellationToken)
     {
-        var foundedRecord = QuizzesStub.Records.FirstOrDefault(r => r.Id == id);
-        if (foundedRecord is not null)
+        var result = await _quizRepository.RetrieveQuiz(id, cancellationToken);
+
+        if (result.IsT0)
         {
-            return Ok(foundedRecord);
+            return Ok(result.AsT0);
         }
 
-        _logger.Log(LogLevel.Information, $"Quiz with Id {id} not found");
-        return NotFound();
+        return result.HandleError(this);
     }
 
-    [HttpPost("multiple-option/suggestion")]
-    public async Task<ActionResult<MultipleOptionResponse>> MakeMultipleOptionQuizSuggestion(
-        [FromBody]MultipleOptionRequestPrompt prompt, CancellationToken token)
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Quiz>> DeleteQuiz(
+        int id, CancellationToken cancellationToken)
     {
-        var response = await _quizGenerationService
-            .GenerateMultipleOptionQuizQuestion(prompt, token);
-        return Ok(new MultipleOptionResponse(
-            QuestionContent: response,
-            Options: new List<string> { "O1" }
-        ));
+        var result = await _quizRepository.DeleteQuiz(id, cancellationToken);
+
+        if (result.IsT0)
+        {
+            return NoContent();
+        }
+
+        return result.HandleError(this);
     }
+    
 
     [HttpGet("{id}/questions")]
-    public ActionResult<IEnumerable<BaseQuestion>> GetQuizQuestions(
+    public async Task<ActionResult<IEnumerable<BaseQuestion>>> GetQuizQuestions(
         int id, CancellationToken cancellationToken)
     {
-        var foundedQuiz = QuizzesStub.Records.FirstOrDefault(q => q.Id == id);
-        if (foundedQuiz is null)
+        var result = await _questionRepository.RetrieveQuestions(id, cancellationToken);
+        if (result.IsT0)
         {
-            return NotFound();
+            return Ok(result.AsT0);
         }
 
-        return Ok(foundedQuiz.Questions);
+        return result.HandleError(this);
     }
 
     [HttpGet("{quizId}/questions/{questionId}")]
-    public ActionResult<IEnumerable<BaseQuestion>> GetQuizQuestionById(
+    public async Task<ActionResult<BaseQuestion>> GetQuizQuestionById(
         int quizId, int questionId, CancellationToken cancellationToken)
     {
-        var foundedQuiz = QuizzesStub.Records
-            .FirstOrDefault(q => q.Id == quizId);
-        if (foundedQuiz is null)
+        var result = await _questionRepository.RetrieveQuestion(quizId, questionId, cancellationToken);
+
+        if (result.IsT0)
         {
-            return NotFound();
+            return Ok(result.AsT0);
         }
 
-        var foundedQuestion = foundedQuiz.Questions
-            .FirstOrDefault(q => q.Id == questionId);
-        if (foundedQuestion is null)
-        {
-            return NotFound();
-        }
-
-        return Ok(foundedQuestion);
+        return result.HandleError(this);
     }
 }

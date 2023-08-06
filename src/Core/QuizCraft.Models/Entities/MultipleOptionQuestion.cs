@@ -9,7 +9,7 @@ public record MultipleOptionQuestion : BaseQuestion
 
     public MultipleOptionQuestion(
         int id, string text, IEnumerable<string> options, string correctAnswer, int score = 10)
-        : base(id, correctAnswer, score, text)
+        : base(id, correctAnswer, score, text, QuestionType.MultipleOption)
     {
         Options = new List<string>(options);
     }

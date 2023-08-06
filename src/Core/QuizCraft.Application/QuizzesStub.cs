@@ -3,7 +3,7 @@
 
 using QuizCraft.Models.Entities;
 
-namespace QuizCraft.Api.CollectionsManagement;
+namespace QuizCraft.Application;
 
 public static class QuizzesStub
 {

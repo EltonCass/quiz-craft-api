@@ -2,17 +2,28 @@
 // See LICENSE.txt
 
 using Microsoft.AspNetCore.Mvc;
+using QuizCraft.Application.CategoryManagement;
+using QuizCraft.Models.Entities;
 
 namespace QuizCraft.Api.CategoriesManagement;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1.0")]
 public class CategoriesController : ControllerBase
 {
-    [HttpGet]
-    public IEnumerable<string> GetCategories()
+    private readonly ICategoryRepository _category;
+
+    public CategoriesController(ICategoryRepository category)
     {
-        return new string[] { "value1", "value2" };
+        ArgumentNullException.ThrowIfNull(category);
+        _category = category;
+    }
+
+    [HttpGet]
+    public ActionResult<IEnumerable<Category>> GetCategories(CancellationToken cancellationToken)
+    {
+        return Ok(_category.RetrieveCategories(cancellationToken));
     }
 
     [HttpGet("{id}")]

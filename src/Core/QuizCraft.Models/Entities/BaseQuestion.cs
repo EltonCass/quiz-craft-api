@@ -3,4 +3,4 @@
 
 namespace QuizCraft.Models.Entities;
 
-public record BaseQuestion(int Id, string CorrectAnswer, int Score, string Text);
+public record BaseQuestion(int Id, string CorrectAnswer, int Score, string Text, QuestionType type);

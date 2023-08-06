@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\QuizCraft.Models\QuizCraft.Models.csproj" />
+  </ItemGroup>
+
 </Project>

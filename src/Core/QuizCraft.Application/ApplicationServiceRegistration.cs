@@ -1,17 +1,27 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿// Copyright (c) 2023 Elton Cassas. All rights reserved.
+// See LICENSE.txt
+
+using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using QuizCraft.Application.CategoryManagement;
 using QuizCraft.Application.QuizManagement;
-using System.Reflection;
+using QuizCraft.Application.QuizManagement.QuestionManagement;
+using QuizCraft.Models.Entities;
 
-namespace QuizCraft.Application
+namespace QuizCraft.Application;
+
+public static class ApplicationServiceRegistration
 {
-    public static class ApplicationServiceRegistration
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        public static IServiceCollection AddServices(this IServiceCollection services)
-        {
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<IQuizRepository, QuizRepository>();
-            return services;
-        }
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IQuizRepository, QuizRepository>();
+        services.AddScoped<IQuestionRepository, QuestionRepository>();
+        services.AddScoped<IValidator<Category>, CategoryValidator>();
+        services.AddScoped<IValidator<Quiz>, QuizValidator>();
+        services.AddScoped<IValidator<FillInBlankQuestion>, FillInBlankQuestionValidator>();
+        services.AddScoped<IValidator<MultipleOptionQuestion>, MultipleOptionQuestionValidator>();
+
+        return services;
     }
 }
