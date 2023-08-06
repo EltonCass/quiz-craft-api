@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\QuizCraft.Api.Models\QuizCraft.Models.csproj" />
+    <ProjectReference Include="..\QuizCraft.Models\QuizCraft.Models.csproj" />
   </ItemGroup>
 
 </Project>
