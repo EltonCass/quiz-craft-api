@@ -1,7 +1,9 @@
 // Copyright (c) 2023 Elton Cassas. All rights reserved.
 // See LICENSE.txt
 
+using Microsoft.AspNetCore.Mvc;
 using QuizCraft.Api.Middlewares;
+using QuizCraft.Api.PromptManagement;
 using QuizCraft.Api.QuizManagement;
 using QuizCraft.Application;
 using System.Text.Json;
@@ -24,6 +26,12 @@ namespace QuizCraft.Api
             builder.Services.AddControllers(options =>
             {
                 options.ReturnHttpNotAcceptable = true;
+                options.Filters.Add(
+                    new ProducesResponseTypeAttribute(StatusCodes.Status400BadRequest));
+                options.Filters.Add(
+                    new ProducesResponseTypeAttribute(StatusCodes.Status406NotAcceptable));
+                options.Filters.Add(
+                    new ProducesResponseTypeAttribute(StatusCodes.Status500InternalServerError));
             }).AddJsonOptions(options =>
             {
                 // Set the JSON serializer options here
@@ -39,13 +47,26 @@ namespace QuizCraft.Api
             .ValidateDataAnnotations()
             .ValidateOnStart();
              */
+            builder.Services.AddHealthChecks();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
                 {
-                    Title = "QuizCraft Api",
+                    Title = "QuizCraft API",
                     Version = "v1",
+                    Description = "This API lets you access to quizzes and categories.",
+                    Contact = new()
+                    {
+                        Email = "elcassastn50@gmail.com",
+                        Name = "Elton Cassas",
+                        Url = new Uri("https://www.linkedin.com/in/elton-cassas/")
+                    },
+                    License = new()
+                    {
+                        Name = "MIT License",
+                        Url = new Uri("https://opensource.org/licenses/MIT")
+                    }
                 });
                 //c.OperationFilter<SecurityOperationFilter>();
             });
@@ -65,13 +86,18 @@ namespace QuizCraft.Api
         private static void ConfigureMiddleware(WebApplication app)
         {
             // Configure the HTTP request pipeline.
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint(
+            app.UseSwagger()
+                .UseSwaggerUI(c => c.SwaggerEndpoint(
                 "/swagger/v1/swagger.json", "QuizCraft Api"));
 
-            app.UseMiddleware<SecurityMiddleware>();
-            app.UseAuthorization();
-            app.MapControllers();
+            app.UseMiddleware<SecurityMiddleware>()
+                .UseRouting()
+                .UseAuthorization()
+                .UseEndpoints(endpoints =>
+                {
+                    endpoints.MapControllers();
+                    endpoints.MapHealthChecks("/health");
+                });
             app.Run();
         }
     }

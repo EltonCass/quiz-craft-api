@@ -22,8 +22,4 @@
     <ProjectReference Include="..\..\Core\QuizCraft.Models\QuizCraft.Models.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="CollectionsManagement\" />
-  </ItemGroup>
-
 </Project>

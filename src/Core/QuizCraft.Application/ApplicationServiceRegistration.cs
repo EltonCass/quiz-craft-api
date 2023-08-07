@@ -14,13 +14,16 @@ public static class ApplicationServiceRegistration
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddScoped<ICategoryRepository, CategoryRepository>();
-        services.AddScoped<IQuizRepository, QuizRepository>();
-        services.AddScoped<IQuestionRepository, QuestionRepository>();
-        services.AddScoped<IValidator<Category>, CategoryValidator>();
-        services.AddScoped<IValidator<Quiz>, QuizValidator>();
-        services.AddScoped<IValidator<FillInBlankQuestion>, FillInBlankQuestionValidator>();
-        services.AddScoped<IValidator<MultipleOptionQuestion>, MultipleOptionQuestionValidator>();
+        services
+            .AddScoped<ICategoryRepository, CategoryRepository>()
+            .AddScoped<IQuizRepository, QuizRepository>()
+            .AddScoped<IQuestionRepository, QuestionRepository>()
+            .AddScoped<IUpsertQuestionRepository<MultipleOptionQuestion>, MultipleOptionQuestionRepository>()
+            .AddScoped<IUpsertQuestionRepository<FillInBlankQuestion>, FillInBlankQuestionRepository>()
+            .AddScoped<IValidator<Category>, CategoryValidator>()
+            .AddScoped<IValidator<Quiz>, QuizValidator>()
+            .AddScoped<IValidator<FillInBlankQuestion>, FillInBlankQuestionValidator>()
+            .AddScoped<IValidator<MultipleOptionQuestion>, MultipleOptionQuestionValidator>();
 
         return services;
     }

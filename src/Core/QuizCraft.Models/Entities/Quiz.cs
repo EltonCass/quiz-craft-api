@@ -6,9 +6,9 @@ namespace QuizCraft.Models.Entities;
 public record Quiz
 {
     public int Id { get; init; }
-    public IReadOnlyCollection<Category> Categories { get; init; }
+    public IList<Category> Categories { get; init; }
     public string Description { get; init; }
-    public IReadOnlyCollection<BaseQuestion> Questions { get; init; }
+    public IList<BaseQuestion> Questions { get; init; }
 
     public Quiz(
         int id,

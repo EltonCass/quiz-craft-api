@@ -4,16 +4,15 @@
 using FluentValidation;
 using QuizCraft.Models.Entities;
 
-namespace QuizCraft.Application.QuizManagement.QuestionManagement
+namespace QuizCraft.Application.QuizManagement.QuestionManagement;
+
+internal class FillInBlankQuestionValidator : AbstractValidator<FillInBlankQuestion>
 {
-    internal class FillInBlankQuestionValidator : AbstractValidator<FillInBlankQuestion>
+    public FillInBlankQuestionValidator()
     {
-        public FillInBlankQuestionValidator()
-        {
-            RuleFor(q => q.CorrectAnswer).NotEmpty();
-            RuleFor(q => q.Text).NotEmpty();
-            RuleFor(q => q.Score).GreaterThan(0);
-            RuleFor(q => q.WordPosition).GreaterThan(0);
-        }
+        RuleFor(q => q.CorrectAnswer).NotEmpty();
+        RuleFor(q => q.Text).NotEmpty();
+        RuleFor(q => q.Score).GreaterThan(0);
+        RuleFor(q => q.WordPosition).GreaterThan(0);
     }
 }

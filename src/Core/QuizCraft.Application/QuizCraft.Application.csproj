@@ -16,4 +16,8 @@
     <ProjectReference Include="..\QuizCraft.Models\QuizCraft.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="PromptManagement\" />
+  </ItemGroup>
+
 </Project>

@@ -2,6 +2,7 @@
 // See LICENSE.txt
 
 using Microsoft.AspNetCore.Mvc;
+using QuizCraft.Api.Helpers;
 using QuizCraft.Application.CategoryManagement;
 using QuizCraft.Models.Entities;
 
@@ -12,41 +13,73 @@ namespace QuizCraft.Api.CategoriesManagement;
 [ApiVersion("1.0")]
 public class CategoriesController : ControllerBase
 {
-    private readonly ICategoryRepository _category;
+    private readonly ICategoryRepository _categoryRepository;
 
     public CategoriesController(ICategoryRepository category)
     {
         ArgumentNullException.ThrowIfNull(category);
-        _category = category;
+        _categoryRepository = category;
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Category>> GetCategories(CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(IEnumerable<Category>), 200)]
+    public async Task<ActionResult<IEnumerable<Category>>> GetCategories(CancellationToken cancellationToken)
     {
-        return Ok(_category.RetrieveCategories(cancellationToken));
+        return Ok(await _categoryRepository.RetrieveCategories(cancellationToken));
     }
 
-    [HttpGet("{id}")]
-    public string Get(int id)
+    [HttpGet("{id}", Name = "GetCategory")]
+    [ProducesResponseType(typeof(Category), 200)]
+    public async Task<ActionResult<Category>> GetCategory(int id, CancellationToken cancellationToken)
     {
-        return "value";
+        var result = await _categoryRepository.RetrieveCategory(id, cancellationToken);
+
+        if (result.IsT0)
+        {
+            return Ok(result.AsT0);
+        }
+
+        return result.HandleError(this);
     }
 
-    // POST api/<CategoriesController>
     [HttpPost]
-    public void Post([FromBody] string value)
+    [ProducesResponseType(typeof(Category), 201)]
+    [ProducesResponseType(422)]
+    public async Task<ActionResult<Category>> PostCategory([FromBody] Category category, CancellationToken cancellationToken)
     {
+        var result = await _categoryRepository.CreateCategory(category, cancellationToken);
+        if (result.IsT0)
+        {
+            return Created("GetCategory", result.AsT0);
+        }
+
+        return result.HandleError(this);
     }
 
-    // PUT api/<CategoriesController>/5
     [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+    [ProducesResponseType(typeof(Category), 200)]
+    [ProducesResponseType(422)]
+    public async Task<ActionResult> PutCategory(int id, [FromBody] Category category, CancellationToken cancellationToken)
     {
+        var result = await _categoryRepository.UpdateCategory(id, category, cancellationToken);
+        if (result.IsT0)
+        {
+            return Ok(result.AsT0);
+        }
+
+        return result.HandleError(this);
     }
 
-    // DELETE api/<CategoriesController>/5
     [HttpDelete("{id}")]
-    public void Delete(int id)
+    [ProducesResponseType(204)]
+    public async Task<ActionResult> DeleteCategory(int id, CancellationToken cancellationToken)
     {
+        var result = await _categoryRepository.DeleteCategory(id, cancellationToken);
+        if (result.IsT0)
+        {
+            return NoContent();
+        }
+
+        return result.HandleError(this);
     }
 }

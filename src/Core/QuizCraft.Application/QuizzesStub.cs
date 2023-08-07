@@ -5,13 +5,19 @@ using QuizCraft.Models.Entities;
 
 namespace QuizCraft.Application;
 
-public static class QuizzesStub
+public static class Stubs
 {
-    public static IEnumerable<Quiz> Records = new List<Quiz>
+    public static List<Category> Categories = new List<Category>()
+    {
+        new(1, "Geography", ""),
+        new(2, "Art", "")
+    };
+
+    public static List<Quiz> Quizzes = new List<Quiz>
     {
         new Quiz(
             id: 1,
-            categories: new List<Category>() { new(1, "Geography", "") } ,
+            categories: Categories.Take(1),
             description:"Test your knowledge of world capitals!",
             questions:new List<BaseQuestion>
             {
@@ -32,7 +38,7 @@ public static class QuizzesStub
         ),
         new Quiz(
             id: 2,
-            categories: new List<Category>() { new(1, "Art", "") } ,
+            categories: Categories.Skip(1).Take(1) ,
             description: "Test your knowledge of famous paintings!",
             questions: new List<BaseQuestion>
             {

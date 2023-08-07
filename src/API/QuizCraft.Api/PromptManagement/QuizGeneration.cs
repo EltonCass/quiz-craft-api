@@ -4,9 +4,10 @@
 using OpenAI_API;
 using OpenAI_API.Chat;
 using OpenAI_API.Models;
+using QuizCraft.Api.QuizManagement;
 using QuizCraft.Models;
 
-namespace QuizCraft.Api.QuizManagement;
+namespace QuizCraft.Api.PromptManagement;
 
 public class QuizGeneration : IQuizGeneration
 {
