@@ -4,9 +4,7 @@
 using FluentValidation;
 using OneOf;
 using QuizCraft.Application.QuizManagement;
-using QuizCraft.Models.Entities;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+using QuizCraft.Models.DTOs;
 using System.Net;
 
 namespace QuizCraft.Application.CategoryManagement;

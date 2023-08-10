@@ -2,7 +2,7 @@
 // See LICENSE.txt
 
 using FluentValidation;
-using QuizCraft.Models.Entities;
+using QuizCraft.Models.DTOs;
 
 namespace QuizCraft.Application.CategoryManagement;
 

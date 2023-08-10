@@ -2,7 +2,7 @@
 // See LICENSE.txt
 
 using OneOf;
-using QuizCraft.Models.Entities;
+using QuizCraft.Models.DTOs;
 
 namespace QuizCraft.Application.QuizManagement;
 

@@ -1,7 +1,7 @@
 ﻿// Copyright (c) 2023 Elton Cassas. All rights reserved.
 // See LICENSE.txt
 
-using QuizCraft.Models.Entities;
+using QuizCraft.Models.DTOs;
 
 namespace QuizCraft.Application;
 
@@ -18,43 +18,58 @@ public static class Stubs
         new Quiz(
             id: 1,
             categories: Categories.Take(1),
+            title: "World Capitals",
             description:"Test your knowledge of world capitals!",
+            createdAt: DateTime.Now,
             questions:new List<BaseQuestion>
             {
                 new MultipleOptionQuestion(
-                    id: 1,
-                    text: "What is the capital of France?",
-                    options: new List<string> {
+                    Id: 1,
+                    QuizId: 1,
+                    Text: "What is the capital of France?",
+                    Options: new List<string> {
                         "London", "Paris", "Berlin", "Madrid" },
-                    correctAnswer: "Paris"
+                    CorrectAnswer: "Paris"
                 ),
                 new MultipleOptionQuestion(
-                    id: 2,
-                    text: "What is the capital of Japan?",
-                    options: new List<string> { "Tokyo", "Beijing", "Seoul", "Bangkok" },
-                    correctAnswer: "Tokyo"
+                    Id: 2,
+                    QuizId: 1,
+                    Text: "What is the capital of Japan?",
+                    Options: new List<string> { "Tokyo", "Beijing", "Seoul", "Bangkok" },
+                    CorrectAnswer: "Tokyo"
+                ),
+                new FillInBlankQuestion(
+                    Id: 5,
+                    QuizId: 1,
+                    Text: "The capital of Japan is _____",
+                    CorrectAnswer: "Tokyo",
+                    Position: 24
                 )
             }
         ),
         new Quiz(
             id: 2,
             categories: Categories.Skip(1).Take(1) ,
+            title: "Famous paintings",
             description: "Test your knowledge of famous paintings!",
+            createdAt: DateTime.Now,
             questions: new List<BaseQuestion>
             {
                 new MultipleOptionQuestion(
-                    id: 3,
-                    text: "Who painted the Mona Lisa?",
-                    options: new List<string> {
+                    Id: 3,
+                    QuizId: 2,
+                    Text: "Who painted the Mona Lisa?",
+                    Options: new List<string> {
                         "Pablo Picasso", "Vincent van Gogh", "Leonardo da Vinci", "Michelangelo" },
-                    correctAnswer: "Leonardo da Vinci"
+                    CorrectAnswer: "Leonardo da Vinci"
                 ),
                 new MultipleOptionQuestion(
-                    id: 4,
-                    text: "Who painted The Starry Night?",
-                    options: new List<string> {
+                    Id: 4,
+                    QuizId: 2,
+                    Text: "Who painted The Starry Night?",
+                    Options: new List<string> {
                         "Claude Monet", "Vincent van Gogh", "Salvador Dalí", "Pablo Picasso" },
-                    correctAnswer: "Vincent van Gogh"
+                    CorrectAnswer: "Vincent van Gogh"
                 )
             }
         )

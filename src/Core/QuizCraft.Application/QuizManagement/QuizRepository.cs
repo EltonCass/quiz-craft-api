@@ -4,7 +4,7 @@
 using FluentValidation;
 using OneOf;
 using QuizCraft.Application.QuizManagement.QuestionManagement;
-using QuizCraft.Models.Entities;
+using QuizCraft.Models.DTOs;
 using System.Net;
 
 namespace QuizCraft.Application.QuizManagement;

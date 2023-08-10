@@ -2,13 +2,10 @@
 // See LICENSE.txt
 
 using Microsoft.AspNetCore.Mvc;
-using OneOf;
 using QuizCraft.Api.Helpers;
 using QuizCraft.Application.QuizManagement;
 using QuizCraft.Application.QuizManagement.QuestionManagement;
-using QuizCraft.Models;
-using QuizCraft.Models.Constants;
-using QuizCraft.Models.Entities;
+using QuizCraft.Models.DTOs;
 
 namespace QuizCraft.Api.QuizManagement;
 
@@ -17,6 +14,8 @@ namespace QuizCraft.Api.QuizManagement;
 [ApiVersion("1.0")]
 public class QuizzesController : ControllerBase
 {
+    private const string _GetQuizByIdEndpointName = "GetQuiz";
+
     private readonly IQuizRepository _quizRepository;
     private readonly IUpsertQuestionRepository<MultipleOptionQuestion> _multipleQuestionRepository;
     private readonly IUpsertQuestionRepository<FillInBlankQuestion> _fillInBlankQuestionRepository;
@@ -45,7 +44,7 @@ public class QuizzesController : ControllerBase
         return Ok(await _quizRepository.RetrieveQuizzes(cancellationToken));
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name=_GetQuizByIdEndpointName)]
     [ProducesResponseType(typeof(Quiz), 200)]
     public async Task<ActionResult<Quiz>> GetQuiz(
         int id, CancellationToken cancellationToken)
@@ -74,7 +73,6 @@ public class QuizzesController : ControllerBase
 
         return result.HandleError(this);
     }
-    
 
     [HttpGet("{id}/questions")]
     [ProducesResponseType(typeof(IEnumerable<BaseQuestion>), 200)]
@@ -105,43 +103,57 @@ public class QuizzesController : ControllerBase
         return result.HandleError(this);
     }
 
-    [HttpPost("{quizId}/questions")]
-    [ProducesResponseType(typeof(BaseQuestion), 200)]
+    [HttpPost("{quizId}/multipleOptionQuestions")]
+    [ProducesResponseType(typeof(MultipleOptionQuestion), 201)]
     [ProducesResponseType(422)]
-    public async Task<ActionResult<BaseQuestion>> PostQuestion(
-        int quizId, [FromBody]BaseQuestion question, CancellationToken cancellationToken)
+    public async Task<ActionResult<MultipleOptionQuestion>> PostQuestion(
+        int quizId, [FromBody]MultipleOptionQuestion question, CancellationToken cancellationToken)
     {
-        var result = question.Type switch
-        {
-            QuestionType.MultipleOption =>
-                await CreateMultipleOptionQuestion(quizId, question, cancellationToken),
-            QuestionType.FillInBlank =>
-                await CreateFillInBlankOptionQuestion(quizId, question, cancellationToken),
-            _ => BadRequest("Invalid question type.")
-        };
-
-        return result;
+        return await CreateMultipleOptionQuestion(quizId, question, cancellationToken);
     }
 
-    private async Task<ActionResult<BaseQuestion>> CreateMultipleOptionQuestion(
-        int quizId, BaseQuestion question, CancellationToken cancellationToken)
+    [HttpPost("{quizId}/fillInBlankQuestions")]
+    [ProducesResponseType(typeof(FillInBlankQuestion), 201)]
+    [ProducesResponseType(422)]
+    public async Task<ActionResult<FillInBlankQuestion>> PostQuestion(
+        int quizId, [FromBody]FillInBlankQuestion question, CancellationToken cancellationToken)
+    {
+        return await CreateFillInBlankOptionQuestion(quizId, question, cancellationToken);
+    }
+
+    private async Task<ActionResult<MultipleOptionQuestion>> CreateMultipleOptionQuestion(
+        int quizId, MultipleOptionQuestion question, CancellationToken cancellationToken)
     {
         var result = await _multipleQuestionRepository
-            .CreateQuestion(quizId, (MultipleOptionQuestion)question, cancellationToken);
+            .CreateQuestion(quizId, question, cancellationToken);
 
-        return result.IsT0 
-            ? (ActionResult<BaseQuestion>)Created("", result.AsT0)
-            : (ActionResult<BaseQuestion>)result.HandleError(this);
+        if (result.IsT0)
+        {
+            var resourceUrl = Url.Action(
+                _GetQuizByIdEndpointName,
+                ControllerContext.ActionDescriptor.ControllerName,
+                new { result.AsT0.Id, cancellationToken }, Request.Scheme);
+            return Created(resourceUrl!, result.AsT0);
+        }
+
+        return result.HandleError(this);
     }
 
-    private async Task<ActionResult<BaseQuestion>> CreateFillInBlankOptionQuestion(
-        int quizId, BaseQuestion question, CancellationToken cancellationToken)
+    private async Task<ActionResult<FillInBlankQuestion>> CreateFillInBlankOptionQuestion(
+        int quizId, FillInBlankQuestion question, CancellationToken cancellationToken)
     {
         var result = await _fillInBlankQuestionRepository
-            .CreateQuestion(quizId, (FillInBlankQuestion)question, cancellationToken);
+            .CreateQuestion(quizId, question, cancellationToken);
 
-        return result.IsT0
-            ? (ActionResult<BaseQuestion>)Created("", result.AsT0)
-            : (ActionResult<BaseQuestion>)result.HandleError(this);
+        if (result.IsT0)
+        {
+            var resourceUrl = Url.Action(
+                _GetQuizByIdEndpointName,
+                ControllerContext.ActionDescriptor.ControllerName,
+                new { result.AsT0.Id, cancellationToken }, Request.Scheme);
+            return Created(resourceUrl!, result.AsT0);
+        }
+
+        return result.HandleError(this);
     }
 }

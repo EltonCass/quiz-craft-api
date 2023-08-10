@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using QuizCraft.Application.CategoryManagement;
 using QuizCraft.Application.QuizManagement;
 using QuizCraft.Application.QuizManagement.QuestionManagement;
-using QuizCraft.Models.Entities;
+using QuizCraft.Models.DTOs;
 
 namespace QuizCraft.Application;
 

@@ -3,7 +3,7 @@
 
 using OneOf;
 using QuizCraft.Application.QuizManagement;
-using QuizCraft.Models.Entities;
+using QuizCraft.Models.DTOs;
 
 namespace QuizCraft.Application.CategoryManagement;
 

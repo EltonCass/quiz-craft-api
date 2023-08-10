@@ -4,7 +4,7 @@
 using Microsoft.AspNetCore.Mvc;
 using QuizCraft.Api.Helpers;
 using QuizCraft.Application.CategoryManagement;
-using QuizCraft.Models.Entities;
+using QuizCraft.Models.DTOs;
 
 namespace QuizCraft.Api.CategoriesManagement;
 
@@ -50,7 +50,9 @@ public class CategoriesController : ControllerBase
         var result = await _categoryRepository.CreateCategory(category, cancellationToken);
         if (result.IsT0)
         {
-            return Created("GetCategory", result.AsT0);
+            var resourceUrl = Url.Action(
+                "GetCategory", "Categories", new { result.AsT0.Id, cancellationToken }, Request.Scheme);
+            return Created(resourceUrl!, result.AsT0);
         }
 
         return result.HandleError(this);
