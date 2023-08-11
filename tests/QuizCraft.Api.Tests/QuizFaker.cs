@@ -2,7 +2,7 @@
 // See LICENSE.txt
 
 using Bogus;
-using QuizCraft.Models.Entities;
+using QuizCraft.Models.DTOs;
 
 namespace QuizCraft.Api.Tests;
 
