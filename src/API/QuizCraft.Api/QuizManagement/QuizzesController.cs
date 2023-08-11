@@ -17,14 +17,14 @@ public class QuizzesController : ControllerBase
     private const string _GetQuizByIdEndpointName = "GetQuiz";
 
     private readonly IQuizRepository _quizRepository;
-    private readonly IUpsertQuestionRepository<MultipleOptionQuestion> _multipleQuestionRepository;
-    private readonly IUpsertQuestionRepository<FillInBlankQuestion> _fillInBlankQuestionRepository;
+    private readonly IUpsertQuestionRepository<MultipleOptionQuestionDTO> _multipleQuestionRepository;
+    private readonly IUpsertQuestionRepository<FillInBlankQuestionDTO> _fillInBlankQuestionRepository;
     private readonly IQuestionRepository _questionRepository;
 
     public QuizzesController(
         IQuizRepository quizRepository,
-        IUpsertQuestionRepository<MultipleOptionQuestion> multipleQuestionRepository,
-        IUpsertQuestionRepository<FillInBlankQuestion> fillInBlankQuestionRepository,
+        IUpsertQuestionRepository<MultipleOptionQuestionDTO> multipleQuestionRepository,
+        IUpsertQuestionRepository<FillInBlankQuestionDTO> fillInBlankQuestionRepository,
         IQuestionRepository questionRepository)
     {
         ArgumentNullException.ThrowIfNull(quizRepository, nameof(quizRepository));
@@ -38,15 +38,15 @@ public class QuizzesController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<Quiz>), 200)]
-    public async Task<ActionResult<IEnumerable<Quiz>>> GetQuizzes(CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(IEnumerable<QuizDTO>), 200)]
+    public async Task<ActionResult<IEnumerable<QuizDTO>>> GetQuizzes(CancellationToken cancellationToken)
     {
         return Ok(await _quizRepository.RetrieveQuizzes(cancellationToken));
     }
 
     [HttpGet("{id}", Name=_GetQuizByIdEndpointName)]
-    [ProducesResponseType(typeof(Quiz), 200)]
-    public async Task<ActionResult<Quiz>> GetQuiz(
+    [ProducesResponseType(typeof(QuizDTO), 200)]
+    public async Task<ActionResult<QuizDTO>> GetQuiz(
         int id, CancellationToken cancellationToken)
     {
         var result = await _quizRepository.RetrieveQuiz(id, cancellationToken);
@@ -61,7 +61,7 @@ public class QuizzesController : ControllerBase
 
     [HttpDelete("{id}")]
     [ProducesResponseType(204)]
-    public async Task<ActionResult<Quiz>> DeleteQuiz(
+    public async Task<ActionResult<QuizDTO>> DeleteQuiz(
         int id, CancellationToken cancellationToken)
     {
         var result = await _quizRepository.DeleteQuiz(id, cancellationToken);
@@ -75,8 +75,8 @@ public class QuizzesController : ControllerBase
     }
 
     [HttpGet("{id}/questions")]
-    [ProducesResponseType(typeof(IEnumerable<BaseQuestion>), 200)]
-    public async Task<ActionResult<IEnumerable<BaseQuestion>>> GetQuestions(
+    [ProducesResponseType(typeof(IEnumerable<QuestionDTO>), 200)]
+    public async Task<ActionResult<IEnumerable<QuestionDTO>>> GetQuestions(
         int id, CancellationToken cancellationToken)
     {
         var result = await _questionRepository.RetrieveQuestions(id, cancellationToken);
@@ -89,8 +89,8 @@ public class QuizzesController : ControllerBase
     }
 
     [HttpGet("{quizId}/questions/{questionId}")]
-    [ProducesResponseType(typeof(BaseQuestion), 200)]
-    public async Task<ActionResult<BaseQuestion>> GetQuestionById(
+    [ProducesResponseType(typeof(QuestionDTO), 200)]
+    public async Task<ActionResult<QuestionDTO>> GetQuestionById(
         int quizId, int questionId, CancellationToken cancellationToken)
     {
         var result = await _questionRepository.RetrieveQuestion(quizId, questionId, cancellationToken);
@@ -104,25 +104,25 @@ public class QuizzesController : ControllerBase
     }
 
     [HttpPost("{quizId}/multipleOptionQuestions")]
-    [ProducesResponseType(typeof(MultipleOptionQuestion), 201)]
+    [ProducesResponseType(typeof(MultipleOptionQuestionDTO), 201)]
     [ProducesResponseType(422)]
-    public async Task<ActionResult<MultipleOptionQuestion>> PostQuestion(
-        int quizId, [FromBody]MultipleOptionQuestion question, CancellationToken cancellationToken)
+    public async Task<ActionResult<MultipleOptionQuestionDTO>> PostQuestion(
+        int quizId, [FromBody] MultipleOptionQuestionDTO question, CancellationToken cancellationToken)
     {
         return await CreateMultipleOptionQuestion(quizId, question, cancellationToken);
     }
 
     [HttpPost("{quizId}/fillInBlankQuestions")]
-    [ProducesResponseType(typeof(FillInBlankQuestion), 201)]
+    [ProducesResponseType(typeof(FillInBlankQuestionDTO), 201)]
     [ProducesResponseType(422)]
-    public async Task<ActionResult<FillInBlankQuestion>> PostQuestion(
-        int quizId, [FromBody]FillInBlankQuestion question, CancellationToken cancellationToken)
+    public async Task<ActionResult<FillInBlankQuestionDTO>> PostQuestion(
+        int quizId, [FromBody] FillInBlankQuestionDTO question, CancellationToken cancellationToken)
     {
         return await CreateFillInBlankOptionQuestion(quizId, question, cancellationToken);
     }
 
-    private async Task<ActionResult<MultipleOptionQuestion>> CreateMultipleOptionQuestion(
-        int quizId, MultipleOptionQuestion question, CancellationToken cancellationToken)
+    private async Task<ActionResult<MultipleOptionQuestionDTO>> CreateMultipleOptionQuestion(
+        int quizId, MultipleOptionQuestionDTO question, CancellationToken cancellationToken)
     {
         var result = await _multipleQuestionRepository
             .CreateQuestion(quizId, question, cancellationToken);
@@ -139,8 +139,8 @@ public class QuizzesController : ControllerBase
         return result.HandleError(this);
     }
 
-    private async Task<ActionResult<FillInBlankQuestion>> CreateFillInBlankOptionQuestion(
-        int quizId, FillInBlankQuestion question, CancellationToken cancellationToken)
+    private async Task<ActionResult<FillInBlankQuestionDTO>> CreateFillInBlankOptionQuestion(
+        int quizId, FillInBlankQuestionDTO question, CancellationToken cancellationToken)
     {
         var result = await _fillInBlankQuestionRepository
             .CreateQuestion(quizId, question, cancellationToken);

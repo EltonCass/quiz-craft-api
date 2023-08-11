@@ -8,9 +8,9 @@ namespace QuizCraft.Application.QuizManagement;
 
 public interface IQuizRepository
 {
-    Task<IEnumerable<Quiz>> RetrieveQuizzes(CancellationToken cancellationToken);
-    Task<OneOf<Quiz, RequestError>> RetrieveQuiz(int id, CancellationToken cancellationToken);
-    Task<OneOf<Quiz, RequestError>> CreateQuiz(Quiz newQuiz, CancellationToken cancellationToken);
-    Task<OneOf<Quiz, RequestError>> UpdateQuiz(Quiz quiz, CancellationToken cancellationToken);
-    Task<OneOf<Quiz, RequestError>> DeleteQuiz(int id, CancellationToken cancellationToken);
+    Task<IEnumerable<QuizDTO>> RetrieveQuizzes(CancellationToken cancellationToken);
+    Task<OneOf<QuizDTO, RequestError>> RetrieveQuiz(int id, CancellationToken cancellationToken);
+    Task<OneOf<QuizDTO, RequestError>> CreateQuiz(QuizDTO newQuiz, CancellationToken cancellationToken);
+    Task<OneOf<QuizDTO, RequestError>> UpdateQuiz(QuizDTO quiz, CancellationToken cancellationToken);
+    Task<OneOf<QuizDTO, RequestError>> DeleteQuiz(int id, CancellationToken cancellationToken);
 }

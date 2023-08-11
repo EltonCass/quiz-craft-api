@@ -6,7 +6,7 @@ using QuizCraft.Models.DTOs;
 
 namespace QuizCraft.Application.QuizManagement;
 
-internal class QuizValidator : AbstractValidator<Quiz>
+internal class QuizValidator : AbstractValidator<QuizDTO>
 {
     public QuizValidator()
     {

@@ -6,7 +6,7 @@ using QuizCraft.Models.DTOs;
 
 namespace QuizCraft.Application.QuizManagement.QuestionManagement;
 
-internal class MultipleOptionQuestionValidator : AbstractValidator<MultipleOptionQuestion>
+internal class MultipleOptionQuestionValidator : AbstractValidator<MultipleOptionQuestionDTO>
 {
     public MultipleOptionQuestionValidator()
     {
