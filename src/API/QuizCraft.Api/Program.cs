@@ -6,6 +6,7 @@ using QuizCraft.Api.Middlewares;
 using QuizCraft.Api.PromptManagement;
 using QuizCraft.Api.QuizManagement;
 using QuizCraft.Application;
+using QuizCraft.Persistence;
 using System.Text.Json;
 
 namespace QuizCraft.Api
@@ -58,9 +59,7 @@ namespace QuizCraft.Api
                     Description = "This API lets you access to quizzes and categories.",
                     Contact = new()
                     {
-                        Email = "elcassastn50@gmail.com",
                         Name = "Elton Cassas",
-                        Url = new Uri("https://www.linkedin.com/in/elton-cassas/")
                     },
                     License = new()
                     {
@@ -73,10 +72,11 @@ namespace QuizCraft.Api
 
             builder.Services.AddScoped<IQuizGeneration, QuizGeneration>();
             builder.Services.AddApplicationServices();
+            builder.Services.AddPersistenceServices(builder.Configuration);
             builder.Services.AddApiVersioning(setupAction =>
             {
                 setupAction.AssumeDefaultVersionWhenUnspecified = true;
-                setupAction.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+                setupAction.DefaultApiVersion = new ApiVersion(1, 0);
                 setupAction.ReportApiVersions = true;
             });
 
