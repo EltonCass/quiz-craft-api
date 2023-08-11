@@ -8,10 +8,10 @@ namespace QuizCraft.Application.QuizManagement.QuestionManagement;
 
 public interface IQuestionRepository
 {
-    Task<OneOf<IEnumerable<BaseQuestion>, RequestError>> RetrieveQuestions(
+    Task<OneOf<IEnumerable<QuestionDTO>, RequestError>> RetrieveQuestions(
         int quizId, CancellationToken cancellationToken);
-    Task<OneOf<BaseQuestion, RequestError>> RetrieveQuestion(
+    Task<OneOf<QuestionDTO, RequestError>> RetrieveQuestion(
         int quizId, int id, CancellationToken cancellationToken);
-    Task<OneOf<BaseQuestion, RequestError>> DeleteQuestion(
+    Task<OneOf<QuestionDTO, RequestError>> DeleteQuestion(
         int quizId, int id, CancellationToken cancellationToken);
 }

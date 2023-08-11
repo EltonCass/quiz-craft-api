@@ -9,7 +9,7 @@ namespace QuizCraft.Application.QuizManagement.QuestionManagement;
 
 public class QuestionRepository : IQuestionRepository
 {
-    public async Task<OneOf<BaseQuestion, RequestError>> DeleteQuestion(int quizId, int id, CancellationToken cancellationToken)
+    public async Task<OneOf<QuestionDTO, RequestError>> DeleteQuestion(int quizId, int id, CancellationToken cancellationToken)
     {
         var foundedQuiz = Stubs.Quizzes.FirstOrDefault(q => q.Id == quizId);
         await Task.Delay(100, cancellationToken);
@@ -28,7 +28,7 @@ public class QuestionRepository : IQuestionRepository
         return foundedQuestion;
     }
 
-    public async Task<OneOf<BaseQuestion, RequestError>> RetrieveQuestion(int quizId, int id, CancellationToken cancellationToken)
+    public async Task<OneOf<QuestionDTO, RequestError>> RetrieveQuestion(int quizId, int id, CancellationToken cancellationToken)
     {
         var foundedQuiz = Stubs.Quizzes.FirstOrDefault(q => q.Id == quizId);
         await Task.Delay(100, cancellationToken);
@@ -46,7 +46,7 @@ public class QuestionRepository : IQuestionRepository
         return foundedQuestion;
     }
 
-    public async Task<OneOf<IEnumerable<BaseQuestion>, RequestError>> RetrieveQuestions(int quizId, CancellationToken cancellationToken)
+    public async Task<OneOf<IEnumerable<QuestionDTO>, RequestError>> RetrieveQuestions(int quizId, CancellationToken cancellationToken)
     {
         var foundedQuiz = Stubs.Quizzes.FirstOrDefault(q => q.Id == quizId);
         await Task.Delay(100, cancellationToken);

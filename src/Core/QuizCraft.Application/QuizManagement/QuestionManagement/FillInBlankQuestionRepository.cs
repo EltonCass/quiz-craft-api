@@ -8,18 +8,18 @@ using System.Net;
 
 namespace QuizCraft.Application.QuizManagement.QuestionManagement;
 
-public class FillInBlankQuestionRepository : IUpsertQuestionRepository<FillInBlankQuestion>
+public class FillInBlankQuestionRepository : IUpsertQuestionRepository<FillInBlankQuestionDTO>
 {
-    private readonly IValidator<FillInBlankQuestion> _validator;
+    private readonly IValidator<FillInBlankQuestionDTO> _validator;
 
-    public FillInBlankQuestionRepository(IValidator<FillInBlankQuestion> validator)
+    public FillInBlankQuestionRepository(IValidator<FillInBlankQuestionDTO> validator)
     {
         ArgumentNullException.ThrowIfNull(validator);
         _validator = validator;
     }
 
-    public async Task<OneOf<FillInBlankQuestion, RequestError>> CreateQuestion(
-        int quizId, FillInBlankQuestion newQuestion, CancellationToken cancellationToken)
+    public async Task<OneOf<FillInBlankQuestionDTO, RequestError>> CreateQuestion(
+        int quizId, FillInBlankQuestionDTO newQuestion, CancellationToken cancellationToken)
     {
         var foundedQuiz = Stubs.Quizzes.FirstOrDefault(q => q.Id == quizId);
         await Task.Delay(100, cancellationToken);
@@ -40,8 +40,8 @@ public class FillInBlankQuestionRepository : IUpsertQuestionRepository<FillInBla
             result.ToString());
     }
 
-    public async Task<OneOf<FillInBlankQuestion, RequestError>> UpdateQuestion(
-        int quizId, int questionId, FillInBlankQuestion question, CancellationToken cancellationToken)
+    public async Task<OneOf<FillInBlankQuestionDTO, RequestError>> UpdateQuestion(
+        int quizId, int questionId, FillInBlankQuestionDTO question, CancellationToken cancellationToken)
     {
         var foundedQuiz = Stubs.Quizzes.FirstOrDefault(q => q.Id == quizId);
         await Task.Delay(100, cancellationToken);

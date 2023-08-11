@@ -5,22 +5,23 @@ using FluentValidation;
 using OneOf;
 using QuizCraft.Application.QuizManagement;
 using QuizCraft.Models.DTOs;
+using QuizCraft.Models.Entities;
 using System.Net;
 
 namespace QuizCraft.Application.CategoryManagement;
 
 public class CategoryRepository : ICategoryRepository
 {
-    private readonly IValidator<Category> _validator;
+    private readonly IValidator<CategoryDTO> _validator;
     private const short _DelayInMs = 100;
 
-    public CategoryRepository(IValidator<Category> validator)
+    public CategoryRepository(IValidator<CategoryDTO> validator)
     {
         ArgumentNullException.ThrowIfNull(validator);
         _validator = validator;
     }
 
-    public async Task<OneOf<Category, RequestError>> CreateCategory(Category newCategory, CancellationToken cancellationToken)
+    public async Task<OneOf<CategoryDTO, RequestError>> CreateCategory(CategoryDTO newCategory, CancellationToken cancellationToken)
     {
         var result = _validator.Validate(newCategory);
         await Task.Delay(_DelayInMs, cancellationToken);
@@ -35,9 +36,7 @@ public class CategoryRepository : ICategoryRepository
             result.ToString());
     }
 
-    
-
-    public async Task<OneOf<Category, RequestError>> DeleteCategory(int id, CancellationToken cancellationToken)
+    public async Task<OneOf<CategoryDTO, RequestError>> DeleteCategory(int id, CancellationToken cancellationToken)
     {
         var foundedCategory = Stubs.Categories.FirstOrDefault(c => c.Id == id);
 
@@ -67,13 +66,13 @@ public class CategoryRepository : ICategoryRepository
         return foundedCategory;
     }
 
-    public async Task<IEnumerable<Category>> RetrieveCategories(CancellationToken cancellationToken)
+    public async Task<IEnumerable<CategoryDTO>> RetrieveCategories(CancellationToken cancellationToken)
     {
         await Task.Delay(_DelayInMs, cancellationToken);
         return Stubs.Categories;
     }
 
-    public async Task<OneOf<Category, RequestError>> RetrieveCategory(int id, CancellationToken cancellationToken)
+    public async Task<OneOf<CategoryDTO, RequestError>> RetrieveCategory(int id, CancellationToken cancellationToken)
     {
         await Task.Delay(_DelayInMs, cancellationToken);
         var foundedCategory = Stubs.Categories.FirstOrDefault(c => c.Id == id);
@@ -85,8 +84,8 @@ public class CategoryRepository : ICategoryRepository
         return foundedCategory;
     }
 
-    public async Task<OneOf<Category, RequestError>> UpdateCategory(
-        int id,  Category category, CancellationToken cancellationToken)
+    public async Task<OneOf<CategoryDTO, RequestError>> UpdateCategory(
+        int id, CategoryDTO category, CancellationToken cancellationToken)
     {
         var foundedCategory = Stubs.Categories.FirstOrDefault(c => c.Id == id);
         if (foundedCategory is null)
