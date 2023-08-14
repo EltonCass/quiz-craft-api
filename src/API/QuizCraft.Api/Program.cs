@@ -6,6 +6,7 @@ using QuizCraft.Api.Middlewares;
 using QuizCraft.Api.PromptManagement;
 using QuizCraft.Api.QuizManagement;
 using QuizCraft.Application;
+using QuizCraft.Persistence;
 using System.Text.Json;
 
 namespace QuizCraft.Api
@@ -18,7 +19,7 @@ namespace QuizCraft.Api
                 .CreateBuilder(args);
             builder = ConfigureMiddlewarePipelines(builder);
             var app = builder.Build();
-            ConfigureMiddleware(app);
+            ConfigurePipeline(app);
         }
 
         private static WebApplicationBuilder ConfigureMiddlewarePipelines(WebApplicationBuilder builder)
@@ -73,17 +74,18 @@ namespace QuizCraft.Api
 
             builder.Services.AddScoped<IQuizGeneration, QuizGeneration>();
             builder.Services.AddApplicationServices();
+            builder.Services.AddPersistenceServices(builder.Configuration);
             builder.Services.AddApiVersioning(setupAction =>
             {
                 setupAction.AssumeDefaultVersionWhenUnspecified = true;
-                setupAction.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+                setupAction.DefaultApiVersion = new ApiVersion(1, 0);
                 setupAction.ReportApiVersions = true;
             });
 
             return builder;
         }
 
-        private static void ConfigureMiddleware(WebApplication app)
+        private static void ConfigurePipeline(WebApplication app)
         {
             // Configure the HTTP request pipeline.
             app.UseSwagger()

@@ -6,7 +6,7 @@ using QuizCraft.Models.DTOs;
 
 namespace QuizCraft.Application.QuizManagement.QuestionManagement;
 
-public interface IUpsertQuestionRepository<T> where T : BaseQuestion
+public interface IUpsertQuestionRepository<T> where T : QuestionDTO
 {
     Task<OneOf<T, RequestError>> CreateQuestion(
         int quizId, T newQuestion, CancellationToken cancellationToken);

@@ -9,24 +9,31 @@ using System.Net;
 
 namespace QuizCraft.Application.CategoryManagement;
 
-public class CategoryRepository : ICategoryRepository
+public class CategoryHandler : ICategoryHandler
 {
-    private readonly IValidator<Category> _validator;
+    private readonly IValidator<CategoryDTO> _validator;
+    private readonly ICategoryRepository _CategoryRepository;
     private const short _DelayInMs = 100;
 
-    public CategoryRepository(IValidator<Category> validator)
+    public CategoryHandler(
+        IValidator<CategoryDTO> validator,
+        ICategoryRepository categoryRepository)
     {
         ArgumentNullException.ThrowIfNull(validator);
+        ArgumentNullException.ThrowIfNull(categoryRepository);
         _validator = validator;
+        _CategoryRepository = categoryRepository;
     }
 
-    public async Task<OneOf<Category, RequestError>> CreateCategory(Category newCategory, CancellationToken cancellationToken)
+    public async Task<OneOf<CategoryDTO, RequestError>> CreateCategory(CategoryDTO newCategory, CancellationToken cancellationToken)
     {
         var result = _validator.Validate(newCategory);
-        await Task.Delay(_DelayInMs, cancellationToken);
         if (result.IsValid)
         {
-            Stubs.Categories.Add(newCategory);
+            var categoryEntity = CategoryDTO.ToEntity(newCategory);
+            var category = await _CategoryRepository
+                .CreateCategory(categoryEntity, cancellationToken);
+            //Stubs.Categories.Add(newCategory);
             return newCategory;
         }
 
@@ -35,9 +42,7 @@ public class CategoryRepository : ICategoryRepository
             result.ToString());
     }
 
-    
-
-    public async Task<OneOf<Category, RequestError>> DeleteCategory(int id, CancellationToken cancellationToken)
+    public async Task<OneOf<CategoryDTO, RequestError>> DeleteCategory(int id, CancellationToken cancellationToken)
     {
         var foundedCategory = Stubs.Categories.FirstOrDefault(c => c.Id == id);
 
@@ -67,26 +72,33 @@ public class CategoryRepository : ICategoryRepository
         return foundedCategory;
     }
 
-    public async Task<IEnumerable<Category>> RetrieveCategories(CancellationToken cancellationToken)
+    public async Task<IEnumerable<CategoryDTO>> RetrieveCategories(CancellationToken cancellationToken)
     {
-        await Task.Delay(_DelayInMs, cancellationToken);
+        var categories = await _CategoryRepository
+            .GetCategories(cancellationToken);
+        //await Task.Delay(_DelayInMs, cancellationToken);
         return Stubs.Categories;
     }
 
-    public async Task<OneOf<Category, RequestError>> RetrieveCategory(int id, CancellationToken cancellationToken)
+    public async Task<OneOf<CategoryDTO, RequestError>> RetrieveCategory(int id, CancellationToken cancellationToken)
     {
-        await Task.Delay(_DelayInMs, cancellationToken);
-        var foundedCategory = Stubs.Categories.FirstOrDefault(c => c.Id == id);
-        if (foundedCategory is null)
+        var categoryEntity = await _CategoryRepository.GetCategory(id, cancellationToken);
+        if (categoryEntity.Id == 0)
         {
             return new RequestError(HttpStatusCode.NotFound, "Category not found");
         }
 
+        var foundedCategory = new CategoryDTO(
+            Description: categoryEntity.Description ?? string.Empty,
+            Id: categoryEntity.Id,
+            Name: categoryEntity.Name
+        );
+
         return foundedCategory;
     }
 
-    public async Task<OneOf<Category, RequestError>> UpdateCategory(
-        int id,  Category category, CancellationToken cancellationToken)
+    public async Task<OneOf<CategoryDTO, RequestError>> UpdateCategory(
+        int id, CategoryDTO category, CancellationToken cancellationToken)
     {
         var foundedCategory = Stubs.Categories.FirstOrDefault(c => c.Id == id);
         if (foundedCategory is null)

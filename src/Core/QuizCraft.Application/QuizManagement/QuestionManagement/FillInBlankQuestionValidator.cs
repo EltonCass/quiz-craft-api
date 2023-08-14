@@ -6,7 +6,7 @@ using QuizCraft.Models.DTOs;
 
 namespace QuizCraft.Application.QuizManagement.QuestionManagement;
 
-internal class FillInBlankQuestionValidator : AbstractValidator<FillInBlankQuestion>
+internal class FillInBlankQuestionValidator : AbstractValidator<FillInBlankQuestionDTO>
 {
     public FillInBlankQuestionValidator()
     {

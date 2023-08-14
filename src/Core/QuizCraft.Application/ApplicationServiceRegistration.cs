@@ -7,6 +7,7 @@ using QuizCraft.Application.CategoryManagement;
 using QuizCraft.Application.QuizManagement;
 using QuizCraft.Application.QuizManagement.QuestionManagement;
 using QuizCraft.Models.DTOs;
+using QuizCraft.Models.Entities;
 
 namespace QuizCraft.Application;
 
@@ -15,15 +16,15 @@ public static class ApplicationServiceRegistration
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services
-            .AddScoped<ICategoryRepository, CategoryRepository>()
-            .AddScoped<IQuizRepository, QuizRepository>()
-            .AddScoped<IQuestionRepository, QuestionRepository>()
-            .AddScoped<IUpsertQuestionRepository<MultipleOptionQuestion>, MultipleOptionQuestionRepository>()
-            .AddScoped<IUpsertQuestionRepository<FillInBlankQuestion>, FillInBlankQuestionRepository>()
-            .AddScoped<IValidator<Category>, CategoryValidator>()
-            .AddScoped<IValidator<Quiz>, QuizValidator>()
-            .AddScoped<IValidator<FillInBlankQuestion>, FillInBlankQuestionValidator>()
-            .AddScoped<IValidator<MultipleOptionQuestion>, MultipleOptionQuestionValidator>();
+            .AddScoped<ICategoryHandler, CategoryHandler>()
+            .AddScoped<IQuizHandler, QuizHandler>()
+            .AddScoped<IQuestionHandler, QuestionHandler>()
+            .AddScoped<IUpsertQuestionRepository<MultipleOptionQuestionDTO>, MultipleOptionQuestionHandler>()
+            .AddScoped<IUpsertQuestionRepository<FillInBlankQuestionDTO>, FillInBlankQuestionHandler>()
+            .AddScoped<IValidator<CategoryDTO>, CategoryValidator>()
+            .AddScoped<IValidator<QuizDTO>, QuizValidator>()
+            .AddScoped<IValidator<FillInBlankQuestionDTO>, FillInBlankQuestionValidator>()
+            .AddScoped<IValidator<MultipleOptionQuestionDTO>, MultipleOptionQuestionValidator>();
 
         return services;
     }

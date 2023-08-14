@@ -8,18 +8,18 @@ using System.Net;
 
 namespace QuizCraft.Application.QuizManagement.QuestionManagement;
 
-public class MultipleOptionQuestionRepository : IUpsertQuestionRepository<MultipleOptionQuestion>
+public class MultipleOptionQuestionHandler : IUpsertQuestionRepository<MultipleOptionQuestionDTO>
 {
-    private readonly IValidator<MultipleOptionQuestion> _validator;
+    private readonly IValidator<MultipleOptionQuestionDTO> _validator;
 
-    public MultipleOptionQuestionRepository(IValidator<MultipleOptionQuestion> validator)
+    public MultipleOptionQuestionHandler(IValidator<MultipleOptionQuestionDTO> validator)
     {
         ArgumentNullException.ThrowIfNull(validator);
         _validator = validator;
     }
 
-    public async Task<OneOf<MultipleOptionQuestion, RequestError>> CreateQuestion(
-        int quizId, MultipleOptionQuestion newQuestion, CancellationToken cancellationToken)
+    public async Task<OneOf<MultipleOptionQuestionDTO, RequestError>> CreateQuestion(
+        int quizId, MultipleOptionQuestionDTO newQuestion, CancellationToken cancellationToken)
     {
         var foundedQuiz = Stubs.Quizzes.FirstOrDefault(q => q.Id == quizId);
         await Task.Delay(100, cancellationToken);
@@ -40,8 +40,8 @@ public class MultipleOptionQuestionRepository : IUpsertQuestionRepository<Multip
             result.ToString());
     }
 
-    public async Task<OneOf<MultipleOptionQuestion, RequestError>> UpdateQuestion(
-        int quizId, int questionId, MultipleOptionQuestion question, CancellationToken cancellationToken)
+    public async Task<OneOf<MultipleOptionQuestionDTO, RequestError>> UpdateQuestion(
+        int quizId, int questionId, MultipleOptionQuestionDTO question, CancellationToken cancellationToken)
     {
         var foundedQuiz = Stubs.Quizzes.FirstOrDefault(q => q.Id == quizId);
         await Task.Delay(100, cancellationToken);

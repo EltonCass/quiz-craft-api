@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using QuizCraft.Api.Helpers;
 using QuizCraft.Application.CategoryManagement;
 using QuizCraft.Models.DTOs;
+using QuizCraft.Models.Entities;
 
 namespace QuizCraft.Api.CategoriesManagement;
 
@@ -13,9 +14,9 @@ namespace QuizCraft.Api.CategoriesManagement;
 [ApiVersion("1.0")]
 public class CategoriesController : ControllerBase
 {
-    private readonly ICategoryRepository _categoryRepository;
+    private readonly ICategoryHandler _categoryRepository;
 
-    public CategoriesController(ICategoryRepository category)
+    public CategoriesController(ICategoryHandler category)
     {
         ArgumentNullException.ThrowIfNull(category);
         _categoryRepository = category;
@@ -45,7 +46,7 @@ public class CategoriesController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(Category), 201)]
     [ProducesResponseType(422)]
-    public async Task<ActionResult<Category>> PostCategory([FromBody] Category category, CancellationToken cancellationToken)
+    public async Task<ActionResult<Category>> PostCategory([FromBody] CategoryDTO category, CancellationToken cancellationToken)
     {
         var result = await _categoryRepository.CreateCategory(category, cancellationToken);
         if (result.IsT0)
@@ -59,9 +60,9 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [ProducesResponseType(typeof(Category), 200)]
+    [ProducesResponseType(typeof(CategoryDTO), 200)]
     [ProducesResponseType(422)]
-    public async Task<ActionResult> PutCategory(int id, [FromBody] Category category, CancellationToken cancellationToken)
+    public async Task<ActionResult> PutCategory(int id, [FromBody] CategoryDTO category, CancellationToken cancellationToken)
     {
         var result = await _categoryRepository.UpdateCategory(id, category, cancellationToken);
         if (result.IsT0)
