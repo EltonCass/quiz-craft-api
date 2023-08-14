@@ -9,13 +9,13 @@ using System.Net;
 
 namespace QuizCraft.Application.QuizManagement;
 
-public class QuizRepository : IQuizRepository
+public class QuizHandler : IQuizHandler
 {
     private readonly IValidator<QuizDTO> _validator;
     private readonly IUpsertQuestionRepository<MultipleOptionQuestionDTO> _multipleOptionRepository;
     private readonly IUpsertQuestionRepository<FillInBlankQuestionDTO> _fillInBlankRepository;
 
-    public QuizRepository(
+    public QuizHandler(
         IValidator<QuizDTO> validator,
         IUpsertQuestionRepository<MultipleOptionQuestionDTO> multipleOptionRepository,
         IUpsertQuestionRepository<FillInBlankQuestionDTO> fillInBlankRepository)

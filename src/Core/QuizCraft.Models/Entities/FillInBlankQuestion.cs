@@ -3,9 +3,15 @@
 
 namespace QuizCraft.Models.Entities;
 
-public class FillInBlankQuestion : Question
+public class FillInBlankQuestion
 {
-    public int WordPosition { get; init; }
+    public FillInBlankQuestion()
+    {
+        Question = new Question();
+    }
+
+    public int Id { get; set; }
+    public int WordPosition { get; set; }
     public int QuestionId { get; set; }
-    public Question Question { get; set; } = new Question();
+    public Question Question { get; set; }
 }

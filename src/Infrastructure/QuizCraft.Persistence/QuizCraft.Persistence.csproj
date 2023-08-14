@@ -13,8 +13,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.10" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\QuizCraft.Models\QuizCraft.Models.csproj" />
+    <ProjectReference Include="..\..\Core\QuizCraft.Application\QuizCraft.Application.csproj" />
   </ItemGroup>
 
 </Project>

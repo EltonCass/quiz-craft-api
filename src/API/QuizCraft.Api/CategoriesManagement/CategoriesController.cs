@@ -14,9 +14,9 @@ namespace QuizCraft.Api.CategoriesManagement;
 [ApiVersion("1.0")]
 public class CategoriesController : ControllerBase
 {
-    private readonly ICategoryRepository _categoryRepository;
+    private readonly ICategoryHandler _categoryRepository;
 
-    public CategoriesController(ICategoryRepository category)
+    public CategoriesController(ICategoryHandler category)
     {
         ArgumentNullException.ThrowIfNull(category);
         _categoryRepository = category;

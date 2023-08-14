@@ -5,6 +5,11 @@ namespace QuizCraft.Models.Entities;
 
 public class Question
 {
+    public Question()
+    {
+        Quiz = new Quiz();
+    }
+
     public int Id { get; set; }
     public int QuizId { get; set; }
     public string CorrectAnswer { get; set; } = string.Empty;
@@ -15,5 +20,5 @@ public class Question
     public DateTime? UpdatedAt { get; set; }
     public FillInBlankQuestion? FillInBlankQuestion { get; set; }
     public MultipleOptionQuestion? MultipleOptionQuestion { get; set; }
-    public Quiz Quiz { get; set; } = new Quiz();
+    public Quiz Quiz { get; set; }
 }

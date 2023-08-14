@@ -16,16 +16,16 @@ public class QuizzesController : ControllerBase
 {
     private const string _GetQuizByIdEndpointName = "GetQuiz";
 
-    private readonly IQuizRepository _quizRepository;
+    private readonly IQuizHandler _quizRepository;
     private readonly IUpsertQuestionRepository<MultipleOptionQuestionDTO> _multipleQuestionRepository;
     private readonly IUpsertQuestionRepository<FillInBlankQuestionDTO> _fillInBlankQuestionRepository;
-    private readonly IQuestionRepository _questionRepository;
+    private readonly IQuestionHandler _questionRepository;
 
     public QuizzesController(
-        IQuizRepository quizRepository,
+        IQuizHandler quizRepository,
         IUpsertQuestionRepository<MultipleOptionQuestionDTO> multipleQuestionRepository,
         IUpsertQuestionRepository<FillInBlankQuestionDTO> fillInBlankQuestionRepository,
-        IQuestionRepository questionRepository)
+        IQuestionHandler questionRepository)
     {
         ArgumentNullException.ThrowIfNull(quizRepository, nameof(quizRepository));
         ArgumentNullException.ThrowIfNull(multipleQuestionRepository, nameof(multipleQuestionRepository));

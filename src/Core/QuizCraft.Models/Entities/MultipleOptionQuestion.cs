@@ -3,9 +3,15 @@
 
 namespace QuizCraft.Models.Entities;
 
-public class MultipleOptionQuestion : Question
+public class MultipleOptionQuestion
 {
+    public MultipleOptionQuestion()
+    {
+        Options = new List<Option>();
+    }
+
+    public int Id { get; set; }
     public int QuestionId { get; set; }
-    public ICollection<Option> Options { get; } = new List<Option>();
+    public ICollection<Option> Options { get; set; }
     public Question Question { get; set; } = new Question();
 }

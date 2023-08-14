@@ -8,11 +8,11 @@ using System.Net;
 
 namespace QuizCraft.Application.QuizManagement.QuestionManagement;
 
-public class FillInBlankQuestionRepository : IUpsertQuestionRepository<FillInBlankQuestionDTO>
+public class FillInBlankQuestionHandler : IUpsertQuestionRepository<FillInBlankQuestionDTO>
 {
     private readonly IValidator<FillInBlankQuestionDTO> _validator;
 
-    public FillInBlankQuestionRepository(IValidator<FillInBlankQuestionDTO> validator)
+    public FillInBlankQuestionHandler(IValidator<FillInBlankQuestionDTO> validator)
     {
         ArgumentNullException.ThrowIfNull(validator);
         _validator = validator;

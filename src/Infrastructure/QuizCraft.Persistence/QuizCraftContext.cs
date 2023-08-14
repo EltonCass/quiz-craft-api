@@ -23,5 +23,24 @@ namespace QuizCraft.Persistence
         public DbSet<Question> Questions { get; set; }
         public DbSet<Quiz> Quizzes { get; set; }
         public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(QuizCraftContext).Assembly);
+            modelBuilder.Entity<User>().HasData(
+                new User()
+                {
+                    Id = 1,
+                    Email = "admin@gmail.com",
+                    FullName = "Admin"
+                });
+            modelBuilder.Entity<Category>().HasData(
+                new Category()
+                {
+                    Id = 1,
+                    Name = "C# Programming",
+                    Description = "Quizzes Related to C# Programming"
+                });
+        }
     }
 }

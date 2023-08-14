@@ -6,7 +6,7 @@ using QuizCraft.Models.DTOs;
 
 namespace QuizCraft.Application.QuizManagement.QuestionManagement;
 
-public interface IQuestionRepository
+public interface IQuestionHandler
 {
     Task<OneOf<IEnumerable<QuestionDTO>, RequestError>> RetrieveQuestions(
         int quizId, CancellationToken cancellationToken);

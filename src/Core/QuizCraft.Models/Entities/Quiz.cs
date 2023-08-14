@@ -5,18 +5,22 @@ namespace QuizCraft.Models.Entities;
 
 public class Quiz
 {
+    public Quiz()
+    {
+        CategoriesQuizzes = new List<CategoriesQuiz>();
+        Questions = new List<Question>();
+    }
+
     public int Id { get; set; }
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public int? Score { get; set; }
     public DateTime? CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
-    public int? CreatedBy { get; set; }
-    public int? UpdatedBy { get; set; }
-    public ICollection<CategoriesQuiz> CategoriesQuizzes { get; set; } =
-        new List<CategoriesQuiz>();
+    public int? CreatedByUserId { get; set; }
+    public int? UpdatedByUserId { get; set; }
+    public ICollection<CategoriesQuiz> CategoriesQuizzes { get; set; }
     public User? CreatedByUser { get; set; }
     public User? UpdatedByUser { get; set; }
-    public ICollection<Question> Questions { get; set; } =
-        new List<Question>();
+    public ICollection<Question> Questions { get; set; }
 }

@@ -16,11 +16,11 @@ public static class ApplicationServiceRegistration
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services
-            .AddScoped<ICategoryRepository, CategoryRepository>()
-            .AddScoped<IQuizRepository, QuizRepository>()
-            .AddScoped<IQuestionRepository, QuestionRepository>()
-            .AddScoped<IUpsertQuestionRepository<MultipleOptionQuestionDTO>, MultipleOptionQuestionRepository>()
-            .AddScoped<IUpsertQuestionRepository<FillInBlankQuestionDTO>, FillInBlankQuestionRepository>()
+            .AddScoped<ICategoryHandler, CategoryHandler>()
+            .AddScoped<IQuizHandler, QuizHandler>()
+            .AddScoped<IQuestionHandler, QuestionHandler>()
+            .AddScoped<IUpsertQuestionRepository<MultipleOptionQuestionDTO>, MultipleOptionQuestionHandler>()
+            .AddScoped<IUpsertQuestionRepository<FillInBlankQuestionDTO>, FillInBlankQuestionHandler>()
             .AddScoped<IValidator<CategoryDTO>, CategoryValidator>()
             .AddScoped<IValidator<QuizDTO>, QuizValidator>()
             .AddScoped<IValidator<FillInBlankQuestionDTO>, FillInBlankQuestionValidator>()

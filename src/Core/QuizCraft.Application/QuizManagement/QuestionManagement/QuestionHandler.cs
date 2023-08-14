@@ -7,7 +7,7 @@ using System.Net;
 
 namespace QuizCraft.Application.QuizManagement.QuestionManagement;
 
-public class QuestionRepository : IQuestionRepository
+public class QuestionHandler : IQuestionHandler
 {
     public async Task<OneOf<QuestionDTO, RequestError>> DeleteQuestion(int quizId, int id, CancellationToken cancellationToken)
     {

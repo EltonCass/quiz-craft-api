@@ -5,29 +5,35 @@ using FluentValidation;
 using OneOf;
 using QuizCraft.Application.QuizManagement;
 using QuizCraft.Models.DTOs;
-using QuizCraft.Models.Entities;
 using System.Net;
 
 namespace QuizCraft.Application.CategoryManagement;
 
-public class CategoryRepository : ICategoryRepository
+public class CategoryHandler : ICategoryHandler
 {
     private readonly IValidator<CategoryDTO> _validator;
+    private readonly ICategoryRepository _CategoryRepository;
     private const short _DelayInMs = 100;
 
-    public CategoryRepository(IValidator<CategoryDTO> validator)
+    public CategoryHandler(
+        IValidator<CategoryDTO> validator,
+        ICategoryRepository categoryRepository)
     {
         ArgumentNullException.ThrowIfNull(validator);
+        ArgumentNullException.ThrowIfNull(categoryRepository);
         _validator = validator;
+        _CategoryRepository = categoryRepository;
     }
 
     public async Task<OneOf<CategoryDTO, RequestError>> CreateCategory(CategoryDTO newCategory, CancellationToken cancellationToken)
     {
         var result = _validator.Validate(newCategory);
-        await Task.Delay(_DelayInMs, cancellationToken);
         if (result.IsValid)
         {
-            Stubs.Categories.Add(newCategory);
+            var categoryEntity = CategoryDTO.ToEntity(newCategory);
+            var category = await _CategoryRepository
+                .CreateCategory(categoryEntity, cancellationToken);
+            //Stubs.Categories.Add(newCategory);
             return newCategory;
         }
 

@@ -1,3 +1,14 @@
-﻿namespace QuizCraft.Models.DTOs;
+﻿using QuizCraft.Models.Entities;
 
-public record CategoryDTO(int Id, string Name, string Description);
+namespace QuizCraft.Models.DTOs;
+
+public record CategoryDTO(int Id, string Name, string Description)
+{
+    public static Category ToEntity(CategoryDTO newCategory) =>
+        new Category
+        {
+            Id = newCategory.Id,
+            Name = newCategory.Name,
+            Description = newCategory.Description,
+        };
+}

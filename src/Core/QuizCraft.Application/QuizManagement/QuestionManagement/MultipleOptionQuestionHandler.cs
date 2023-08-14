@@ -8,11 +8,11 @@ using System.Net;
 
 namespace QuizCraft.Application.QuizManagement.QuestionManagement;
 
-public class MultipleOptionQuestionRepository : IUpsertQuestionRepository<MultipleOptionQuestionDTO>
+public class MultipleOptionQuestionHandler : IUpsertQuestionRepository<MultipleOptionQuestionDTO>
 {
     private readonly IValidator<MultipleOptionQuestionDTO> _validator;
 
-    public MultipleOptionQuestionRepository(IValidator<MultipleOptionQuestionDTO> validator)
+    public MultipleOptionQuestionHandler(IValidator<MultipleOptionQuestionDTO> validator)
     {
         ArgumentNullException.ThrowIfNull(validator);
         _validator = validator;
