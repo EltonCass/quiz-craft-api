@@ -74,18 +74,25 @@ public class CategoryHandler : ICategoryHandler
 
     public async Task<IEnumerable<CategoryDTO>> RetrieveCategories(CancellationToken cancellationToken)
     {
-        await Task.Delay(_DelayInMs, cancellationToken);
+        var categories = await _CategoryRepository
+            .GetCategories(cancellationToken);
+        //await Task.Delay(_DelayInMs, cancellationToken);
         return Stubs.Categories;
     }
 
     public async Task<OneOf<CategoryDTO, RequestError>> RetrieveCategory(int id, CancellationToken cancellationToken)
     {
-        await Task.Delay(_DelayInMs, cancellationToken);
-        var foundedCategory = Stubs.Categories.FirstOrDefault(c => c.Id == id);
-        if (foundedCategory is null)
+        var categoryEntity = await _CategoryRepository.GetCategory(id, cancellationToken);
+        if (categoryEntity.Id == 0)
         {
             return new RequestError(HttpStatusCode.NotFound, "Category not found");
         }
+
+        var foundedCategory = new CategoryDTO(
+            Description: categoryEntity.Description ?? string.Empty,
+            Id: categoryEntity.Id,
+            Name: categoryEntity.Name
+        );
 
         return foundedCategory;
     }

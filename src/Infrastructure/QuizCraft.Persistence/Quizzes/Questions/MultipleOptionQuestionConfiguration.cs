@@ -17,7 +17,7 @@ public class MultipleOptionQuestionConfiguration
 
         builder.HasOne(d => d.Question)
             .WithOne(p => p.MultipleOptionQuestion)
-            .HasForeignKey<MultipleOptionQuestion>(d => d.QuestionId)
+            .HasForeignKey<Question>(d => d.Id)
             .HasConstraintName("FK_MultipleOptionQuestions_QuestionId_Questions_Id");
     }
 }

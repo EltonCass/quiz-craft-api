@@ -7,11 +7,11 @@ public class Category
 {
     public Category()
     {
-        CategoryQuizzes = new List<CategoriesQuiz>();
+        Quizzes = new List<Quiz>();
     }
 
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
-    public ICollection<CategoriesQuiz> CategoryQuizzes { get; set; }
+    public ICollection<Quiz> Quizzes { get; set; }
 }

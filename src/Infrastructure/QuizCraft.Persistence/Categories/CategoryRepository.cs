@@ -39,9 +39,11 @@ public class CategoryRepository : ICategoryRepository
 
     public async Task<Category> GetCategory(int categoryId, CancellationToken cancellationToken)
     {
-        return await _Context.Categories
+        var category = await _Context.Categories
             .Where(x => x.Id == categoryId)
             .FirstOrDefaultAsync(cancellationToken) ?? new Category();
+        var debugView = _Context.ChangeTracker.DebugView.ShortView; //TODO Remove once its used
+        return category;
     }
 
     public Task<Category> UpdateCategory(int categoryId, Category updatedCategory, CancellationToken cancellationToken) => throw new NotImplementedException();

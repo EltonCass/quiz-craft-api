@@ -6,12 +6,10 @@ namespace QuizCraft.Models.Entities;
 public class FillInBlankQuestion
 {
     public FillInBlankQuestion()
-    {
-        Question = new Question();
-    }
+    { }
 
     public int Id { get; set; }
     public int WordPosition { get; set; }
     public int QuestionId { get; set; }
-    public Question Question { get; set; }
+    public Question Question { get; set; } = new Question();
 }

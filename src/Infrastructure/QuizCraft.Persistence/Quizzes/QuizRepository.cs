@@ -21,7 +21,7 @@ public class QuizRepository : IQuizRepository
     public async Task<Quiz> GetQuiz(int quizId, CancellationToken cancellationToken)
     {
         var quiz = await _Context.Quizzes
-           .Include(x => x.CategoriesQuizzes)
+           .Include(x => x.Categories)
            .Include(x => x.Questions)
            .Include(x => x.CreatedByUser)
            .Include(x => x.UpdatedByUser)
@@ -30,7 +30,7 @@ public class QuizRepository : IQuizRepository
                Id = x.Id,
                CreatedAt = x.CreatedAt,
                UpdatedAt = x.UpdatedAt,
-               CategoriesQuizzes = x.CategoriesQuizzes,
+               Categories = x.Categories,
                Description = x.Description,
                Questions = x.Questions,
                Score = x.Score,
@@ -48,7 +48,7 @@ public class QuizRepository : IQuizRepository
     public async Task<ICollection<Quiz>> GetQuizzes(CancellationToken cancellationToken)
     {
         var quizzes = await _Context.Quizzes
-            .Include(x => x.CategoriesQuizzes)
+            .Include(x => x.Categories)
             .Include(x => x.Questions)
             .Include(x => x.CreatedByUser)
             .Include(x => x.UpdatedByUser)
@@ -57,7 +57,7 @@ public class QuizRepository : IQuizRepository
                 Id = x.Id,
                 CreatedAt = x.CreatedAt,
                 UpdatedAt = x.UpdatedAt,
-                CategoriesQuizzes = x.CategoriesQuizzes,
+                Categories = x.Categories,
                 Description = x.Description,
                 Questions = x.Questions,
                 Score = x.Score,

@@ -7,7 +7,7 @@ public class Quiz
 {
     public Quiz()
     {
-        CategoriesQuizzes = new List<CategoriesQuiz>();
+        Categories = new List<Quiz>();
         Questions = new List<Question>();
     }
 
@@ -19,7 +19,7 @@ public class Quiz
     public DateTime? UpdatedAt { get; set; }
     public int? CreatedByUserId { get; set; }
     public int? UpdatedByUserId { get; set; }
-    public ICollection<CategoriesQuiz> CategoriesQuizzes { get; set; }
+    public ICollection<Quiz> Categories { get; set; }
     public User? CreatedByUser { get; set; }
     public User? UpdatedByUser { get; set; }
     public ICollection<Question> Questions { get; set; }

@@ -17,7 +17,7 @@ public class FillInBlankQuestionConfiguration
 
         builder.HasOne(d => d.Question)
             .WithOne(p => p.FillInBlankQuestion)
-            .HasForeignKey<FillInBlankQuestion>(d => d.QuestionId)
+            .HasForeignKey<Question>(d => d.Id)
             .HasConstraintName("FK_FillInBlankQuestions_QuestionId_Questions_Id");
     }
 }

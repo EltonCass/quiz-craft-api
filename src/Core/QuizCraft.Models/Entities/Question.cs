@@ -7,7 +7,6 @@ public class Question
 {
     public Question()
     {
-        Quiz = new Quiz();
     }
 
     public int Id { get; set; }
@@ -20,5 +19,5 @@ public class Question
     public DateTime? UpdatedAt { get; set; }
     public FillInBlankQuestion? FillInBlankQuestion { get; set; }
     public MultipleOptionQuestion? MultipleOptionQuestion { get; set; }
-    public Quiz Quiz { get; set; }
+    public Quiz Quiz { get; set; } = new Quiz();
 }

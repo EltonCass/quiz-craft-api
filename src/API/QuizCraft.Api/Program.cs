@@ -19,7 +19,7 @@ namespace QuizCraft.Api
                 .CreateBuilder(args);
             builder = ConfigureMiddlewarePipelines(builder);
             var app = builder.Build();
-            ConfigureMiddleware(app);
+            ConfigurePipeline(app);
         }
 
         private static WebApplicationBuilder ConfigureMiddlewarePipelines(WebApplicationBuilder builder)
@@ -85,7 +85,7 @@ namespace QuizCraft.Api
             return builder;
         }
 
-        private static void ConfigureMiddleware(WebApplication app)
+        private static void ConfigurePipeline(WebApplication app)
         {
             // Configure the HTTP request pipeline.
             app.UseSwagger()
