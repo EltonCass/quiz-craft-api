@@ -15,11 +15,13 @@ public class OptionConfiguration : IEntityTypeConfiguration<Option>
             .HasName("PK_Options_Id");
 
         builder.Property(e => e.Text)
-            .HasMaxLength(500);
+            .HasMaxLength(500)
+            .IsRequired();
 
         builder.HasOne(d => d.MultipleOptionQuestion)
             .WithMany(p => p.Options)
             .HasForeignKey(d => d.MultipleOptionQuestionId)
-            .HasConstraintName("FK_Options_MultipleOptionQuestionId_MultipleOptionQuestions_Id");
+            .HasConstraintName("FK_Options_MultipleOptionQuestionId_MultipleOptionQuestions_Id")
+            .IsRequired();
     }
 }

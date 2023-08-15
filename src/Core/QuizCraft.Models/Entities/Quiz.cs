@@ -3,11 +3,11 @@
 
 namespace QuizCraft.Models.Entities;
 
-public class Quiz
+public class Quiz : IEntity
 {
     public Quiz()
     {
-        Categories = new List<Quiz>();
+        Categories = new List<Category>();
         Questions = new List<Question>();
     }
 
@@ -19,7 +19,7 @@ public class Quiz
     public DateTime? UpdatedAt { get; set; }
     public int? CreatedByUserId { get; set; }
     public int? UpdatedByUserId { get; set; }
-    public ICollection<Quiz> Categories { get; set; }
+    public List<Category> Categories { get; set; }
     public User? CreatedByUser { get; set; }
     public User? UpdatedByUser { get; set; }
     public ICollection<Question> Questions { get; set; }

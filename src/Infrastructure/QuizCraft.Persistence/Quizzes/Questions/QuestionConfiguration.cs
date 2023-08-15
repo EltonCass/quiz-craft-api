@@ -14,18 +14,21 @@ public class QuestionConfiguration : IEntityTypeConfiguration<Question>
         builder.HasKey(e => e.Id).HasName("PK_Questions_Id");
 
         builder.Property(e => e.CorrectAnswer)
-            .HasMaxLength(400);
+            .HasMaxLength(400)
+            .IsRequired();
         builder.Property(e => e.CreatedAt)
             .HasColumnType("datetime")
             .IsRequired(false);
         builder.Property(e => e.Text)
-            .HasMaxLength(500);
+            .HasMaxLength(500)
+            .IsRequired();
         builder.Property(e => e.UpdatedAt)
             .HasColumnType("datetime")
             .IsRequired(false);
         builder.HasOne(d => d.Quiz)
             .WithMany(p => p.Questions)
             .HasForeignKey(d => d.QuizId)
-            .HasConstraintName("FK_Questions_QuizId_Quizzes_Id");
+            .HasConstraintName("FK_Questions_QuizId_Quizzes_Id")
+            .IsRequired();
     }
 }

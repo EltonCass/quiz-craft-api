@@ -3,7 +3,7 @@
 
 namespace QuizCraft.Models.Entities;
 
-public class Category
+public class Category : IEntity
 {
     public Category()
     {
@@ -13,5 +13,5 @@ public class Category
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
-    public ICollection<Quiz> Quizzes { get; set; }
+    public List<Quiz> Quizzes { get; set; }
 }

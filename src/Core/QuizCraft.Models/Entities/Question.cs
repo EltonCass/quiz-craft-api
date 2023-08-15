@@ -3,7 +3,7 @@
 
 namespace QuizCraft.Models.Entities;
 
-public class Question
+public class Question : IEntity
 {
     public Question()
     {
@@ -19,5 +19,5 @@ public class Question
     public DateTime? UpdatedAt { get; set; }
     public FillInBlankQuestion? FillInBlankQuestion { get; set; }
     public MultipleOptionQuestion? MultipleOptionQuestion { get; set; }
-    public Quiz Quiz { get; set; } = new Quiz();
+    public Quiz? Quiz { get; set; }
 }

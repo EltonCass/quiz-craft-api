@@ -1,13 +1,17 @@
 ﻿// Copyright (c) 2023 Elton Cassas. All rights reserved.
 // See LICENSE.txt
 
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using QuizCraft.Application.CategoryManagement;
 using QuizCraft.Application.QuizManagement;
+using QuizCraft.Application.QuizManagement.QuestionManagement;
+using QuizCraft.Models.Entities;
 using QuizCraft.Persistence.Categories;
 using QuizCraft.Persistence.Quizzes;
+using QuizCraft.Persistence.Quizzes.Questions;
 
 namespace QuizCraft.Persistence;
 
@@ -28,8 +32,12 @@ public static class PersistenceServicesRegistration
                 env == "Development"));
 
         // Add Repositories
+        services.AddScoped<IValidator<Category>, CategoryServerSideValidator>();
+
         services.AddScoped<IQuizRepository, QuizRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IMultipleOptionQuestionRepository, MultipleOptionQuestionRepository>();
+        services.AddScoped<IFillInBlankQuestionRepository, FillInBlankQuestionRepository>();
 
         return services;
     }
