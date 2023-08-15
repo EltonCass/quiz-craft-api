@@ -3,7 +3,7 @@
 
 namespace QuizCraft.Models.Entities
 {
-    public class User
+    public class User : IEntity
     {
         public int Id { get; set; }
         public string FullName { get; set; } = string.Empty;

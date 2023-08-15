@@ -12,20 +12,20 @@ namespace QuizCraft.Application.QuizManagement;
 public class QuizHandler : IQuizHandler
 {
     private readonly IValidator<QuizDTO> _validator;
-    private readonly IUpsertQuestionRepository<MultipleOptionQuestionDTO> _multipleOptionRepository;
-    private readonly IUpsertQuestionRepository<FillInBlankQuestionDTO> _fillInBlankRepository;
+    private readonly ISpecificQuestionHandler<MultipleOptionQuestionDTO> _multipleOptionHandler;
+    private readonly ISpecificQuestionHandler<FillInBlankQuestionDTO> _fillInBlankHandler;
 
     public QuizHandler(
         IValidator<QuizDTO> validator,
-        IUpsertQuestionRepository<MultipleOptionQuestionDTO> multipleOptionRepository,
-        IUpsertQuestionRepository<FillInBlankQuestionDTO> fillInBlankRepository)
+        ISpecificQuestionHandler<MultipleOptionQuestionDTO> multipleOptionRepository,
+        ISpecificQuestionHandler<FillInBlankQuestionDTO> fillInBlankRepository)
     {
         ArgumentNullException.ThrowIfNull(validator);
         ArgumentNullException.ThrowIfNull(multipleOptionRepository);
         ArgumentNullException.ThrowIfNull(fillInBlankRepository);
         _validator = validator;
-        _multipleOptionRepository = multipleOptionRepository;
-        _fillInBlankRepository = fillInBlankRepository;
+        _multipleOptionHandler = multipleOptionRepository;
+        _fillInBlankHandler = fillInBlankRepository;
     }
 
     public async Task<OneOf<QuizDTO, RequestError>> CreateQuiz(QuizDTO newQuiz, CancellationToken cancellationToken)
@@ -44,11 +44,11 @@ public class QuizHandler : IQuizHandler
         {
             if (question.Type is QuestionType.MultipleOption)
             {
-                await _multipleOptionRepository.CreateQuestion(newQuiz.Id, (MultipleOptionQuestionDTO)question, cancellationToken);
+                await _multipleOptionHandler.CreateQuestion(newQuiz.Id, (MultipleOptionQuestionDTO)question, cancellationToken);
             }
             else if (question.Type is QuestionType.FillInBlank)
             {
-                await _fillInBlankRepository.CreateQuestion(newQuiz.Id, (FillInBlankQuestionDTO)question, cancellationToken);
+                await _fillInBlankHandler.CreateQuestion(newQuiz.Id, (FillInBlankQuestionDTO)question, cancellationToken);
             }
         }
 

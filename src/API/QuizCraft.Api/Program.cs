@@ -2,7 +2,6 @@
 // See LICENSE.txt
 
 using Microsoft.AspNetCore.Mvc;
-using QuizCraft.Api.Middlewares;
 using QuizCraft.Api.PromptManagement;
 using QuizCraft.Api.QuizManagement;
 using QuizCraft.Application;
@@ -92,8 +91,7 @@ namespace QuizCraft.Api
                 .UseSwaggerUI(c => c.SwaggerEndpoint(
                 "/swagger/v1/swagger.json", "QuizCraft Api"));
 
-            app.UseMiddleware<SecurityMiddleware>()
-                .UseRouting()
+            app.UseRouting()
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {

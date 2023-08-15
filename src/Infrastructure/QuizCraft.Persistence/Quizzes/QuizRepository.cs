@@ -2,6 +2,7 @@
 // See LICENSE.txt
 
 using Microsoft.EntityFrameworkCore;
+using OneOf;
 using QuizCraft.Application.QuizManagement;
 using QuizCraft.Models.Entities;
 
@@ -16,9 +17,9 @@ public class QuizRepository : IQuizRepository
         _Context = context;
     }
 
-    public Task<Quiz> CreateQuiz(Quiz quiz, CancellationToken cancellationToken) => throw new NotImplementedException();
-    public Task<Quiz> DeleteQuiz(int quizId, CancellationToken cancellationToken) => throw new NotImplementedException();
-    public async Task<Quiz> GetQuiz(int quizId, CancellationToken cancellationToken)
+    public Task<OneOf<Quiz, RequestError>> CreateQuiz(Quiz quiz, CancellationToken cancellationToken) => throw new NotImplementedException();
+    public Task<OneOf<Quiz, RequestError>> DeleteQuiz(int quizId, CancellationToken cancellationToken) => throw new NotImplementedException();
+    public async Task<OneOf<Quiz, RequestError>> GetQuiz(int quizId, CancellationToken cancellationToken)
     {
         var quiz = await _Context.Quizzes
            .Include(x => x.Categories)
@@ -71,5 +72,5 @@ public class QuizRepository : IQuizRepository
         return quizzes;
     }
 
-    public Task<Quiz> UpdateQuiz(int quizId, Quiz updatedQuiz, CancellationToken cancellationToken) => throw new NotImplementedException();
+    public Task<OneOf<Quiz, RequestError>> UpdateQuiz(int quizId, Quiz updatedQuiz, CancellationToken cancellationToken) => throw new NotImplementedException();
 }

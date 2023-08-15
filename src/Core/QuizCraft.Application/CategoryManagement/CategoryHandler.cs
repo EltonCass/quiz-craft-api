@@ -2,21 +2,22 @@
 // See LICENSE.txt
 
 using FluentValidation;
+using Mapster;
 using OneOf;
 using QuizCraft.Application.QuizManagement;
 using QuizCraft.Models.DTOs;
+using QuizCraft.Models.Entities;
 using System.Net;
 
 namespace QuizCraft.Application.CategoryManagement;
 
 public class CategoryHandler : ICategoryHandler
 {
-    private readonly IValidator<CategoryDTO> _validator;
+    private readonly IValidator<CategoryForUpsert> _validator;
     private readonly ICategoryRepository _CategoryRepository;
-    private const short _DelayInMs = 100;
 
     public CategoryHandler(
-        IValidator<CategoryDTO> validator,
+        IValidator<CategoryForUpsert> validator,
         ICategoryRepository categoryRepository)
     {
         ArgumentNullException.ThrowIfNull(validator);
@@ -25,111 +26,100 @@ public class CategoryHandler : ICategoryHandler
         _CategoryRepository = categoryRepository;
     }
 
-    public async Task<OneOf<CategoryDTO, RequestError>> CreateCategory(CategoryDTO newCategory, CancellationToken cancellationToken)
+    public async Task<OneOf<CategoryForDisplay, RequestError>> CreateCategory(
+        CategoryForUpsert newCategoryDto, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(newCategory);
-        if (result.IsValid)
+        var result = _validator.Validate(newCategoryDto);
+        if (!result.IsValid)
         {
-            var categoryEntity = CategoryDTO.ToEntity(newCategory);
-            var category = await _CategoryRepository
-                .CreateCategory(categoryEntity, cancellationToken);
-            //Stubs.Categories.Add(newCategory);
-            return newCategory;
-        }
-
-        return new RequestError(
+            return new RequestError(
             HttpStatusCode.UnprocessableEntity,
             result.ToString());
+        }
+
+        var createdCategory = await _CategoryRepository
+                .CreateCategory(newCategoryDto.Adapt<Category>(), cancellationToken);
+        if (createdCategory.IsT1)
+        {
+            return createdCategory.AsT1;
+        }
+
+        var createdCategoryDto = createdCategory.AsT0.Adapt<CategoryForDisplay>();
+        return createdCategoryDto;
     }
 
-    public async Task<OneOf<CategoryDTO, RequestError>> DeleteCategory(int id, CancellationToken cancellationToken)
+    public async Task<OneOf<CategoryForDisplay, RequestError>> DeleteCategory(int id, CancellationToken cancellationToken)
     {
-        var foundedCategory = Stubs.Categories.FirstOrDefault(c => c.Id == id);
+        var categoryResult = await _CategoryRepository
+            .DeleteCategory(id, cancellationToken);
 
-        if (foundedCategory is null)
+        if (categoryResult.IsT1)
         {
-            return new RequestError(HttpStatusCode.NotFound, "Category does not exist");
+            return categoryResult.AsT1;
         }
 
-        // Delete Category for quizzes
-        var quizzesCategories = Stubs.Quizzes
-            .Where(q => q.Categories.Select(c => c.Id).Contains(id))
-            .SelectMany(q => q.Categories)
-            .ToList();
-
-        if (quizzesCategories.Any())
-        {
-            quizzesCategories.RemoveAll(c => c.Id == id);
-        }
-
-        var isSuccessful = Stubs.Categories.Remove(foundedCategory);
-        if (!isSuccessful)
-        {
-            return new RequestError(HttpStatusCode.BadRequest, "Category was not removed");
-        }
-
-        await Task.Delay(_DelayInMs , cancellationToken);
-        return foundedCategory;
+        var categoryDto = categoryResult.AsT0.Adapt<CategoryForDisplay>();
+        return categoryDto;
     }
 
-    public async Task<IEnumerable<CategoryDTO>> RetrieveCategories(CancellationToken cancellationToken)
+    public async Task<IEnumerable<CategoryForDisplay>> RetrieveCategories(CancellationToken cancellationToken)
     {
         var categories = await _CategoryRepository
             .GetCategories(cancellationToken);
-        //await Task.Delay(_DelayInMs, cancellationToken);
-        return Stubs.Categories;
+
+        var categoriesDtos = categories.Adapt<ICollection<CategoryForDisplay>>();
+        return categoriesDtos;
     }
 
-    public async Task<OneOf<CategoryDTO, RequestError>> RetrieveCategory(int id, CancellationToken cancellationToken)
+    public async Task<OneOf<CategoryForDisplay, RequestError>> RetrieveCategory(int id, CancellationToken cancellationToken)
     {
-        var categoryEntity = await _CategoryRepository.GetCategory(id, cancellationToken);
-        if (categoryEntity.Id == 0)
+        var categoryResult = await _CategoryRepository
+            .GetCategory(id, cancellationToken);
+        if (categoryResult.IsT1)
         {
-            return new RequestError(HttpStatusCode.NotFound, "Category not found");
+            return categoryResult.AsT1;
         }
 
-        var foundedCategory = new CategoryDTO(
-            Description: categoryEntity.Description ?? string.Empty,
-            Id: categoryEntity.Id,
-            Name: categoryEntity.Name
-        );
-
+        var foundedCategory = categoryResult.AsT0.Adapt<CategoryForDisplay>();
         return foundedCategory;
     }
 
-    public async Task<OneOf<CategoryDTO, RequestError>> UpdateCategory(
-        int id, CategoryDTO category, CancellationToken cancellationToken)
+    public async Task<OneOf<CategoryForDisplay, RequestError>> UpdateCategory(
+        int id, CategoryForUpsert category, CancellationToken cancellationToken)
     {
-        var foundedCategory = Stubs.Categories.FirstOrDefault(c => c.Id == id);
-        if (foundedCategory is null)
-        {
-            return new RequestError(HttpStatusCode.NotFound, "Category not found");
-        }
-
         var result = _validator.Validate(category);
-        if (!result.IsValid) 
+        if (!result.IsValid)
         {
             return new RequestError(
                 HttpStatusCode.UnprocessableEntity,
                 result.ToString());
         }
 
-        // Update existing categories
-        var quizzesCategories = Stubs.Quizzes
-            .Where(q => q.Categories.Select(c => c.Id).Contains(id))
-            .SelectMany(q => q.Categories)
-            .ToList();
-
-        if (quizzesCategories.Any())
+        var categoryEntity = category.Adapt<Category>();
+        categoryEntity.Id = id;
+        var categoryResult = await _CategoryRepository
+            .UpdateCategory(categoryEntity, cancellationToken);
+        if (categoryResult.IsT1)
         {
-            for (int i = 0; i < quizzesCategories.Count - 1; i++)
-            {
-                quizzesCategories[i] = category;
-            }
+            return categoryResult.AsT1;
         }
 
-        foundedCategory = category;
-        await Task.Delay(_DelayInMs, cancellationToken);
-        return category;
+        var updatedCategory = categoryResult.AsT0.Adapt<CategoryForDisplay>();
+        return updatedCategory;
+
+        //var quizzesCategories = Stubs.Quizzes
+        //    .Where(q => q.Categories.Select(c => c.Id).Contains(id))
+        //    .SelectMany(q => q.Categories)
+        //    .ToList();
+
+        //if (quizzesCategories.Any())
+        //{
+        //    for (int i = 0; i < quizzesCategories.Count - 1; i++)
+        //    {
+        //        quizzesCategories[i] = category;
+        //    }
+        //}
+
+        //foundedCategory = category;
     }
 }

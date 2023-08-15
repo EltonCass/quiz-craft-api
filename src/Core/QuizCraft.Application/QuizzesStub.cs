@@ -7,7 +7,7 @@ namespace QuizCraft.Application;
 
 public static class Stubs
 {
-    public static List<CategoryDTO> Categories = new List<CategoryDTO>()
+    public static List<CategoryForDisplay> Categories = new List<CategoryForDisplay>()
     {
         new(1, "Geography", ""),
         new(2, "Art", "")

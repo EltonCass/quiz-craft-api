@@ -21,7 +21,8 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .IsRequired(false);
         builder.Property(e => e.Name)
             .HasMaxLength(100)
-            .IsUnicode(false);
+            .IsUnicode(false)
+            .IsRequired();
 
         
     }

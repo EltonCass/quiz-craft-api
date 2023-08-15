@@ -55,61 +55,61 @@ namespace QuizCraft.Persistence
                     CreatedByUserId = 1,
                 });
 
-            //modelBuilder.Entity<Question>().HasData(
-            //    new Question[]
-            //    {
-            //        new Question{
-            //            Id = 1,
-            //            CorrectAnswer = "Common Language Runtime",
-            //            Text = "What does the acronym \"CLR\" stand for in the context of C# and .NET?",
-            //            CreatedAt = DateTime.Now,
-            //            QuizId = 1,
-            //        },
-            //        new Question()
-            //        {
-            //            Id = 2,
-            //            CorrectAnswer = "property",
-            //            Text = "In C#, a ______ is a class member that encapsulates a get accessor and an optional set accessor to provide controlled access to an object's state",
-            //            CreatedAt = DateTime.Now,
-            //            QuizId = 1,
-            //        }
-            //    });
+            modelBuilder.Entity<Question>().HasData(
+                new Question[]
+                {
+                    new Question{
+                        Id = 1,
+                        CorrectAnswer = "Common Language Runtime",
+                        Text = "What does the acronym \"CLR\" stand for in the context of C# and .NET?",
+                        CreatedAt = DateTime.Now,
+                        QuizId = 1,
+                    },
+                    new Question()
+                    {
+                        Id = 2,
+                        CorrectAnswer = "property",
+                        Text = "In C#, a ______ is a class member that encapsulates a get accessor and an optional set accessor to provide controlled access to an object's state",
+                        CreatedAt = DateTime.Now,
+                        QuizId = 1,
+                    }
+                });
 
-            //modelBuilder.Entity<MultipleOptionQuestion>().HasData(
-            //    new MultipleOptionQuestion()
-            //    {
-            //        Id = 1,
-            //        QuestionId = 1
-            //    });
+            modelBuilder.Entity<MultipleOptionQuestion>().HasData(
+                new MultipleOptionQuestion()
+                {
+                    Id = 1,
+                    QuestionId = 1
+                });
 
-            //modelBuilder.Entity<FillInBlankQuestion>().HasData(
-            //    new FillInBlankQuestion()
-            //    {
-            //        Id = 1,
-            //        QuestionId = 2,
-            //        WordPosition = 4
-            //    });
+            modelBuilder.Entity<FillInBlankQuestion>().HasData(
+                new FillInBlankQuestion()
+                {
+                    Id = 1,
+                    QuestionId = 2,
+                    WordPosition = 4
+                });
 
-            //modelBuilder.Entity<Option>().HasData(
-            //    new Option()
-            //    {
-            //        Id = 1,
-            //        MultipleOptionQuestionId = 1,
-            //        Text = "Common Language Runtime",
-            //    },
-            //    new Option()
-            //    {
-            //        Id = 2,
-            //        MultipleOptionQuestionId = 1,
-            //        Text = "Core Language Runtime",
-            //    },
-            //    new Option()
-            //    {
-            //        Id = 2,
-            //        MultipleOptionQuestionId = 1,
-            //        Text = "Compiled Language Runtime",
-            //    });
-               
+            modelBuilder.Entity<Option>().HasData(
+                new Option()
+                {
+                    Id = 1,
+                    MultipleOptionQuestionId = 1,
+                    Text = "Common Language Runtime",
+                },
+                new Option()
+                {
+                    Id = 2,
+                    MultipleOptionQuestionId = 1,
+                    Text = "Core Language Runtime",
+                },
+                new Option()
+                {
+                    Id = 3,
+                    MultipleOptionQuestionId = 1,
+                    Text = "Compiled Language Runtime",
+                });
+
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Net;
 
 namespace QuizCraft.Application.QuizManagement.QuestionManagement;
 
-public class FillInBlankQuestionHandler : IUpsertQuestionRepository<FillInBlankQuestionDTO>
+public class FillInBlankQuestionHandler : ISpecificQuestionHandler<FillInBlankQuestionDTO>
 {
     private readonly IValidator<FillInBlankQuestionDTO> _validator;
 

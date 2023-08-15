@@ -3,7 +3,7 @@
     public record QuizDTO
     {
         public int Id { get; init; }
-        public IList<CategoryDTO> Categories { get; init; }
+        public IList<CategoryForDisplay> Categories { get; init; }
         public string Title { get; init; }
         public string Description { get; init; }
         public IList<QuestionDTO> Questions { get; init; }
@@ -13,7 +13,7 @@
 
         public QuizDTO(
             int id,
-            IEnumerable<CategoryDTO> categories,
+            IEnumerable<CategoryForDisplay> categories,
             string description,
             string title,
             IEnumerable<QuestionDTO> questions,
@@ -22,7 +22,7 @@
             int? createdBy = null)
         {
             Id = id;
-            Categories = new List<CategoryDTO>(categories);
+            Categories = new List<CategoryForDisplay>(categories);
             Description = description;
             Title = title;
             Questions = new List<QuestionDTO>(questions);

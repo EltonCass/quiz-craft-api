@@ -3,16 +3,15 @@
 
 namespace QuizCraft.Models.Entities
 {
-    public class Option
+    public class Option : IEntity
     {
         public Option()
         {
-            MultipleOptionQuestion = new();
         }
 
         public int Id { get; set; }
         public int MultipleOptionQuestionId { get; set; }
         public string Text { get; set; } = string.Empty;
-        public MultipleOptionQuestion MultipleOptionQuestion { get; set; }
+        public MultipleOptionQuestion? MultipleOptionQuestion { get; set; }
     }
 }
