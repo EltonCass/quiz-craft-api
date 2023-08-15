@@ -9,9 +9,14 @@ namespace QuizCraft.Application.CategoryManagement;
 
 public interface ICategoryHandler
 {
-    Task<IEnumerable<CategoryDTO>> RetrieveCategories(CancellationToken cancellationToken);
-    Task<OneOf<CategoryDTO, RequestError>> RetrieveCategory(int id, CancellationToken cancellationToken);
-    Task<OneOf<CategoryDTO, RequestError>> CreateCategory(CategoryDTO newCategory, CancellationToken cancellationToken);
-    Task<OneOf<CategoryDTO, RequestError>> UpdateCategory(int id, CategoryDTO category, CancellationToken cancellationToken);
-    Task<OneOf<CategoryDTO, RequestError>> DeleteCategory(int id, CancellationToken cancellationToken);
+    Task<IEnumerable<CategoryForDisplay>> RetrieveCategories(
+        CancellationToken cancellationToken);
+    Task<OneOf<CategoryForDisplay, RequestError>> RetrieveCategory(
+        int id, CancellationToken cancellationToken);
+    Task<OneOf<CategoryForDisplay, RequestError>> CreateCategory(
+        CategoryForUpsert newCategory, CancellationToken cancellationToken);
+    Task<OneOf<CategoryForDisplay, RequestError>> UpdateCategory(
+        int id, CategoryForUpsert category, CancellationToken cancellationToken);
+    Task<OneOf<CategoryForDisplay, RequestError>> DeleteCategory(
+        int id, CancellationToken cancellationToken);
 }

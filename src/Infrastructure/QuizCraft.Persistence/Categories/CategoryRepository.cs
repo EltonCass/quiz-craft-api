@@ -96,7 +96,6 @@ public class CategoryRepository : ICategoryRepository
         var foundedCategory = await _Context.Categories
             .Where(x => x.Id == updatedCategory.Id)
             .FirstOrDefaultAsync(cancellationToken);
-
         if (foundedCategory is null)
         {
             return new RequestError(
@@ -111,7 +110,8 @@ public class CategoryRepository : ICategoryRepository
                 HttpStatusCode.UnprocessableEntity, validationResult.ToString());
         }
 
-        foundedCategory = updatedCategory;
+        foundedCategory.Name = updatedCategory.Name;
+        foundedCategory.Description = updatedCategory.Description;
         var debugView = _Context.ChangeTracker.DebugView.ShortView; //TODO Remove once its used
         var result = await _Context.SaveChangesAsync(cancellationToken);
         if (result == 0)

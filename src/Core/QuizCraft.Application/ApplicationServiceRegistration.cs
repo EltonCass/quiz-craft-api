@@ -19,9 +19,9 @@ public static class ApplicationServiceRegistration
             .AddScoped<ICategoryHandler, CategoryHandler>()
             .AddScoped<IQuizHandler, QuizHandler>()
             .AddScoped<IQuestionHandler, QuestionHandler>()
-            .AddScoped<IUpsertQuestionRepository<MultipleOptionQuestionDTO>, MultipleOptionQuestionHandler>()
-            .AddScoped<IUpsertQuestionRepository<FillInBlankQuestionDTO>, FillInBlankQuestionHandler>()
-            .AddScoped<IValidator<CategoryDTO>, CategoryValidator>()
+            .AddScoped<ISpecificQuestionHandler<MultipleOptionQuestionDTO>, MultipleOptionQuestionHandler>()
+            .AddScoped<ISpecificQuestionHandler<FillInBlankQuestionDTO>, FillInBlankQuestionHandler>()
+            .AddScoped<IValidator<CategoryForUpsert>, CategoryValidator>()
             .AddScoped<IValidator<QuizDTO>, QuizValidator>()
             .AddScoped<IValidator<FillInBlankQuestionDTO>, FillInBlankQuestionValidator>()
             .AddScoped<IValidator<MultipleOptionQuestionDTO>, MultipleOptionQuestionValidator>();

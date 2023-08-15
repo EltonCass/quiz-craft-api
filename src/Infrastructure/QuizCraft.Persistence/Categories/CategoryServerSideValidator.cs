@@ -17,10 +17,11 @@ internal class CategoryServerSideValidator : AbstractValidator<Category>
         _Context = context;
 
         RuleFor(c => c.Name)
-            .MustAsync((c, cn,  cancellationToken) =>
+            .MustAsync(async (c, cn,  cancellationToken) =>
             {
-                return _Context.Categories
-                    .AnyAsync(x => x.Name != cn || x.Id == c.Id, cancellationToken);
+                var res =  await _Context.Categories
+                    .AllAsync(x => x.Name != cn || x.Id == c.Id, cancellationToken);
+                return res;
             })
             .WithMessage(ValidationMessages.NameNotUnique);
 

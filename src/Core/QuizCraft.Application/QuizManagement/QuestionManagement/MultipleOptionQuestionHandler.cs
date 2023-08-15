@@ -8,7 +8,7 @@ using System.Net;
 
 namespace QuizCraft.Application.QuizManagement.QuestionManagement;
 
-public class MultipleOptionQuestionHandler : IUpsertQuestionRepository<MultipleOptionQuestionDTO>
+public class MultipleOptionQuestionHandler : ISpecificQuestionHandler<MultipleOptionQuestionDTO>
 {
     private readonly IValidator<MultipleOptionQuestionDTO> _validator;
 

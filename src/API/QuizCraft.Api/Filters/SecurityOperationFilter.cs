@@ -4,7 +4,7 @@
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace QuizCraft.Api.ApiDocumentation;
+namespace QuizCraft.Api.Filters;
 
 public class SecurityOperationFilter : IOperationFilter
 {

@@ -6,11 +6,15 @@ using QuizCraft.Models.DTOs;
 
 namespace QuizCraft.Application.CategoryManagement;
 
-internal class CategoryValidator : AbstractValidator<CategoryDTO>
+internal class CategoryValidator : AbstractValidator<CategoryForUpsert>
 {
     public CategoryValidator()
     {
-        RuleFor(c => c.Name).NotEmpty();
-        RuleFor(c => c.Description).NotEmpty();
+        RuleFor(c => c.Name)
+            .NotEmpty()
+            .MaximumLength(100);
+        RuleFor(c => c.Description)
+            .MaximumLength(100)
+            .When(c => !string.IsNullOrEmpty(c.Description));
     }
 }

@@ -13,11 +13,11 @@ namespace QuizCraft.Application.CategoryManagement;
 
 public class CategoryHandler : ICategoryHandler
 {
-    private readonly IValidator<CategoryDTO> _validator;
+    private readonly IValidator<CategoryForUpsert> _validator;
     private readonly ICategoryRepository _CategoryRepository;
 
     public CategoryHandler(
-        IValidator<CategoryDTO> validator,
+        IValidator<CategoryForUpsert> validator,
         ICategoryRepository categoryRepository)
     {
         ArgumentNullException.ThrowIfNull(validator);
@@ -26,8 +26,8 @@ public class CategoryHandler : ICategoryHandler
         _CategoryRepository = categoryRepository;
     }
 
-    public async Task<OneOf<CategoryDTO, RequestError>> CreateCategory(
-        CategoryDTO newCategoryDto, CancellationToken cancellationToken)
+    public async Task<OneOf<CategoryForDisplay, RequestError>> CreateCategory(
+        CategoryForUpsert newCategoryDto, CancellationToken cancellationToken)
     {
         var result = _validator.Validate(newCategoryDto);
         if (!result.IsValid)
@@ -44,11 +44,11 @@ public class CategoryHandler : ICategoryHandler
             return createdCategory.AsT1;
         }
 
-        var createdCategoryDto = createdCategory.AsT0.Adapt<CategoryDTO>();
+        var createdCategoryDto = createdCategory.AsT0.Adapt<CategoryForDisplay>();
         return createdCategoryDto;
     }
 
-    public async Task<OneOf<CategoryDTO, RequestError>> DeleteCategory(int id, CancellationToken cancellationToken)
+    public async Task<OneOf<CategoryForDisplay, RequestError>> DeleteCategory(int id, CancellationToken cancellationToken)
     {
         var categoryResult = await _CategoryRepository
             .DeleteCategory(id, cancellationToken);
@@ -58,20 +58,20 @@ public class CategoryHandler : ICategoryHandler
             return categoryResult.AsT1;
         }
 
-        var categoryDto = categoryResult.AsT0.Adapt<CategoryDTO>();
+        var categoryDto = categoryResult.AsT0.Adapt<CategoryForDisplay>();
         return categoryDto;
     }
 
-    public async Task<IEnumerable<CategoryDTO>> RetrieveCategories(CancellationToken cancellationToken)
+    public async Task<IEnumerable<CategoryForDisplay>> RetrieveCategories(CancellationToken cancellationToken)
     {
         var categories = await _CategoryRepository
             .GetCategories(cancellationToken);
 
-        var categoriesDtos = categories.Adapt<ICollection<CategoryDTO>>();
+        var categoriesDtos = categories.Adapt<ICollection<CategoryForDisplay>>();
         return categoriesDtos;
     }
 
-    public async Task<OneOf<CategoryDTO, RequestError>> RetrieveCategory(int id, CancellationToken cancellationToken)
+    public async Task<OneOf<CategoryForDisplay, RequestError>> RetrieveCategory(int id, CancellationToken cancellationToken)
     {
         var categoryResult = await _CategoryRepository
             .GetCategory(id, cancellationToken);
@@ -80,12 +80,12 @@ public class CategoryHandler : ICategoryHandler
             return categoryResult.AsT1;
         }
 
-        var foundedCategory = categoryResult.AsT0.Adapt<CategoryDTO>();
+        var foundedCategory = categoryResult.AsT0.Adapt<CategoryForDisplay>();
         return foundedCategory;
     }
 
-    public async Task<OneOf<CategoryDTO, RequestError>> UpdateCategory(
-        int id, CategoryDTO category, CancellationToken cancellationToken)
+    public async Task<OneOf<CategoryForDisplay, RequestError>> UpdateCategory(
+        int id, CategoryForUpsert category, CancellationToken cancellationToken)
     {
         var result = _validator.Validate(category);
         if (!result.IsValid)
@@ -104,7 +104,7 @@ public class CategoryHandler : ICategoryHandler
             return categoryResult.AsT1;
         }
 
-        var updatedCategory = categoryResult.AsT0.Adapt<CategoryDTO>();
+        var updatedCategory = categoryResult.AsT0.Adapt<CategoryForDisplay>();
         return updatedCategory;
 
         //var quizzesCategories = Stubs.Quizzes
