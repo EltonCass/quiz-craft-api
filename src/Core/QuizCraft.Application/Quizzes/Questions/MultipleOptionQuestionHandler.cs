@@ -3,10 +3,11 @@
 
 using FluentValidation;
 using OneOf;
+using QuizCraft.Models;
 using QuizCraft.Models.DTOs;
 using System.Net;
 
-namespace QuizCraft.Application.QuizManagement.QuestionManagement;
+namespace QuizCraft.Application.Quizzes.Questions;
 
 public class MultipleOptionQuestionHandler : ISpecificQuestionHandler<MultipleOptionQuestionDTO>
 {

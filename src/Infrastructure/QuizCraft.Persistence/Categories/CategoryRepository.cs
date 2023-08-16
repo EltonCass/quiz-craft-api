@@ -5,7 +5,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using OneOf;
 using QuizCraft.Application.CategoryManagement;
-using QuizCraft.Application.QuizManagement;
+using QuizCraft.Models;
 using QuizCraft.Models.Entities;
 using System.Net;
 using static QuizCraft.Models.Constants.Constants;
@@ -26,7 +26,8 @@ public class CategoryRepository : ICategoryRepository
     public async Task<OneOf<Category, RequestError>> CreateCategory(
         Category category, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(category);
+        var validationResult = await _validator
+            .ValidateAsync(category, cancellationToken);
         if (!validationResult.IsValid)
         {
             return new RequestError(
@@ -35,6 +36,7 @@ public class CategoryRepository : ICategoryRepository
 
         await _Context.Categories
             .AddAsync(category, cancellationToken);
+        _Context.ChangeTracker.DetectChanges();
         var debugView = _Context.ChangeTracker.DebugView.ShortView; //TODO Remove once its used
         var result = await _Context.SaveChangesAsync(cancellationToken);
 
@@ -50,13 +52,15 @@ public class CategoryRepository : ICategoryRepository
     public async Task<OneOf<Category, RequestError>> DeleteCategory(
         int categoryId, CancellationToken cancellationToken)
     {
-        var foundedCategory = await GetCategory(categoryId, cancellationToken);
+        var foundedCategory = await GetCategory(
+            categoryId, cancellationToken);
         if (foundedCategory.IsT1)
         {
             return foundedCategory;
         }
 
         _Context.Categories.Remove(foundedCategory.AsT0);
+        _Context.ChangeTracker.DetectChanges();
         var debugView = _Context.ChangeTracker.DebugView.ShortView; //TODO Remove once its used
         var result = await _Context.SaveChangesAsync(cancellationToken);
 
@@ -72,7 +76,8 @@ public class CategoryRepository : ICategoryRepository
     public async Task<ICollection<Category>> GetCategories(
         CancellationToken cancellationToken)
     {
-        return await _Context.Categories.ToListAsync(cancellationToken);
+        return await _Context.Categories
+            .AsNoTracking().ToListAsync(cancellationToken);
     }
 
     public async Task<OneOf<Category, RequestError>> GetCategory(
@@ -81,7 +86,7 @@ public class CategoryRepository : ICategoryRepository
         var category = await _Context.Categories
             .Where(x => x.Id == categoryId)
             .FirstOrDefaultAsync(cancellationToken);
-        var debugView = _Context.ChangeTracker.DebugView.ShortView; //TODO Remove once its used
+
         if (category is null)
         {
             return new RequestError(HttpStatusCode.NotFound, RequestErrorMessages.CategoryNotFound);
@@ -103,7 +108,7 @@ public class CategoryRepository : ICategoryRepository
         }
 
         var validationResult = await _validator
-            .ValidateAsync(updatedCategory);
+            .ValidateAsync(updatedCategory, cancellationToken);
         if (!validationResult.IsValid)
         {
             return new RequestError(
@@ -112,6 +117,7 @@ public class CategoryRepository : ICategoryRepository
 
         foundedCategory.Name = updatedCategory.Name;
         foundedCategory.Description = updatedCategory.Description;
+        _Context.ChangeTracker.DetectChanges();
         var debugView = _Context.ChangeTracker.DebugView.ShortView; //TODO Remove once its used
         var result = await _Context.SaveChangesAsync(cancellationToken);
         if (result == 0)

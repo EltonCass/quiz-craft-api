@@ -3,7 +3,8 @@
 
 using Microsoft.EntityFrameworkCore;
 using OneOf;
-using QuizCraft.Application.QuizManagement;
+using QuizCraft.Application.Quizzes;
+using QuizCraft.Models;
 using QuizCraft.Models.Entities;
 
 namespace QuizCraft.Persistence.Quizzes;

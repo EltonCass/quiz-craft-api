@@ -4,7 +4,7 @@
 using FluentValidation;
 using QuizCraft.Models.DTOs;
 
-namespace QuizCraft.Application.CategoryManagement;
+namespace QuizCraft.Application.Categories;
 
 internal class CategoryValidator : AbstractValidator<CategoryForUpsert>
 {

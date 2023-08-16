@@ -4,12 +4,13 @@
 using FluentValidation;
 using Mapster;
 using OneOf;
-using QuizCraft.Application.QuizManagement;
+using QuizCraft.Application.CategoryManagement;
+using QuizCraft.Models;
 using QuizCraft.Models.DTOs;
 using QuizCraft.Models.Entities;
 using System.Net;
 
-namespace QuizCraft.Application.CategoryManagement;
+namespace QuizCraft.Application.Categories;
 
 public class CategoryHandler : ICategoryHandler
 {

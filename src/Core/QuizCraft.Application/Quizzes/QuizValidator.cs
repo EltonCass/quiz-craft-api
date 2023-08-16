@@ -4,7 +4,7 @@
 using FluentValidation;
 using QuizCraft.Models.DTOs;
 
-namespace QuizCraft.Application.QuizManagement;
+namespace QuizCraft.Application.Quizzes;
 
 internal class QuizValidator : AbstractValidator<QuizDTO>
 {

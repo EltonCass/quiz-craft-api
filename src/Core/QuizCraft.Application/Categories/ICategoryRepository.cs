@@ -2,10 +2,10 @@
 // See LICENSE.txt
 
 using OneOf;
-using QuizCraft.Application.QuizManagement;
+using QuizCraft.Models;
 using QuizCraft.Models.Entities;
 
-namespace QuizCraft.Application.CategoryManagement;
+namespace QuizCraft.Application.Categories;
 
 public interface ICategoryRepository
 {

@@ -3,9 +3,9 @@
 
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using QuizCraft.Application.CategoryManagement;
-using QuizCraft.Application.QuizManagement;
-using QuizCraft.Application.QuizManagement.QuestionManagement;
+using QuizCraft.Application.Categories;
+using QuizCraft.Application.Quizzes;
+using QuizCraft.Application.Quizzes.Questions;
 using QuizCraft.Models.DTOs;
 using QuizCraft.Models.Entities;
 

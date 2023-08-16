@@ -3,8 +3,8 @@
 
 using Microsoft.AspNetCore.Mvc;
 using QuizCraft.Api.Helpers;
-using QuizCraft.Application.QuizManagement;
-using QuizCraft.Application.QuizManagement.QuestionManagement;
+using QuizCraft.Application.Quizzes;
+using QuizCraft.Application.Quizzes.Questions;
 using QuizCraft.Models.DTOs;
 
 namespace QuizCraft.Api.Quizzes;

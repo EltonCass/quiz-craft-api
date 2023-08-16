@@ -3,11 +3,12 @@
 
 using FluentValidation;
 using OneOf;
-using QuizCraft.Application.QuizManagement.QuestionManagement;
+using QuizCraft.Application.Quizzes.Questions;
+using QuizCraft.Models;
 using QuizCraft.Models.DTOs;
 using System.Net;
 
-namespace QuizCraft.Application.QuizManagement;
+namespace QuizCraft.Application.Quizzes;
 
 public class QuizHandler : IQuizHandler
 {
@@ -68,16 +69,16 @@ public class QuizHandler : IQuizHandler
         Stubs.Quizzes.Remove(foundedQuiz);
         return foundedQuiz;
     }
-    
+
     public async Task<OneOf<QuizDTO, RequestError>> RetrieveQuiz(int id, CancellationToken cancellationToken)
     {
         var foundedQuiz = Stubs.Quizzes.FirstOrDefault(q => q.Id == id);
         await Task.Delay(100, cancellationToken);
-        if (foundedQuiz is null) 
+        if (foundedQuiz is null)
         {
             return new RequestError(HttpStatusCode.NotFound, Constants.RequestErrorMessages.QuizNotFound);
         }
-        
+
         return foundedQuiz;
     }
 

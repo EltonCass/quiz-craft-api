@@ -2,8 +2,8 @@
 // See LICENSE.txt
 
 using OneOf;
-using QuizCraft.Application.QuizManagement;
-using QuizCraft.Application.QuizManagement.QuestionManagement;
+using QuizCraft.Application.Quizzes.Questions;
+using QuizCraft.Models;
 using QuizCraft.Models.Entities;
 
 namespace QuizCraft.Persistence.Quizzes.Questions;
