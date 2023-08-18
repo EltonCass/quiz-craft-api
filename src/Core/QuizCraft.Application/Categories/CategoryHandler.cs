@@ -2,9 +2,8 @@
 // See LICENSE.txt
 
 using FluentValidation;
-using Mapster;
+using MapsterMapper;
 using OneOf;
-using QuizCraft.Application.CategoryManagement;
 using QuizCraft.Models;
 using QuizCraft.Models.DTOs;
 using QuizCraft.Models.Entities;
@@ -16,15 +15,19 @@ public class CategoryHandler : ICategoryHandler
 {
     private readonly IValidator<CategoryForUpsert> _validator;
     private readonly ICategoryRepository _CategoryRepository;
+    private readonly IMapper _Mapper;
 
     public CategoryHandler(
         IValidator<CategoryForUpsert> validator,
-        ICategoryRepository categoryRepository)
+        ICategoryRepository categoryRepository,
+        IMapper mapper)
     {
         ArgumentNullException.ThrowIfNull(validator);
         ArgumentNullException.ThrowIfNull(categoryRepository);
+        ArgumentNullException.ThrowIfNull(mapper);
         _validator = validator;
         _CategoryRepository = categoryRepository;
+        _Mapper = mapper;
     }
 
     public async Task<OneOf<CategoryForDisplay, RequestError>> CreateCategory(
@@ -34,22 +37,24 @@ public class CategoryHandler : ICategoryHandler
         if (!result.IsValid)
         {
             return new RequestError(
-            HttpStatusCode.UnprocessableEntity,
-            result.ToString());
+                HttpStatusCode.UnprocessableEntity,
+                result.ToString());
         }
 
         var createdCategory = await _CategoryRepository
-                .CreateCategory(newCategoryDto.Adapt<Category>(), cancellationToken);
+                .CreateCategory(_Mapper.Map<Category>(newCategoryDto), cancellationToken);
         if (createdCategory.IsT1)
         {
             return createdCategory.AsT1;
         }
 
-        var createdCategoryDto = createdCategory.AsT0.Adapt<CategoryForDisplay>();
+        var createdCategoryDto = _Mapper
+            .Map<CategoryForDisplay>(createdCategory.AsT0);
         return createdCategoryDto;
     }
 
-    public async Task<OneOf<CategoryForDisplay, RequestError>> DeleteCategory(int id, CancellationToken cancellationToken)
+    public async Task<OneOf<CategoryForDisplay, RequestError>> DeleteCategory(
+        int id, CancellationToken cancellationToken)
     {
         var categoryResult = await _CategoryRepository
             .DeleteCategory(id, cancellationToken);
@@ -59,20 +64,25 @@ public class CategoryHandler : ICategoryHandler
             return categoryResult.AsT1;
         }
 
-        var categoryDto = categoryResult.AsT0.Adapt<CategoryForDisplay>();
+        var categoryDto = _Mapper
+            .Map<CategoryForDisplay>(categoryResult.AsT0);
         return categoryDto;
     }
 
-    public async Task<IEnumerable<CategoryForDisplay>> RetrieveCategories(CancellationToken cancellationToken)
+    public async Task<IEnumerable<CategoryForDisplay>> RetrieveCategories(
+        CancellationToken cancellationToken)
     {
         var categories = await _CategoryRepository
             .GetCategories(cancellationToken);
 
-        var categoriesDtos = categories.Adapt<ICollection<CategoryForDisplay>>();
+
+        var categoriesDtos = _Mapper
+            .Map<ICollection<CategoryForDisplay>>(categories);
         return categoriesDtos;
     }
 
-    public async Task<OneOf<CategoryForDisplay, RequestError>> RetrieveCategory(int id, CancellationToken cancellationToken)
+    public async Task<OneOf<CategoryForDisplay, RequestError>> RetrieveCategory(
+        int id, CancellationToken cancellationToken)
     {
         var categoryResult = await _CategoryRepository
             .GetCategory(id, cancellationToken);
@@ -81,7 +91,8 @@ public class CategoryHandler : ICategoryHandler
             return categoryResult.AsT1;
         }
 
-        var foundedCategory = categoryResult.AsT0.Adapt<CategoryForDisplay>();
+        var foundedCategory = _Mapper
+            .Map<CategoryForDisplay>(categoryResult.AsT0);
         return foundedCategory;
     }
 
@@ -96,7 +107,7 @@ public class CategoryHandler : ICategoryHandler
                 result.ToString());
         }
 
-        var categoryEntity = category.Adapt<Category>();
+        var categoryEntity = _Mapper.Map<Category>(category);
         categoryEntity.Id = id;
         var categoryResult = await _CategoryRepository
             .UpdateCategory(categoryEntity, cancellationToken);
@@ -105,22 +116,8 @@ public class CategoryHandler : ICategoryHandler
             return categoryResult.AsT1;
         }
 
-        var updatedCategory = categoryResult.AsT0.Adapt<CategoryForDisplay>();
+        var updatedCategory = _Mapper
+            .Map<CategoryForDisplay>(categoryResult.AsT0);
         return updatedCategory;
-
-        //var quizzesCategories = Stubs.Quizzes
-        //    .Where(q => q.Categories.Select(c => c.Id).Contains(id))
-        //    .SelectMany(q => q.Categories)
-        //    .ToList();
-
-        //if (quizzesCategories.Any())
-        //{
-        //    for (int i = 0; i < quizzesCategories.Count - 1; i++)
-        //    {
-        //        quizzesCategories[i] = category;
-        //    }
-        //}
-
-        //foundedCategory = category;
     }
 }

@@ -7,9 +7,9 @@
         public string Title { get; init; }
         public string Description { get; init; }
         public IList<QuestionDTO> Questions { get; init; }
-        public DateTime CreatedAt { get; init; }
+        public DateTime? CreatedAt { get; init; }
         public DateTime? UpdatedAt { get; init; }
-        public int? CreatedBy { get; init; }
+        public int? CreatedByUserId { get; init; }
 
         public QuizDTO(
             int id,
@@ -17,7 +17,7 @@
             string description,
             string title,
             IEnumerable<QuestionDTO> questions,
-            DateTime createdAt,
+            DateTime? createdAt = null,
             DateTime? updatedAt = null,
             int? createdBy = null)
         {
@@ -26,7 +26,7 @@
             Description = description;
             Title = title;
             Questions = new List<QuestionDTO>(questions);
-            CreatedBy = createdBy;
+            CreatedByUserId = createdBy;
             UpdatedAt = updatedAt;
             CreatedAt = createdAt;
         }

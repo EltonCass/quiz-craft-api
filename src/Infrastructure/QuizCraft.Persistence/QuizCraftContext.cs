@@ -12,7 +12,6 @@ namespace QuizCraft.Persistence
         public QuizCraftContext(DbContextOptions<QuizCraftContext> options) 
             : base(options)
         {
-            
         }
 
         public DbSet<Category> Categories { get; set; }
@@ -22,7 +21,6 @@ namespace QuizCraft.Persistence
         public DbSet<FillInBlankQuestion> FillInBlankQuestions { get; set; }
         public DbSet<MultipleOptionQuestion> MultipleOptionQuestions { get; set; }
         public DbSet<Option> Options { get; set; }
-        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -109,7 +107,26 @@ namespace QuizCraft.Persistence
                     MultipleOptionQuestionId = 1,
                     Text = "Compiled Language Runtime",
                 });
+        }
 
+        public override Task<int> SaveChangesAsync(
+            CancellationToken cancellationToken = new CancellationToken())
+        {
+            foreach (var entry in ChangeTracker
+                .Entries<AuditableEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreatedAt = DateTime.UtcNow;
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.UpdatedAt = DateTime.UtcNow;
+                        break;
+                }
+            }
+
+            return base.SaveChangesAsync(cancellationToken);
         }
     }
 }

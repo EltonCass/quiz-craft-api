@@ -4,7 +4,7 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using OneOf;
-using QuizCraft.Application.CategoryManagement;
+using QuizCraft.Application.Categories;
 using QuizCraft.Models;
 using QuizCraft.Models.Entities;
 using System.Net;

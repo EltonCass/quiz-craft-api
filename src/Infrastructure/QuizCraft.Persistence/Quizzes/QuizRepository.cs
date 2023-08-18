@@ -6,6 +6,8 @@ using OneOf;
 using QuizCraft.Application.Quizzes;
 using QuizCraft.Models;
 using QuizCraft.Models.Entities;
+using System.Net;
+using static QuizCraft.Models.Constants.Constants;
 
 namespace QuizCraft.Persistence.Quizzes;
 
@@ -22,11 +24,37 @@ public class QuizRepository : IQuizRepository
     public Task<OneOf<Quiz, RequestError>> DeleteQuiz(int quizId, CancellationToken cancellationToken) => throw new NotImplementedException();
     public async Task<OneOf<Quiz, RequestError>> GetQuiz(int quizId, CancellationToken cancellationToken)
     {
+        var quiz2 = await _Context.Quizzes
+           .AsNoTracking()
+           .Where(x => x.Id == quizId)
+           //.Include(x => x.Categories)
+           //.Include(x => x.Questions)
+           //.Include(x => x.CreatedByUser)
+           //.ThenInclude(x => x.QuizzesCreatedBy)
+           //.Include(x => x.UpdatedByUser)
+           .Select(x => new
+           {
+               Id = x.Id,
+               CreatedAt = x.CreatedAt,
+               UpdatedAt = x.UpdatedAt,
+               Categories = x.Categories,
+               Description = x.Description,
+               Questions = x.Questions,
+               Score = x.Score,
+               Title = x.Title,
+               CreatedByUser = x.CreatedByUser == null ? "" : x.CreatedByUser.FullName,
+               UpdatedByUserEmail = x.UpdatedByUser == null ? "" : x.UpdatedByUser.Email,
+           })
+           .FirstOrDefaultAsync(cancellationToken);
+
         var quiz = await _Context.Quizzes
-           .Include(x => x.Categories)
-           .Include(x => x.Questions)
-           .Include(x => x.CreatedByUser)
-           .Include(x => x.UpdatedByUser)
+           .AsNoTracking()
+           .Where(x => x.Id == quizId)
+           //.Include(x => x.Categories)
+           //.Include(x => x.Questions)
+           //.Include(x => x.CreatedByUser)
+           //.ThenInclude(x => x.QuizzesCreatedBy)
+           //.Include(x => x.UpdatedByUser)
            .Select(x => new Quiz
            {
                Id = x.Id,
@@ -40,10 +68,13 @@ public class QuizRepository : IQuizRepository
                CreatedByUser = x.CreatedByUser,
                UpdatedByUser = x.UpdatedByUser,
            })
-           .Where(x => x.Id == quizId)
-           .FirstOrDefaultAsync(cancellationToken) ?? new Quiz();
+           .FirstOrDefaultAsync(cancellationToken);
 
-        var debugView = _Context.ChangeTracker.DebugView.ShortView; //TODO Remove once its used
+        if (quiz is null)
+        {
+            return new RequestError(HttpStatusCode.NotFound, RequestErrorMessages.QuizNotFound);
+        }
+
         return quiz;
     }
 
@@ -69,7 +100,6 @@ public class QuizRepository : IQuizRepository
             })
             .ToListAsync(cancellationToken);
 
-        var debugView = _Context.ChangeTracker.DebugView.ShortView; //TODO Remove once its used
         return quizzes;
     }
 

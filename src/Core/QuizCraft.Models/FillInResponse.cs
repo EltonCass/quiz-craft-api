@@ -4,4 +4,4 @@
 namespace QuizCraft.Models;
 
 public record FillInResponse(
-    string QuestionContent, string BlankWord, int ocurrence);
+    string QuestionContent, string BlankWord, int Ocurrence);

@@ -5,7 +5,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using QuizCraft.Application.CategoryManagement;
+using QuizCraft.Application.Categories;
 using QuizCraft.Application.Quizzes;
 using QuizCraft.Application.Quizzes.Questions;
 using QuizCraft.Models.Entities;

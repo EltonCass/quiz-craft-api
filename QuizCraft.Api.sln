@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizCraft.Persistence", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizCraft.Api", "src\API\QuizCraft.Api\QuizCraft.Api.csproj", "{EE913F8B-7E74-4F70-94E0-48ACB8F7252F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizCraft.Infrastructure", "src\Infrastructure\QuizCraft.Infrastructure\QuizCraft.Infrastructure.csproj", "{E095677D-B243-4FCC-9F23-7B5EA254D2B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{EE913F8B-7E74-4F70-94E0-48ACB8F7252F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE913F8B-7E74-4F70-94E0-48ACB8F7252F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE913F8B-7E74-4F70-94E0-48ACB8F7252F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E095677D-B243-4FCC-9F23-7B5EA254D2B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E095677D-B243-4FCC-9F23-7B5EA254D2B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E095677D-B243-4FCC-9F23-7B5EA254D2B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E095677D-B243-4FCC-9F23-7B5EA254D2B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +68,7 @@ Global
 		{8BAF0A59-D4EB-4769-808E-EC2C405859D1} = {0F367464-D424-4C03-A1BF-A660C0BDC11C}
 		{78CC742C-7486-4513-842A-64B2ADE73251} = {E4F8DF14-9E44-4D25-8EEA-7810E12FB3BD}
 		{EE913F8B-7E74-4F70-94E0-48ACB8F7252F} = {C8E67C97-A74C-47C9-B677-3F1B2AF03C51}
+		{E095677D-B243-4FCC-9F23-7B5EA254D2B2} = {E4F8DF14-9E44-4D25-8EEA-7810E12FB3BD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {51EC117B-15FA-4DED-B396-B87536659121}
