@@ -2,9 +2,10 @@
 // See LICENSE.txt
 
 using OneOf;
+using QuizCraft.Models;
 using QuizCraft.Models.Entities;
 
-namespace QuizCraft.Application.QuizManagement.QuestionManagement;
+namespace QuizCraft.Application.Quizzes.Questions;
 
 public interface IFillInBlankQuestionRepository
 {

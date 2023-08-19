@@ -4,7 +4,7 @@
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using QuizCraft.Api.Helpers;
-using QuizCraft.Application.CategoryManagement;
+using QuizCraft.Application.Categories;
 using QuizCraft.Models.DTOs;
 
 namespace QuizCraft.Api.Categories;

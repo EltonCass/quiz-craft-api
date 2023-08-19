@@ -3,7 +3,7 @@
 
 namespace QuizCraft.Models.Entities;
 
-public class Quiz : IEntity
+public class Quiz : AuditableEntity, IEntity
 {
     public Quiz()
     {
@@ -15,8 +15,6 @@ public class Quiz : IEntity
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public int? Score { get; set; }
-    public DateTime? CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
     public int? CreatedByUserId { get; set; }
     public int? UpdatedByUserId { get; set; }
     public List<Category> Categories { get; set; }

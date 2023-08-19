@@ -3,6 +3,6 @@
 
 using System.Net;
 
-namespace QuizCraft.Application.QuizManagement;
+namespace QuizCraft.Models;
 
 public record RequestError(HttpStatusCode StatusCode, string Message);

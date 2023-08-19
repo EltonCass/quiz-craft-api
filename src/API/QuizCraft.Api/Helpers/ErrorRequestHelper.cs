@@ -3,7 +3,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using OneOf;
-using QuizCraft.Application.QuizManagement;
+using QuizCraft.Models;
 using System.Net;
 
 namespace QuizCraft.Api.Helpers;

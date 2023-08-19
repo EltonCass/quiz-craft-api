@@ -5,9 +5,9 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using QuizCraft.Application.CategoryManagement;
-using QuizCraft.Application.QuizManagement;
-using QuizCraft.Application.QuizManagement.QuestionManagement;
+using QuizCraft.Application.Categories;
+using QuizCraft.Application.Quizzes;
+using QuizCraft.Application.Quizzes.Questions;
 using QuizCraft.Models.Entities;
 using QuizCraft.Persistence.Categories;
 using QuizCraft.Persistence.Quizzes;
@@ -18,9 +18,10 @@ namespace QuizCraft.Persistence;
 public static class PersistenceServicesRegistration
 {
     public static IServiceCollection AddPersistenceServices(
-        this IServiceCollection services, IConfiguration configuration)
+        this IServiceCollection services,
+        IConfiguration configuration,
+        bool IsDevelopment)
     {
-        var env= Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
         services.AddDbContext<QuizCraftContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString
                 ("QuizAPIConnectionString"))
@@ -28,8 +29,7 @@ public static class PersistenceServicesRegistration
                 Console.WriteLine,
                 new[] { DbLoggerCategory.Database.Command.Name },
                 Microsoft.Extensions.Logging.LogLevel.Information)
-            .EnableSensitiveDataLogging(
-                env == "Development"));
+            .EnableSensitiveDataLogging(IsDevelopment));
 
         // Add Repositories
         services.AddScoped<IValidator<Category>, CategoryServerSideValidator>();

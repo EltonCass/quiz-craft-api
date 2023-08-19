@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using QuizCraft.Api.PromptManagement;
 using QuizCraft.Api.QuizManagement;
 using QuizCraft.Application;
+using QuizCraft.Infrastructure;
 using QuizCraft.Persistence;
+using Serilog;
 using System.Text.Json;
 
 namespace QuizCraft.Api
@@ -14,8 +16,16 @@ namespace QuizCraft.Api
     {
         public static void Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .CreateBootstrapLogger();
+
+            Log.Information("QuizCraft API starting.");
             var builder = WebApplication
                 .CreateBuilder(args);
+            builder.Host.UseSerilog((context, loggerConfig) =>
+                loggerConfig.WriteTo.Console().ReadFrom.Configuration(context.Configuration));
+
             builder = ConfigureMiddlewarePipelines(builder);
             var app = builder.Build();
             ConfigurePipeline(app);
@@ -73,7 +83,10 @@ namespace QuizCraft.Api
 
             builder.Services.AddScoped<IQuizGeneration, QuizGeneration>();
             builder.Services.AddApplicationServices();
-            builder.Services.AddPersistenceServices(builder.Configuration);
+            builder.Services.AddPersistenceServices(
+                builder.Configuration,
+                builder.Environment.IsDevelopment());
+            builder.Services.AddInfrastructureServices(builder.Configuration);
             builder.Services.AddApiVersioning(setupAction =>
             {
                 setupAction.AssumeDefaultVersionWhenUnspecified = true;
@@ -98,6 +111,8 @@ namespace QuizCraft.Api
                     endpoints.MapControllers();
                     endpoints.MapHealthChecks("/health");
                 });
+
+            app.UseSerilogRequestLogging();
             app.Run();
         }
     }

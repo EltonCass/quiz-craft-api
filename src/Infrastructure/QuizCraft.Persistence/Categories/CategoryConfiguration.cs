@@ -23,7 +23,5 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .HasMaxLength(100)
             .IsUnicode(false)
             .IsRequired();
-
-        
     }
 }

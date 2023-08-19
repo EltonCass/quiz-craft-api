@@ -5,7 +5,8 @@ namespace QuizCraft.Models.Constants
 {
     public enum QuestionType
     {
-        FillInBlank,
-        MultipleOption
+        Default = 0,
+        FillInBlank = 1,
+        MultipleOption = 2
     }
 }
