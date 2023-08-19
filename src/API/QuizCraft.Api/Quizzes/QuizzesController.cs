@@ -1,6 +1,8 @@
 // Copyright (c)  Elton Cassas. All rights reserved.
 // See LICENSE.txt
 
+using Mapster;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using QuizCraft.Api.Helpers;
 using QuizCraft.Application.Quizzes;
@@ -18,6 +20,7 @@ public class QuizzesController : ControllerBase
 
     private readonly IQuizHandler _quizHandler;
     private readonly IQuestionHandler _questionHandler;
+    private readonly IMapper _Mapper;
     private readonly ISpecificQuestionHandler<MultipleOptionQuestionDTO> _multipleQuestionHandler;
     private readonly ISpecificQuestionHandler<FillInBlankQuestionDTO> _fillInBlankQuestionHandler;
 
@@ -25,29 +28,32 @@ public class QuizzesController : ControllerBase
         IQuizHandler quizRepository,
         ISpecificQuestionHandler<MultipleOptionQuestionDTO> multipleQuestionRepository,
         ISpecificQuestionHandler<FillInBlankQuestionDTO> fillInBlankQuestionRepository,
-        IQuestionHandler questionRepository)
+        IQuestionHandler questionRepository,
+        IMapper mapper)
     {
         ArgumentNullException.ThrowIfNull(quizRepository, nameof(quizRepository));
         ArgumentNullException.ThrowIfNull(multipleQuestionRepository, nameof(multipleQuestionRepository));
         ArgumentNullException.ThrowIfNull(fillInBlankQuestionRepository, nameof(fillInBlankQuestionRepository));
         ArgumentNullException.ThrowIfNull(questionRepository, nameof(questionRepository));
+        ArgumentNullException.ThrowIfNull(mapper, nameof(mapper));
         _quizHandler = quizRepository;
         _multipleQuestionHandler = multipleQuestionRepository;
         _fillInBlankQuestionHandler = fillInBlankQuestionRepository;
         _questionHandler = questionRepository;
+        _Mapper = mapper;
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<QuizDTO>), 200)]
-    public async Task<ActionResult<IEnumerable<QuizDTO>>> GetQuizzes(CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(IEnumerable<QuizForDisplay>), 200)]
+    public async Task<ActionResult<IEnumerable<QuizForDisplay>>> GetQuizzes(CancellationToken cancellationToken)
     {
         return Ok(await _quizHandler.RetrieveQuizzes(cancellationToken));
     }
 
     [HttpGet("{id}", Name = _GetQuizByIdEndpointName)]
-    [ProducesResponseType(typeof(QuizDTO), 200)]
+    [ProducesResponseType(typeof(QuizForDisplay), 200)]
     [ProducesResponseType(401)]
-    public async Task<ActionResult<QuizDTO>> GetQuiz(
+    public async Task<ActionResult<QuizForDisplay>> GetQuiz(
         int id, CancellationToken cancellationToken)
     {
         var result = await _quizHandler.RetrieveQuiz(id, cancellationToken);
@@ -63,7 +69,7 @@ public class QuizzesController : ControllerBase
     [HttpDelete("{id}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(401)]
-    public async Task<ActionResult<QuizDTO>> DeleteQuiz(
+    public async Task<ActionResult<QuizForDisplay>> DeleteQuiz(
         int id, CancellationToken cancellationToken)
     {
         var result = await _quizHandler.DeleteQuiz(id, cancellationToken);
@@ -74,6 +80,28 @@ public class QuizzesController : ControllerBase
         }
 
         return result.HandleError(this);
+    }
+
+    [HttpPost()]
+    [ProducesResponseType(201)]
+    [ProducesResponseType(422)]
+    public async Task<ActionResult<QuizForUpsert>> PostQuiz(
+        [FromBody]QuizForUpsert quiz, CancellationToken cancellationToken)
+    {
+        var result = await _quizHandler
+            .CreateQuiz(quiz, cancellationToken);
+
+        if (result.IsT1)
+        {
+            return result.HandleError(this);
+        }
+
+        var resourceUrl = Url.Action(
+                _GetQuizByIdEndpointName,
+                "Quizzes",
+                new { result.AsT0.Id, cancellationToken }, Request.Scheme);
+        var responseQuiz = _Mapper.Map<QuizForUpsert>(result.AsT0);
+        return Created(resourceUrl!, responseQuiz);
     }
 
     [HttpGet("{id}/questions")]

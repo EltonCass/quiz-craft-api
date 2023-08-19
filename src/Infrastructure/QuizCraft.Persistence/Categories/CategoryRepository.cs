@@ -7,6 +7,7 @@ using OneOf;
 using QuizCraft.Application.Categories;
 using QuizCraft.Models;
 using QuizCraft.Models.Entities;
+using System.Linq;
 using System.Net;
 using static QuizCraft.Models.Constants.Constants;
 
@@ -21,6 +22,25 @@ public class CategoryRepository : ICategoryRepository
     {
         _Context = context;
         _validator = validator;
+    }
+
+    public async Task<OneOf<ICollection<Category>, RequestError>> AddCategoriesByNames(
+        ICollection<Category> categories, CancellationToken cancellationToken)
+    {
+        var newCategories = new List<Category>();
+        foreach (var category in categories)
+        {
+            var categoryResult = await CreateCategory(
+                category, cancellationToken);
+            if (categoryResult.IsT1)
+            {
+                return categoryResult.AsT1;
+            }
+
+            newCategories.Add(categoryResult.AsT0);
+        }
+
+        return newCategories;
     }
 
     public async Task<OneOf<Category, RequestError>> CreateCategory(
@@ -78,6 +98,29 @@ public class CategoryRepository : ICategoryRepository
     {
         return await _Context.Categories
             .AsNoTracking().ToListAsync(cancellationToken);
+    }
+
+    public async Task<(ICollection<Category> MatchingCategories,
+        ICollection<Category> NonMatchingCategories)> GetCategoriesByNames(
+        string[] categories, CancellationToken cancellationToken)
+    {
+        var matchingCategories = await _Context.Categories.Where(
+            c => categories.Contains(c.Name))
+            .ToListAsync(cancellationToken);
+
+        var matchingCategoriesNames = matchingCategories
+            .Select(c => c.Name).ToArray();
+        var nonMatchingCategories = new List<Category>();
+        foreach (var category in categories)
+        {
+            if (!matchingCategoriesNames.Contains(category))
+            {
+                nonMatchingCategories.Add(
+                    new Category() { Name = category });
+            }
+        }
+
+        return (matchingCategories, nonMatchingCategories);
     }
 
     public async Task<OneOf<Category, RequestError>> GetCategory(

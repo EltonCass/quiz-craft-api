@@ -126,6 +126,12 @@ namespace QuizCraft.Persistence
                 }
             }
 
+            //TODO: Should we have logic to auto assing the correct question type here?
+            //foreach (var entry in ChangeTracker.Entries<Question>())
+            //{
+            //    entry.Entity.QuestionType
+            //}
+
             return base.SaveChangesAsync(cancellationToken);
         }
     }

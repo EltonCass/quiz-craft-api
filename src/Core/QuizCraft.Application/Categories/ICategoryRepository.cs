@@ -18,4 +18,8 @@ public interface ICategoryRepository
     Task<ICollection<Category>> GetCategories(CancellationToken cancellationToken);
     Task<OneOf<Category, RequestError>> GetCategory(
         int categoryId, CancellationToken cancellationToken);
+    Task<OneOf<ICollection<Category>, RequestError>> AddCategoriesByNames(
+        ICollection<Category> categories, CancellationToken cancellationToken);
+    Task<(ICollection<Category> MatchingCategories, ICollection<Category> NonMatchingCategories)> 
+        GetCategoriesByNames(string[] categories, CancellationToken cancellationToken);
 }

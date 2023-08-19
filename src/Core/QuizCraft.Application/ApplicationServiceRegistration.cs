@@ -28,7 +28,7 @@ public static class ApplicationServiceRegistration
             .AddScoped<ISpecificQuestionHandler<MultipleOptionQuestionDTO>, MultipleOptionQuestionHandler>()
             .AddScoped<ISpecificQuestionHandler<FillInBlankQuestionDTO>, FillInBlankQuestionHandler>()
             .AddScoped<IValidator<CategoryForUpsert>, CategoryValidator>()
-            .AddScoped<IValidator<QuizDTO>, QuizValidator>()
+            .AddScoped<IValidator<QuizForUpsert>, QuizValidator>()
             .AddScoped<IValidator<FillInBlankQuestionDTO>, FillInBlankQuestionValidator>()
             .AddScoped<IValidator<MultipleOptionQuestionDTO>, MultipleOptionQuestionValidator>()
             .AddSingleton(config)

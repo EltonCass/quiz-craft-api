@@ -9,14 +9,14 @@ namespace QuizCraft.Application.Quizzes;
 
 public interface IQuizHandler
 {
-    Task<IEnumerable<QuizDTO>> RetrieveQuizzes(
+    Task<IEnumerable<QuizForDisplay>> RetrieveQuizzes(
         CancellationToken cancellationToken);
-    Task<OneOf<QuizDTO, RequestError>> RetrieveQuiz(
+    Task<OneOf<QuizForDisplay, RequestError>> RetrieveQuiz(
         int id, CancellationToken cancellationToken);
-    Task<OneOf<QuizDTO, RequestError>> CreateQuiz(
-        QuizDTO newQuiz, CancellationToken cancellationToken);
-    Task<OneOf<QuizDTO, RequestError>> UpdateQuiz(
-        QuizDTO quiz, CancellationToken cancellationToken);
-    Task<OneOf<QuizDTO, RequestError>> DeleteQuiz(
+    Task<OneOf<QuizForDisplay, RequestError>> CreateQuiz(
+        QuizForUpsert newQuiz, CancellationToken cancellationToken);
+    Task<OneOf<QuizForDisplay, RequestError>> UpdateQuiz(
+        QuizForDisplay quiz, CancellationToken cancellationToken);
+    Task<OneOf<QuizForDisplay, RequestError>> DeleteQuiz(
         int id, CancellationToken cancellationToken);
 }

@@ -14,7 +14,7 @@ internal class CategoryValidator : AbstractValidator<CategoryForUpsert>
             .NotEmpty()
             .MaximumLength(100);
         RuleFor(c => c.Description)
-            .MaximumLength(100)
+            .Length(5, 100)
             .When(c => !string.IsNullOrEmpty(c.Description));
     }
 }

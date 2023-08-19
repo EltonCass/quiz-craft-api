@@ -13,9 +13,9 @@ public static class Stubs
         new(2, "Art", "")
     };
 
-    public static List<QuizDTO> Quizzes = new List<QuizDTO>
+    public static List<QuizForDisplay> Quizzes = new List<QuizForDisplay>
     {
-        new QuizDTO(
+        new QuizForDisplay(
             id: 1,
             categories: Categories.Take(1),
             title: "World Capitals",
@@ -47,7 +47,7 @@ public static class Stubs
                 )
             }
         ),
-        new QuizDTO(
+        new QuizForDisplay(
             id: 2,
             categories: Categories.Skip(1).Take(1) ,
             title: "Famous paintings",

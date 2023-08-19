@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizCraft.Persistence;
 
@@ -11,9 +12,11 @@ using QuizCraft.Persistence;
 namespace QuizCraft.Persistence.Migrations
 {
     [DbContext(typeof(QuizCraftContext))]
-    partial class QuizCraftContextModelSnapshot : ModelSnapshot
+    [Migration("20230819110011_add-question-type")]
+    partial class addquestiontype
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -11,8 +11,8 @@ public class QuizMappingConfig : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
-        config.NewConfig<Quiz, QuizDTO>()
-            .MapWith(src => new QuizDTO(
+        config.NewConfig<Quiz, QuizForDisplay>()
+            .MapWith(src => new QuizForDisplay(
                 src.Id,
                 src.Categories.Adapt<CategoryForDisplay[]>(),
                 src.Description,
@@ -22,7 +22,7 @@ public class QuizMappingConfig : IRegister
                 src.UpdatedAt,
                 src.CreatedByUserId));
 
-        config.NewConfig<QuizDTO, Quiz>()
+        config.NewConfig<QuizForUpsert, Quiz>()
             .Map(dest => dest.Categories, src => src.Categories)
             .Ignore(dest => dest.Questions);
     }
