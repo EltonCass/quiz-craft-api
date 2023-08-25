@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -9,10 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bogus" Version="34.0.2" />
+    <Compile Remove="QuizCraft\**" />
+    <EmbeddedResource Remove="QuizCraft\**" />
+    <None Remove="QuizCraft\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
-    <PackageReference Include="NSubstitute" Version="5.0.0" />
+    <PackageReference Include="NetArchTest.Rules" Version="1.3.2" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -26,7 +31,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\API\QuizCraft.Api\QuizCraft.Api.csproj" />
+    <ProjectReference Include="..\..\src\Core\QuizCraft.Application\QuizCraft.Application.csproj" />
     <ProjectReference Include="..\..\src\Core\QuizCraft.Models\QuizCraft.Models.csproj" />
+    <ProjectReference Include="..\..\src\Infrastructure\QuizCraft.Persistence\QuizCraft.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

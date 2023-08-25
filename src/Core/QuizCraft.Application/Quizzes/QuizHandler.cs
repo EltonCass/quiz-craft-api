@@ -63,20 +63,6 @@ public class QuizHandler : IQuizHandler
 
         var newQuizDto = _Mapper.Map<QuizForDisplay>(createdQuizResult.AsT0);
 
-        //foreach (var question in newQuiz.Questions)
-        //{
-        //    if (question.Type is Models.Constants.QuestionType.MultipleOption)
-        //    {
-        //        await _multipleOptionHandler.CreateQuestion(
-        //            newQuiz.Id, (MultipleOptionQuestionDTO)question, cancellationToken);
-        //    }
-        //    else if (question.Type is Models.Constants.QuestionType.FillInBlank)
-        //    {
-        //        await _fillInBlankHandler.CreateQuestion(
-        //            newQuiz.Id, (FillInBlankQuestionDTO)question, cancellationToken);
-        //    }
-        //}
-
         return newQuizDto;
     }
 
@@ -121,6 +107,30 @@ public class QuizHandler : IQuizHandler
         return quizzes;
     }
 
-    public Task<OneOf<QuizForDisplay, RequestError>> UpdateQuiz(
-        QuizForDisplay quiz, CancellationToken cancellationToken) => throw new NotImplementedException();
+    public async Task<OneOf<QuizForDisplay, RequestError>> UpdateQuiz(
+        int id, QuizForUpsert quiz, CancellationToken cancellationToken)
+    {
+        var result = _validator.Validate(quiz);
+        if (!result.IsValid)
+        {
+            return new RequestError(
+                HttpStatusCode.UnprocessableEntity,
+                result.ToString());
+        }
+
+        var quizEntity = _Mapper.Map<Quiz>(quiz);
+        quizEntity.Id = id;
+        var updatedQuizResult = await _quizRepository
+            .UpdateQuiz(quizEntity, cancellationToken);
+
+        if (updatedQuizResult.IsT1)
+        {
+            return updatedQuizResult.AsT1;
+        }
+
+        var quizDto = _Mapper.Map<QuizForDisplay>(
+            updatedQuizResult.AsT0);
+
+        return quizDto;
+    }
 }

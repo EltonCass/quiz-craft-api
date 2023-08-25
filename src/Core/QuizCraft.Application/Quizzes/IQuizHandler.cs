@@ -16,7 +16,7 @@ public interface IQuizHandler
     Task<OneOf<QuizForDisplay, RequestError>> CreateQuiz(
         QuizForUpsert newQuiz, CancellationToken cancellationToken);
     Task<OneOf<QuizForDisplay, RequestError>> UpdateQuiz(
-        QuizForDisplay quiz, CancellationToken cancellationToken);
+        int id, QuizForUpsert quiz, CancellationToken cancellationToken);
     Task<OneOf<QuizForDisplay, RequestError>> DeleteQuiz(
         int id, CancellationToken cancellationToken);
 }

@@ -2,7 +2,7 @@
 
 namespace QuizCraft.Models.DTOs;
 
-public record MultipleOptionQuestionDTO : QuestionDTO
+public record MultipleOptionQuestionDTO : QuestionForDisplay
 {
     public IReadOnlyList<string> Options { get; }
 

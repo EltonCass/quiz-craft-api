@@ -2,7 +2,7 @@
 
 namespace QuizCraft.Models.DTOs
 {
-    public record FillInBlankQuestionDTO : QuestionDTO
+    public record FillInBlankQuestionDTO : QuestionForDisplay
     {
         public int WordPosition { get; init; }
         public FillInBlankQuestionDTO(

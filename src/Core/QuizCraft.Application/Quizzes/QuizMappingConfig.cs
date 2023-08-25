@@ -17,7 +17,7 @@ public class QuizMappingConfig : IRegister
                 src.Categories.Adapt<CategoryForDisplay[]>(),
                 src.Description,
                 src.Title,
-                src.Questions.Adapt<QuestionDTO[]>(),
+                src.Questions.Adapt<QuestionForDisplay[]>(),
                 src.CreatedAt,
                 src.UpdatedAt,
                 src.CreatedByUserId));

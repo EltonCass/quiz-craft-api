@@ -6,7 +6,7 @@ using QuizCraft.Models.DTOs;
 
 namespace QuizCraft.Application.Categories;
 
-internal class CategoryValidator : AbstractValidator<CategoryForUpsert>
+public class CategoryValidator : AbstractValidator<CategoryForUpsert>
 {
     public CategoryValidator()
     {

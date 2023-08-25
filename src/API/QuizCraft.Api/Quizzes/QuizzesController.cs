@@ -1,12 +1,10 @@
 // Copyright (c)  Elton Cassas. All rights reserved.
 // See LICENSE.txt
 
-using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using QuizCraft.Api.Helpers;
 using QuizCraft.Application.Quizzes;
-using QuizCraft.Application.Quizzes.Questions;
 using QuizCraft.Models.DTOs;
 
 namespace QuizCraft.Api.Quizzes;
@@ -19,33 +17,23 @@ public class QuizzesController : ControllerBase
     private const string _GetQuizByIdEndpointName = "GetQuiz";
 
     private readonly IQuizHandler _quizHandler;
-    private readonly IQuestionHandler _questionHandler;
     private readonly IMapper _Mapper;
-    private readonly ISpecificQuestionHandler<MultipleOptionQuestionDTO> _multipleQuestionHandler;
-    private readonly ISpecificQuestionHandler<FillInBlankQuestionDTO> _fillInBlankQuestionHandler;
 
     public QuizzesController(
         IQuizHandler quizRepository,
-        ISpecificQuestionHandler<MultipleOptionQuestionDTO> multipleQuestionRepository,
-        ISpecificQuestionHandler<FillInBlankQuestionDTO> fillInBlankQuestionRepository,
-        IQuestionHandler questionRepository,
         IMapper mapper)
     {
         ArgumentNullException.ThrowIfNull(quizRepository, nameof(quizRepository));
-        ArgumentNullException.ThrowIfNull(multipleQuestionRepository, nameof(multipleQuestionRepository));
-        ArgumentNullException.ThrowIfNull(fillInBlankQuestionRepository, nameof(fillInBlankQuestionRepository));
-        ArgumentNullException.ThrowIfNull(questionRepository, nameof(questionRepository));
         ArgumentNullException.ThrowIfNull(mapper, nameof(mapper));
+        
         _quizHandler = quizRepository;
-        _multipleQuestionHandler = multipleQuestionRepository;
-        _fillInBlankQuestionHandler = fillInBlankQuestionRepository;
-        _questionHandler = questionRepository;
         _Mapper = mapper;
     }
 
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<QuizForDisplay>), 200)]
-    public async Task<ActionResult<IEnumerable<QuizForDisplay>>> GetQuizzes(CancellationToken cancellationToken)
+    public async Task<ActionResult<IEnumerable<QuizForDisplay>>> GetQuizzes(
+        CancellationToken cancellationToken)
     {
         return Ok(await _quizHandler.RetrieveQuizzes(cancellationToken));
     }
@@ -104,87 +92,20 @@ public class QuizzesController : ControllerBase
         return Created(resourceUrl!, responseQuiz);
     }
 
-    [HttpGet("{id}/questions")]
-    [ProducesResponseType(typeof(IEnumerable<QuestionDTO>), 200)]
-    public async Task<ActionResult<IEnumerable<QuestionDTO>>> GetQuestions(
-        int id, CancellationToken cancellationToken)
-    {
-        var result = await _questionHandler.RetrieveQuestions(id, cancellationToken);
-        if (result.IsT0)
-        {
-            return Ok(result.AsT0);
-        }
-
-        return result.HandleError(this);
-    }
-
-    [HttpGet("{quizId}/questions/{questionId}")]
-    [ProducesResponseType(typeof(QuestionDTO), 200)]
-    [ProducesResponseType(401)]
-    public async Task<ActionResult<QuestionDTO>> GetQuestionById(
-        int quizId, int questionId, CancellationToken cancellationToken)
-    {
-        var result = await _questionHandler.RetrieveQuestion(quizId, questionId, cancellationToken);
-
-        if (result.IsT0)
-        {
-            return Ok(result.AsT0);
-        }
-
-        return result.HandleError(this);
-    }
-
-    [HttpPost("{quizId}/multipleOptionQuestions")]
-    [ProducesResponseType(typeof(MultipleOptionQuestionDTO), 201)]
+    [HttpPut("{id}")]
+    [ProducesResponseType(typeof(QuizForDisplay), 200)]
     [ProducesResponseType(422)]
-    public async Task<ActionResult<MultipleOptionQuestionDTO>> PostQuestion(
-        int quizId, [FromBody] MultipleOptionQuestionDTO question, CancellationToken cancellationToken)
+    public async Task<ActionResult<QuizForDisplay>> PutQuiz(
+        int id, [FromBody] QuizForUpsert quiz, CancellationToken cancellationToken)
     {
-        return await CreateMultipleOptionQuestion(quizId, question, cancellationToken);
-    }
+        var result = await _quizHandler
+            .UpdateQuiz(id, quiz, cancellationToken);
 
-    [HttpPost("{quizId}/fillInBlankQuestions")]
-    [ProducesResponseType(typeof(FillInBlankQuestionDTO), 201)]
-    [ProducesResponseType(422)]
-    public async Task<ActionResult<FillInBlankQuestionDTO>> PostQuestion(
-        int quizId, [FromBody] FillInBlankQuestionDTO question, CancellationToken cancellationToken)
-    {
-        return await CreateFillInBlankOptionQuestion(quizId, question, cancellationToken);
-    }
-
-    private async Task<ActionResult<MultipleOptionQuestionDTO>> CreateMultipleOptionQuestion(
-        int quizId, MultipleOptionQuestionDTO question, CancellationToken cancellationToken)
-    {
-        var result = await _multipleQuestionHandler
-            .CreateQuestion(quizId, question, cancellationToken);
-
-        if (result.IsT0)
+        if (result.IsT1)
         {
-            var resourceUrl = Url.Action(
-                _GetQuizByIdEndpointName,
-                ControllerContext.ActionDescriptor.ControllerName,
-                new { result.AsT0.Id, cancellationToken }, Request.Scheme);
-            return Created(resourceUrl!, result.AsT0);
+            return result.HandleError(this);
         }
 
-        return result.HandleError(this);
-    }
-
-    private async Task<ActionResult<FillInBlankQuestionDTO>> CreateFillInBlankOptionQuestion(
-        int quizId, FillInBlankQuestionDTO question, CancellationToken cancellationToken)
-    {
-        var result = await _fillInBlankQuestionHandler
-            .CreateQuestion(quizId, question, cancellationToken);
-
-        if (result.IsT0)
-        {
-            var resourceUrl = Url.Action(
-                _GetQuizByIdEndpointName,
-                ControllerContext.ActionDescriptor.ControllerName,
-                new { result.AsT0.Id, cancellationToken }, Request.Scheme);
-            return Created(resourceUrl!, result.AsT0);
-        }
-
-        return result.HandleError(this);
+        return Ok(result.AsT0);
     }
 }

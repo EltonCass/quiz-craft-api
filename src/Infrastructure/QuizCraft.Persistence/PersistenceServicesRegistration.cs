@@ -36,6 +36,7 @@ public static class PersistenceServicesRegistration
 
         services.AddScoped<IQuizRepository, QuizRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IQuestionRepository, QuestionRepository>();
         services.AddScoped<IMultipleOptionQuestionRepository, MultipleOptionQuestionRepository>();
         services.AddScoped<IFillInBlankQuestionRepository, FillInBlankQuestionRepository>();
 

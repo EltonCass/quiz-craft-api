@@ -166,6 +166,6 @@ public class QuizRepository : IQuizRepository
     }
 
     public Task<OneOf<Quiz, RequestError>> UpdateQuiz(
-        int quizId, Quiz updatedQuiz, CancellationToken cancellationToken)
+        Quiz updatedQuiz, CancellationToken cancellationToken)
         => throw new NotImplementedException();
 }

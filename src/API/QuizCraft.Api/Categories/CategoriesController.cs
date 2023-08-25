@@ -1,7 +1,7 @@
 ﻿// Copyright (c) 2023 Elton Cassas. All rights reserved.
 // See LICENSE.txt
 
-using Mapster;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using QuizCraft.Api.Helpers;
 using QuizCraft.Application.Categories;
@@ -15,11 +15,14 @@ namespace QuizCraft.Api.Categories;
 public class CategoriesController : ControllerBase
 {
     private readonly ICategoryHandler _categoryHandler;
+    private readonly IMapper _Mapper;
 
-    public CategoriesController(ICategoryHandler category)
+    public CategoriesController(ICategoryHandler category, IMapper mapper)
     {
         ArgumentNullException.ThrowIfNull(category);
+        ArgumentNullException.ThrowIfNull(mapper);
         _categoryHandler = category;
+        _Mapper = mapper;
     }
 
     [HttpGet]
@@ -60,7 +63,8 @@ public class CategoriesController : ControllerBase
                 "GetCategory",
                 "Categories",
                 new { result.AsT0.Id, cancellationToken }, Request.Scheme);
-            var responseCategory = result.AsT0.Adapt<CategoryForUpsert>();
+            var responseCategory = _Mapper
+                .Map<CategoryForUpsert>(result.AsT0);
             return Created(resourceUrl!, responseCategory);
         }
 

@@ -21,7 +21,7 @@ public static class Stubs
             title: "World Capitals",
             description:"Test your knowledge of world capitals!",
             createdAt: DateTime.Now,
-            questions:new List<QuestionDTO>
+            questions:new List<QuestionForDisplay>
             {
                 new MultipleOptionQuestionDTO(
                     Id: 1,
@@ -53,7 +53,7 @@ public static class Stubs
             title: "Famous paintings",
             description: "Test your knowledge of famous paintings!",
             createdAt: DateTime.Now,
-            questions: new List<QuestionDTO>
+            questions: new List<QuestionForDisplay>
             {
                 new MultipleOptionQuestionDTO(
                     Id: 3,

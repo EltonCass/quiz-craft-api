@@ -7,7 +7,7 @@ using QuizCraft.Models.DTOs;
 
 namespace QuizCraft.Application.Quizzes.Questions;
 
-public interface ISpecificQuestionHandler<T> where T : QuestionDTO
+public interface ISpecificQuestionHandler<T> where T : QuestionForDisplay
 {
     Task<OneOf<T, RequestError>> CreateQuestion(
         int quizId, T newQuestion, CancellationToken cancellationToken);
