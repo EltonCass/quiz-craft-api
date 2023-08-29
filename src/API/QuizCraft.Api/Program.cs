@@ -7,6 +7,7 @@ using QuizCraft.Api.QuizManagement;
 using QuizCraft.Application;
 using QuizCraft.Infrastructure;
 using QuizCraft.Persistence;
+using QuizCraft.Persistence.Postgresql;
 using Serilog;
 using System.Text.Json;
 
@@ -85,9 +86,13 @@ public class Program
 
         builder.Services.AddScoped<IQuizGeneration, QuizGeneration>();
         builder.Services.AddApplicationServices();
-        builder.Services.AddPersistenceServices(
+        builder.Services.AddPostgreSqlPersistenceServices(
             builder.Configuration,
             builder.Environment.IsDevelopment());
+
+        // builder.Services.AddPersistenceServices(
+        //    builder.Configuration,
+        //    builder.Environment.IsDevelopment());
         builder.Services.AddInfrastructureServices(builder.Configuration);
         builder.Services.AddApiVersioning(setupAction =>
         {

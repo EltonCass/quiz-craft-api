@@ -38,6 +38,7 @@
     <ProjectReference Include="..\..\Core\QuizCraft.Application\QuizCraft.Application.csproj" />
     <ProjectReference Include="..\..\Core\QuizCraft.Models\QuizCraft.Models.csproj" />
     <ProjectReference Include="..\..\Infrastructure\QuizCraft.Infrastructure\QuizCraft.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\QuizCraft.Persistence.Postgresql\QuizCraft.Persistence.Postgresql.csproj" />
     <ProjectReference Include="..\..\Infrastructure\QuizCraft.Persistence\QuizCraft.Persistence.csproj" />
   </ItemGroup>
 

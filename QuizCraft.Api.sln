@@ -42,7 +42,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizCraft.Integration.Tests", "tests\QuizCraft.Integration.Tests\QuizCraft.Integration.Tests.csproj", "{1314334B-49F9-4B67-86E7-788C032828A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizCraft.Integration.Tests", "tests\QuizCraft.Integration.Tests\QuizCraft.Integration.Tests.csproj", "{1314334B-49F9-4B67-86E7-788C032828A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizCraft.Persistence.Postgresql", "src\Infrastructure\QuizCraft.Persistence.Postgresql\QuizCraft.Persistence.Postgresql.csproj", "{609DD0E8-F8A2-4959-8D90-EA7C185CA481}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -90,6 +92,10 @@ Global
 		{1314334B-49F9-4B67-86E7-788C032828A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1314334B-49F9-4B67-86E7-788C032828A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1314334B-49F9-4B67-86E7-788C032828A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{609DD0E8-F8A2-4959-8D90-EA7C185CA481}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{609DD0E8-F8A2-4959-8D90-EA7C185CA481}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{609DD0E8-F8A2-4959-8D90-EA7C185CA481}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{609DD0E8-F8A2-4959-8D90-EA7C185CA481}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,6 +114,7 @@ Global
 		{E9A9F585-E1DA-49F7-89C5-07E9A6A772C6} = {8AC39497-E12A-4F7D-ADA5-97FA7428F8DD}
 		{316E915E-51A8-411B-B8FF-69E7B59B5446} = {E4F8DF14-9E44-4D25-8EEA-7810E12FB3BD}
 		{1314334B-49F9-4B67-86E7-788C032828A4} = {8AC39497-E12A-4F7D-ADA5-97FA7428F8DD}
+		{609DD0E8-F8A2-4959-8D90-EA7C185CA481} = {E4F8DF14-9E44-4D25-8EEA-7810E12FB3BD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {51EC117B-15FA-4DED-B396-B87536659121}
