@@ -20,16 +20,16 @@ public static class PersistenceServicesRegistration
     public static IServiceCollection AddPersistenceServices(
         this IServiceCollection services,
         IConfiguration configuration,
-        bool IsDevelopment)
+        bool isDevelopment)
     {
         services.AddDbContext<QuizCraftContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString
-                ("QuizAPIConnectionString"))
+            options.UseSqlServer(
+                configuration.GetConnectionString("QuizAPIConnectionString"))
             .LogTo(
                 Console.WriteLine,
                 new[] { DbLoggerCategory.Database.Command.Name },
                 Microsoft.Extensions.Logging.LogLevel.Information)
-            .EnableSensitiveDataLogging(IsDevelopment));
+            .EnableSensitiveDataLogging(isDevelopment));
 
         // Add Repositories
         services.AddScoped<IValidator<Category>, CategoryServerSideValidator>();

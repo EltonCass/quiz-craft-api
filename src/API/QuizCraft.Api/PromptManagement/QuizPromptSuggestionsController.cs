@@ -16,7 +16,7 @@ public class QuizPromptSuggestionsController : ControllerBase
 
     public QuizPromptSuggestionsController(IQuizGeneration quizGeneration)
     {
-        ArgumentNullException.ThrowIfNull(quizGeneration, nameof(quizGeneration));
+        ArgumentNullException.ThrowIfNull(quizGeneration);
         _quizGenerationService = quizGeneration;
     }
 
@@ -28,7 +28,6 @@ public class QuizPromptSuggestionsController : ControllerBase
             .GenerateMultipleOptionQuizQuestion(prompt, token);
         return Ok(new MultipleOptionResponse(
             QuestionContent: response,
-            Options: new List<string> { "O1" }
-        ));
+            Options: new List<string> { "O1" }));
     }
 }

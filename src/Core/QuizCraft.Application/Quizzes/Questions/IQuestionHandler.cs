@@ -11,8 +11,10 @@ public interface IQuestionHandler
 {
     Task<ICollection<QuestionForDisplay>> RetrieveQuestions(
         int quizId, CancellationToken cancellationToken);
+
     Task<OneOf<QuestionForDisplay, RequestError>> RetrieveQuestion(
         int quizId, int id, CancellationToken cancellationToken);
+
     Task<OneOf<QuestionForDisplay, RequestError>> DeleteQuestion(
         int quizId, int id, CancellationToken cancellationToken);
 }

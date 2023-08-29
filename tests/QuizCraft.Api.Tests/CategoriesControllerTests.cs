@@ -13,8 +13,8 @@ namespace QuizCraft.Api.Tests;
 
 public class CategoriesControllerTests
 {
-    private ICategoryHandler _handler;
-    private IMapper _mapper;
+    private readonly ICategoryHandler _handler;
+    private readonly IMapper _mapper;
 
     public CategoriesControllerTests()
     {
@@ -37,9 +37,9 @@ public class CategoriesControllerTests
             .GetCategory(categoryId, default);
 
         //Assert
-        ((OkObjectResult)result.Result).StatusCode.Should().Be(200);
+        (result.Result as OkObjectResult).StatusCode.Should().Be(200);
     }
 
     private CategoriesController ControllerInstance() =>
-        new CategoriesController(_handler, _mapper);
+        new(_handler, _mapper);
 }

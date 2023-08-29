@@ -31,6 +31,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizCraft.Architecture.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizCraft.Infrastructure", "src\Infrastructure\QuizCraft.Infrastructure\QuizCraft.Infrastructure.csproj", "{316E915E-51A8-411B-B8FF-69E7B59B5446}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D7F5988C-0E10-4A55-8999-B7543423819A}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+		Dockerfile = Dockerfile
+		LICENSE.txt = LICENSE.txt
+		NuGet.config = NuGet.config
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizCraft.Integration.Tests", "tests\QuizCraft.Integration.Tests\QuizCraft.Integration.Tests.csproj", "{1314334B-49F9-4B67-86E7-788C032828A4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +86,10 @@ Global
 		{316E915E-51A8-411B-B8FF-69E7B59B5446}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{316E915E-51A8-411B-B8FF-69E7B59B5446}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{316E915E-51A8-411B-B8FF-69E7B59B5446}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1314334B-49F9-4B67-86E7-788C032828A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1314334B-49F9-4B67-86E7-788C032828A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1314334B-49F9-4B67-86E7-788C032828A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1314334B-49F9-4B67-86E7-788C032828A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +107,7 @@ Global
 		{96B5D2E2-FEE3-4D6D-9B51-C789422E2C84} = {8AC39497-E12A-4F7D-ADA5-97FA7428F8DD}
 		{E9A9F585-E1DA-49F7-89C5-07E9A6A772C6} = {8AC39497-E12A-4F7D-ADA5-97FA7428F8DD}
 		{316E915E-51A8-411B-B8FF-69E7B59B5446} = {E4F8DF14-9E44-4D25-8EEA-7810E12FB3BD}
+		{1314334B-49F9-4B67-86E7-788C032828A4} = {8AC39497-E12A-4F7D-ADA5-97FA7428F8DD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {51EC117B-15FA-4DED-B396-B87536659121}

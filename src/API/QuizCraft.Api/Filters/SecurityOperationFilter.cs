@@ -18,7 +18,7 @@ public class SecurityOperationFilter : IOperationFilter
             Name = "security-header",
             In = ParameterLocation.Header,
             Required = true,
-            Description = "Security Header value"
+            Description = "Security Header value",
         });
     }
 }

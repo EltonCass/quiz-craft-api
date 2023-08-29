@@ -12,38 +12,19 @@ namespace QuizCraft.Persistence.Quizzes.Questions;
 
 public class QuestionRepository : IQuestionRepository
 {
-    private readonly QuizCraftContext _Context;
+    private readonly QuizCraftContext _context;
 
     public QuestionRepository(
         QuizCraftContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
-        _Context = context;
+        _context = context;
     }
 
     public async Task<OneOf<Question, RequestError>> DeleteQuestion(
         int quizId, int questionId, CancellationToken cancellationToken)
     {
-        var foundedQuestion = await _Context.Questions
-            .FirstOrDefaultAsync(
-            q => q.Id == questionId && q.QuizId == quizId, cancellationToken);
-        if (foundedQuestion is null) 
-        {
-            return new RequestError(
-                System.Net.HttpStatusCode.NotFound,
-                Constants.RequestErrorMessages.QuestionNotFound);
-        }
-
-        _Context.Questions.Remove(foundedQuestion);
-        await _Context.SaveChangesAsync(cancellationToken);
-        return foundedQuestion;
-    }
-
-    public async Task<OneOf<Question, RequestError>> GetQuestion(
-        int quizId, int questionId, CancellationToken cancellationToken)
-    {
-        var foundedQuestion = await _Context.Questions
-            .AsNoTracking()
+        var foundedQuestion = await _context.Questions
             .FirstOrDefaultAsync(
             q => q.Id == questionId && q.QuizId == quizId, cancellationToken);
         if (foundedQuestion is null)
@@ -53,13 +34,29 @@ public class QuestionRepository : IQuestionRepository
                 Constants.RequestErrorMessages.QuestionNotFound);
         }
 
+        _context.Questions.Remove(foundedQuestion);
+        await _context.SaveChangesAsync(cancellationToken);
         return foundedQuestion;
+    }
+
+    public async Task<OneOf<Question, RequestError>> GetQuestion(
+        int quizId, int questionId, CancellationToken cancellationToken)
+    {
+        var foundedQuestion = await _context.Questions
+            .AsNoTracking()
+            .FirstOrDefaultAsync(
+            q => q.Id == questionId && q.QuizId == quizId, cancellationToken);
+        return foundedQuestion is null
+            ? new RequestError(
+                System.Net.HttpStatusCode.NotFound,
+                Constants.RequestErrorMessages.QuestionNotFound)
+            : foundedQuestion;
     }
 
     public async Task<ICollection<Question>> GetQuestions(
         int quizId, CancellationToken cancellationToken)
     {
-        var questions = await _Context.Questions
+        var questions = await _context.Questions
             .AsNoTracking()
             .Where(q => q.QuizId == quizId)
             .ToListAsync(cancellationToken);

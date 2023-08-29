@@ -14,8 +14,8 @@ namespace QuizCraft.Application.Categories;
 public class CategoryHandler : ICategoryHandler
 {
     private readonly IValidator<CategoryForUpsert> _validator;
-    private readonly ICategoryRepository _CategoryRepository;
-    private readonly IMapper _Mapper;
+    private readonly ICategoryRepository _categoryRepository;
+    private readonly IMapper _mapper;
 
     public CategoryHandler(
         IValidator<CategoryForUpsert> validator,
@@ -26,14 +26,14 @@ public class CategoryHandler : ICategoryHandler
         ArgumentNullException.ThrowIfNull(categoryRepository);
         ArgumentNullException.ThrowIfNull(mapper);
         _validator = validator;
-        _CategoryRepository = categoryRepository;
-        _Mapper = mapper;
+        _categoryRepository = categoryRepository;
+        _mapper = mapper;
     }
 
     public async Task<OneOf<CategoryForDisplay, RequestError>> CreateCategory(
-        CategoryForUpsert newCategoryDto, CancellationToken cancellationToken)
+        CategoryForUpsert newCategory, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(newCategoryDto);
+        var result = _validator.Validate(newCategory);
         if (!result.IsValid)
         {
             return new RequestError(
@@ -41,14 +41,14 @@ public class CategoryHandler : ICategoryHandler
                 result.ToString());
         }
 
-        var createdCategory = await _CategoryRepository
-                .CreateCategory(_Mapper.Map<Category>(newCategoryDto), cancellationToken);
+        var createdCategory = await _categoryRepository
+                .CreateCategory(_mapper.Map<Category>(newCategory), cancellationToken);
         if (createdCategory.IsT1)
         {
             return createdCategory.AsT1;
         }
 
-        var createdCategoryDto = _Mapper
+        var createdCategoryDto = _mapper
             .Map<CategoryForDisplay>(createdCategory.AsT0);
         return createdCategoryDto;
     }
@@ -56,7 +56,7 @@ public class CategoryHandler : ICategoryHandler
     public async Task<OneOf<CategoryForDisplay, RequestError>> DeleteCategory(
         int id, CancellationToken cancellationToken)
     {
-        var categoryResult = await _CategoryRepository
+        var categoryResult = await _categoryRepository
             .DeleteCategory(id, cancellationToken);
 
         if (categoryResult.IsT1)
@@ -64,7 +64,7 @@ public class CategoryHandler : ICategoryHandler
             return categoryResult.AsT1;
         }
 
-        var categoryDto = _Mapper
+        var categoryDto = _mapper
             .Map<CategoryForDisplay>(categoryResult.AsT0);
         return categoryDto;
     }
@@ -72,11 +72,10 @@ public class CategoryHandler : ICategoryHandler
     public async Task<IEnumerable<CategoryForDisplay>> RetrieveCategories(
         CancellationToken cancellationToken)
     {
-        var categories = await _CategoryRepository
+        var categories = await _categoryRepository
             .GetCategories(cancellationToken);
 
-
-        var categoriesDtos = _Mapper
+        var categoriesDtos = _mapper
             .Map<ICollection<CategoryForDisplay>>(categories);
         return categoriesDtos;
     }
@@ -84,14 +83,14 @@ public class CategoryHandler : ICategoryHandler
     public async Task<OneOf<CategoryForDisplay, RequestError>> RetrieveCategory(
         int id, CancellationToken cancellationToken)
     {
-        var categoryResult = await _CategoryRepository
+        var categoryResult = await _categoryRepository
             .GetCategory(id, cancellationToken);
         if (categoryResult.IsT1)
         {
             return categoryResult.AsT1;
         }
 
-        var foundedCategory = _Mapper
+        var foundedCategory = _mapper
             .Map<CategoryForDisplay>(categoryResult.AsT0);
         return foundedCategory;
     }
@@ -107,16 +106,16 @@ public class CategoryHandler : ICategoryHandler
                 result.ToString());
         }
 
-        var categoryEntity = _Mapper.Map<Category>(category);
+        var categoryEntity = _mapper.Map<Category>(category);
         categoryEntity.Id = id;
-        var categoryResult = await _CategoryRepository
+        var categoryResult = await _categoryRepository
             .UpdateCategory(categoryEntity, cancellationToken);
         if (categoryResult.IsT1)
         {
             return categoryResult.AsT1;
         }
 
-        var updatedCategory = _Mapper
+        var updatedCategory = _mapper
             .Map<CategoryForDisplay>(categoryResult.AsT0);
         return updatedCategory;
     }

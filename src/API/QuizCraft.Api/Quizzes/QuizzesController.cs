@@ -17,17 +17,17 @@ public class QuizzesController : ControllerBase
     private const string _GetQuizByIdEndpointName = "GetQuiz";
 
     private readonly IQuizHandler _quizHandler;
-    private readonly IMapper _Mapper;
+    private readonly IMapper _mapper;
 
     public QuizzesController(
         IQuizHandler quizRepository,
         IMapper mapper)
     {
-        ArgumentNullException.ThrowIfNull(quizRepository, nameof(quizRepository));
-        ArgumentNullException.ThrowIfNull(mapper, nameof(mapper));
-        
+        ArgumentNullException.ThrowIfNull(quizRepository);
+        ArgumentNullException.ThrowIfNull(mapper);
+
         _quizHandler = quizRepository;
-        _Mapper = mapper;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -46,12 +46,9 @@ public class QuizzesController : ControllerBase
     {
         var result = await _quizHandler.RetrieveQuiz(id, cancellationToken);
 
-        if (result.IsT0)
-        {
-            return Ok(result.AsT0);
-        }
-
-        return result.HandleError(this);
+        return result.IsT0
+            ? Ok(result.AsT0)
+            : result.HandleError(this);
     }
 
     [HttpDelete("{id}")]
@@ -62,15 +59,12 @@ public class QuizzesController : ControllerBase
     {
         var result = await _quizHandler.DeleteQuiz(id, cancellationToken);
 
-        if (result.IsT0)
-        {
-            return NoContent();
-        }
-
-        return result.HandleError(this);
+        return result.IsT0
+            ? NoContent()
+            : result.HandleError(this);
     }
 
-    [HttpPost()]
+    [HttpPost]
     [ProducesResponseType(201)]
     [ProducesResponseType(422)]
     public async Task<ActionResult<QuizForUpsert>> PostQuiz(
@@ -87,8 +81,9 @@ public class QuizzesController : ControllerBase
         var resourceUrl = Url.Action(
                 _GetQuizByIdEndpointName,
                 "Quizzes",
-                new { result.AsT0.Id, cancellationToken }, Request.Scheme);
-        var responseQuiz = _Mapper.Map<QuizForUpsert>(result.AsT0);
+                new { result.AsT0.Id, cancellationToken },
+                Request.Scheme);
+        var responseQuiz = _mapper.Map<QuizForUpsert>(result.AsT0);
         return Created(resourceUrl!, responseQuiz);
     }
 
@@ -101,11 +96,8 @@ public class QuizzesController : ControllerBase
         var result = await _quizHandler
             .UpdateQuiz(id, quiz, cancellationToken);
 
-        if (result.IsT1)
-        {
-            return result.HandleError(this);
-        }
-
-        return Ok(result.AsT0);
+        return result.IsT1
+            ? result.HandleError(this)
+            : Ok(result.AsT0);
     }
 }

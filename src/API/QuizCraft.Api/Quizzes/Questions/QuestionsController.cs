@@ -22,7 +22,7 @@ public class QuestionsController : ControllerBase
         _questionHandler = questionHandler;
     }
 
-    [HttpGet()]
+    [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<QuestionForDisplay>), 200)]
     public async Task<ActionResult<IEnumerable<QuestionForDisplay>>> GetQuestions(
         [FromRoute] int quizId, CancellationToken cancellationToken)
@@ -41,11 +41,8 @@ public class QuestionsController : ControllerBase
         var result = await _questionHandler
             .RetrieveQuestion(quizId, questionId, cancellationToken);
 
-        if (result.IsT0)
-        {
-            return Ok(result.AsT0);
-        }
-
-        return result.HandleError(this);
+        return result.IsT0
+            ? Ok(result.AsT0)
+            : result.HandleError(this);
     }
 }

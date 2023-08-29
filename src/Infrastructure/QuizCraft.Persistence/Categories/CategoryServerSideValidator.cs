@@ -10,16 +10,16 @@ namespace QuizCraft.Persistence.Categories;
 
 internal class CategoryServerSideValidator : AbstractValidator<Category>
 {
-    private readonly QuizCraftContext _Context;
+    private readonly QuizCraftContext _context;
 
     public CategoryServerSideValidator(QuizCraftContext context)
     {
-        _Context = context;
+        _context = context;
 
         RuleFor(c => c.Name)
             .MustAsync(async (c, cn,  cancellationToken) =>
             {
-                var res =  await _Context.Categories
+                var res = await _context.Categories
                     .AllAsync(x => x.Name != cn || x.Id == c.Id, cancellationToken);
                 return res;
             })

@@ -16,13 +16,14 @@ public class FillInBlankQuestionsController : ControllerBase
     private const string _GetQuizByIdEndpointName = "GetQuiz";
     private readonly ISpecificQuestionHandler<FillInBlankQuestionDTO> _fillInBlankQuestionHandler;
 
-    public FillInBlankQuestionsController(ISpecificQuestionHandler<FillInBlankQuestionDTO> fillInBlankQuestionRepository)
+    public FillInBlankQuestionsController(
+        ISpecificQuestionHandler<FillInBlankQuestionDTO> fillInBlankQuestionRepository)
     {
         ArgumentNullException.ThrowIfNull(fillInBlankQuestionRepository, nameof(fillInBlankQuestionRepository));
         _fillInBlankQuestionHandler = fillInBlankQuestionRepository;
     }
 
-    [HttpPost()]
+    [HttpPost]
     [ProducesResponseType(typeof(FillInBlankQuestionDTO), 201)]
     [ProducesResponseType(422)]
     public async Task<ActionResult<FillInBlankQuestionDTO>> PostQuestion(
@@ -44,7 +45,8 @@ public class FillInBlankQuestionsController : ControllerBase
             var resourceUrl = Url.Action(
                 _GetQuizByIdEndpointName,
                 ControllerContext.ActionDescriptor.ControllerName,
-                new { result.AsT0.Id, cancellationToken }, Request.Scheme);
+                new { result.AsT0.Id, cancellationToken },
+                Request.Scheme);
             return Created(resourceUrl!, result.AsT0);
         }
 

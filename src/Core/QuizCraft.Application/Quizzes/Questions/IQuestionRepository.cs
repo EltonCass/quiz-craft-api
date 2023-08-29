@@ -11,8 +11,10 @@ public interface IQuestionRepository
 {
     Task<OneOf<Question, RequestError>> DeleteQuestion(
         int quizId, int questionId, CancellationToken cancellationToken);
+
     Task<OneOf<Question, RequestError>> GetQuestion(
         int quizId, int questionId, CancellationToken cancellationToken);
+
     Task<ICollection<Question>> GetQuestions(
         int quizId, CancellationToken cancellationToken);
 }
