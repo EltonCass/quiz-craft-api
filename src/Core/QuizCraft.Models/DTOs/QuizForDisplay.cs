@@ -33,4 +33,24 @@ public record QuizForDisplay
         UpdatedAt = updatedAt;
         CreatedAt = createdAt;
     }
+
+    public QuizForDisplay(
+        int id,
+        IEnumerable<CategoryForDisplay> categories,
+        string description,
+        string title,
+        IEnumerable<QuestionForDisplay> questions,
+        DateTimeOffset? createdAt = null,
+        DateTimeOffset? updatedAt = null,
+        int? createdBy = null)
+    {
+        Id = id;
+        Categories = new List<CategoryForDisplay>(categories);
+        Description = description;
+        Title = title;
+        Questions = new List<QuestionForDisplay>(questions);
+        CreatedByUserId = createdBy;
+        UpdatedAt = updatedAt?.LocalDateTime;
+        CreatedAt = createdAt?.LocalDateTime;
+    }
 }
