@@ -1,11 +1,11 @@
 ﻿// Copyright (c) 2023 Elton Cassas. All rights reserved.
 // See LICENSE.txt
 
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using QuizCraft.Models.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 using QuizCraft.Application.Mail;
 using QuizCraft.Infrastructure.Mail;
+using QuizCraft.Models.Infrastructure;
 
 namespace QuizCraft.Infrastructure;
 

@@ -1,61 +1,66 @@
 ﻿// Copyright (c) 2023 Elton Cassas. All rights reserved.
 // See LICENSE.txt
 
+using MapsterMapper;
 using OneOf;
 using QuizCraft.Models;
 using QuizCraft.Models.DTOs;
-using System.Net;
 
 namespace QuizCraft.Application.Quizzes.Questions;
 
 public class QuestionHandler : IQuestionHandler
 {
-    public async Task<OneOf<QuestionDTO, RequestError>> DeleteQuestion(int quizId, int id, CancellationToken cancellationToken)
+    private readonly IQuestionRepository _questionRepository;
+    private readonly IMapper _mapper;
+
+    public QuestionHandler(
+        IQuestionRepository questionRepository,
+        IMapper mapper)
     {
-        var foundedQuiz = Stubs.Quizzes.FirstOrDefault(q => q.Id == quizId);
-        await Task.Delay(100, cancellationToken);
-        if (foundedQuiz is null)
-        {
-            return new RequestError(HttpStatusCode.NotFound, Constants.RequestErrorMessages.QuizNotFound);
-        }
-
-        var foundedQuestion = foundedQuiz.Questions.FirstOrDefault(q => q.Id == id);
-        if (foundedQuestion is null)
-        {
-            return new RequestError(HttpStatusCode.NotFound, Constants.RequestErrorMessages.QuestionNotFound);
-        }
-
-        foundedQuiz.Questions.Remove(foundedQuestion);
-        return foundedQuestion;
+        _questionRepository = questionRepository;
+        _mapper = mapper;
     }
 
-    public async Task<OneOf<QuestionDTO, RequestError>> RetrieveQuestion(int quizId, int id, CancellationToken cancellationToken)
+    public async Task<OneOf<QuestionForDisplay, RequestError>> DeleteQuestion(
+        int quizId, int id, CancellationToken cancellationToken)
     {
-        var foundedQuiz = Stubs.Quizzes.FirstOrDefault(q => q.Id == quizId);
-        await Task.Delay(100, cancellationToken);
-        if (foundedQuiz is null)
+        var questionResult = await _questionRepository
+            .DeleteQuestion(quizId, id, cancellationToken);
+
+        if (questionResult.IsT1)
         {
-            return new RequestError(HttpStatusCode.NotFound, Constants.RequestErrorMessages.QuizNotFound);
+            return questionResult.AsT1;
         }
 
-        var foundedQuestion = foundedQuiz.Questions.FirstOrDefault(q => q.Id == id);
-        if (foundedQuestion is null)
-        {
-            return new RequestError(HttpStatusCode.NotFound, Constants.RequestErrorMessages.QuestionNotFound);
-        }
-
-        return foundedQuestion;
+        var question = _mapper
+            .Map<QuestionForDisplay>(questionResult.AsT0);
+        return question;
     }
 
-    public async Task<OneOf<IEnumerable<QuestionDTO>, RequestError>> RetrieveQuestions(int quizId, CancellationToken cancellationToken)
+    public async Task<OneOf<QuestionForDisplay, RequestError>> RetrieveQuestion(
+        int quizId, int id, CancellationToken cancellationToken)
     {
-        var foundedQuiz = Stubs.Quizzes.FirstOrDefault(q => q.Id == quizId);
-        await Task.Delay(100, cancellationToken);
-        if (foundedQuiz is null)
+        var questionResult = await _questionRepository
+            .GetQuestion(quizId, id, cancellationToken);
+
+        if (questionResult.IsT1)
         {
-            return new RequestError(HttpStatusCode.NotFound, Constants.RequestErrorMessages.QuizNotFound);
+            return questionResult.AsT1;
         }
 
-        return foundedQuiz.Questions.ToList();
+        var question = _mapper
+            .Map<QuestionForDisplay>(questionResult.AsT0);
+        return question;
+    }
+
+    public async Task<ICollection<QuestionForDisplay>> RetrieveQuestions(
+        int quizId, CancellationToken cancellationToken)
+    {
+        var questionResult = await _questionRepository
+            .GetQuestions(quizId, cancellationToken);
+
+        var questions = _mapper
+            .Map<QuestionForDisplay[]>(questionResult);
+        return questions;
     }
 }

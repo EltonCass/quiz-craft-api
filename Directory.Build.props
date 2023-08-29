@@ -1,0 +1,9 @@
+<Project>
+	<PropertyGroup>
+		<Copyright>Copyright 2023 Elton Cassas</Copyright>
+		<Authors>Elton Cassas</Authors>
+	</PropertyGroup>
+	<PropertyGroup>
+		<NetCoreFramework>net7.0</NetCoreFramework>
+	</PropertyGroup>
+</Project>

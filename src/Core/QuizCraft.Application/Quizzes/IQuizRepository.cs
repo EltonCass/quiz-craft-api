@@ -11,11 +11,15 @@ public interface IQuizRepository
 {
     Task<OneOf<Quiz, RequestError>> CreateQuiz(
         Quiz quiz, CancellationToken cancellationToken, bool addNewCategories = false);
+
     Task<OneOf<Quiz, RequestError>> DeleteQuiz(
         int quizId, CancellationToken cancellationToken);
+
     Task<OneOf<Quiz, RequestError>> GetQuiz(
         int quizId, CancellationToken cancellationToken, bool useTracking = false);
+
     Task<ICollection<Quiz>> GetQuizzes(CancellationToken cancellationToken);
+
     Task<OneOf<Quiz, RequestError>> UpdateQuiz(
-        int quizId, Quiz updatedQuiz, CancellationToken cancellationToken);
+        Quiz updatedQuiz, CancellationToken cancellationToken);
 }

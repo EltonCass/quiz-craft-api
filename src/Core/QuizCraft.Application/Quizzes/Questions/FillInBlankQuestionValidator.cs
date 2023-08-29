@@ -10,9 +10,16 @@ internal class FillInBlankQuestionValidator : AbstractValidator<FillInBlankQuest
 {
     public FillInBlankQuestionValidator()
     {
-        RuleFor(q => q.CorrectAnswer).NotEmpty();
-        RuleFor(q => q.Text).NotEmpty();
-        RuleFor(q => q.Score).GreaterThan(0);
-        RuleFor(q => q.WordPosition).GreaterThan(0);
+        RuleFor(q => q.CorrectAnswer)
+            .NotEmpty()
+            .Length(1, 400);
+        RuleFor(q => q.Text)
+            .NotEmpty()
+            .Length(5, 500);
+        RuleFor(q => q.Score)
+            .GreaterThan(0)
+            .When(q => q.Score is not null);
+        RuleFor(q => q.WordPosition)
+            .GreaterThanOrEqualTo(0);
     }
 }

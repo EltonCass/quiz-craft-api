@@ -23,7 +23,26 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizCraft.Persistence", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizCraft.Api", "src\API\QuizCraft.Api\QuizCraft.Api.csproj", "{EE913F8B-7E74-4F70-94E0-48ACB8F7252F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizCraft.Infrastructure", "src\Infrastructure\QuizCraft.Infrastructure\QuizCraft.Infrastructure.csproj", "{E095677D-B243-4FCC-9F23-7B5EA254D2B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizCraft.Application.Tests", "tests\QuizCraft.Application.Tests\QuizCraft.Application.Tests.csproj", "{85AFB68B-498E-4004-B46C-DDCF45C422AF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizCraft.Persistence.Tests", "tests\QuizCraft.Persistence.Tests\QuizCraft.Persistence.Tests.csproj", "{96B5D2E2-FEE3-4D6D-9B51-C789422E2C84}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizCraft.Architecture.Tests", "tests\QuizCraft.Architecture.Tests\QuizCraft.Architecture.Tests.csproj", "{E9A9F585-E1DA-49F7-89C5-07E9A6A772C6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizCraft.Infrastructure", "src\Infrastructure\QuizCraft.Infrastructure\QuizCraft.Infrastructure.csproj", "{316E915E-51A8-411B-B8FF-69E7B59B5446}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D7F5988C-0E10-4A55-8999-B7543423819A}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+		Dockerfile = Dockerfile
+		LICENSE.txt = LICENSE.txt
+		NuGet.config = NuGet.config
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizCraft.Integration.Tests", "tests\QuizCraft.Integration.Tests\QuizCraft.Integration.Tests.csproj", "{1314334B-49F9-4B67-86E7-788C032828A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,10 +70,26 @@ Global
 		{EE913F8B-7E74-4F70-94E0-48ACB8F7252F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE913F8B-7E74-4F70-94E0-48ACB8F7252F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE913F8B-7E74-4F70-94E0-48ACB8F7252F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E095677D-B243-4FCC-9F23-7B5EA254D2B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E095677D-B243-4FCC-9F23-7B5EA254D2B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E095677D-B243-4FCC-9F23-7B5EA254D2B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E095677D-B243-4FCC-9F23-7B5EA254D2B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85AFB68B-498E-4004-B46C-DDCF45C422AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85AFB68B-498E-4004-B46C-DDCF45C422AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85AFB68B-498E-4004-B46C-DDCF45C422AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85AFB68B-498E-4004-B46C-DDCF45C422AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96B5D2E2-FEE3-4D6D-9B51-C789422E2C84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96B5D2E2-FEE3-4D6D-9B51-C789422E2C84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96B5D2E2-FEE3-4D6D-9B51-C789422E2C84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96B5D2E2-FEE3-4D6D-9B51-C789422E2C84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9A9F585-E1DA-49F7-89C5-07E9A6A772C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9A9F585-E1DA-49F7-89C5-07E9A6A772C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9A9F585-E1DA-49F7-89C5-07E9A6A772C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9A9F585-E1DA-49F7-89C5-07E9A6A772C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{316E915E-51A8-411B-B8FF-69E7B59B5446}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{316E915E-51A8-411B-B8FF-69E7B59B5446}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{316E915E-51A8-411B-B8FF-69E7B59B5446}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{316E915E-51A8-411B-B8FF-69E7B59B5446}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1314334B-49F9-4B67-86E7-788C032828A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1314334B-49F9-4B67-86E7-788C032828A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1314334B-49F9-4B67-86E7-788C032828A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1314334B-49F9-4B67-86E7-788C032828A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,7 +103,11 @@ Global
 		{8BAF0A59-D4EB-4769-808E-EC2C405859D1} = {0F367464-D424-4C03-A1BF-A660C0BDC11C}
 		{78CC742C-7486-4513-842A-64B2ADE73251} = {E4F8DF14-9E44-4D25-8EEA-7810E12FB3BD}
 		{EE913F8B-7E74-4F70-94E0-48ACB8F7252F} = {C8E67C97-A74C-47C9-B677-3F1B2AF03C51}
-		{E095677D-B243-4FCC-9F23-7B5EA254D2B2} = {E4F8DF14-9E44-4D25-8EEA-7810E12FB3BD}
+		{85AFB68B-498E-4004-B46C-DDCF45C422AF} = {8AC39497-E12A-4F7D-ADA5-97FA7428F8DD}
+		{96B5D2E2-FEE3-4D6D-9B51-C789422E2C84} = {8AC39497-E12A-4F7D-ADA5-97FA7428F8DD}
+		{E9A9F585-E1DA-49F7-89C5-07E9A6A772C6} = {8AC39497-E12A-4F7D-ADA5-97FA7428F8DD}
+		{316E915E-51A8-411B-B8FF-69E7B59B5446} = {E4F8DF14-9E44-4D25-8EEA-7810E12FB3BD}
+		{1314334B-49F9-4B67-86E7-788C032828A4} = {8AC39497-E12A-4F7D-ADA5-97FA7428F8DD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {51EC117B-15FA-4DED-B396-B87536659121}

@@ -22,11 +22,13 @@ public class MultipleOptionQuestionHandler : ISpecificQuestionHandler<MultipleOp
     public async Task<OneOf<MultipleOptionQuestionDTO, RequestError>> CreateQuestion(
         int quizId, MultipleOptionQuestionDTO newQuestion, CancellationToken cancellationToken)
     {
-        var foundedQuiz = Stubs.Quizzes.FirstOrDefault(q => q.Id == quizId);
+        var foundedQuiz = Stubs.Quizzes
+            .FirstOrDefault(q => q.Id == quizId);
         await Task.Delay(100, cancellationToken);
         if (foundedQuiz is null)
         {
-            return new RequestError(HttpStatusCode.NotFound, Constants.RequestErrorMessages.QuizNotFound);
+            return new RequestError(
+                HttpStatusCode.NotFound, Constants.RequestErrorMessages.QuizNotFound);
         }
 
         var result = _validator.Validate(newQuestion);
@@ -44,28 +46,25 @@ public class MultipleOptionQuestionHandler : ISpecificQuestionHandler<MultipleOp
     public async Task<OneOf<MultipleOptionQuestionDTO, RequestError>> UpdateQuestion(
         int quizId, int questionId, MultipleOptionQuestionDTO question, CancellationToken cancellationToken)
     {
-        var foundedQuiz = Stubs.Quizzes.FirstOrDefault(q => q.Id == quizId);
+        var foundedQuiz = Stubs.Quizzes
+            .FirstOrDefault(q => q.Id == quizId);
         await Task.Delay(100, cancellationToken);
         if (foundedQuiz is null)
         {
-            return new RequestError(HttpStatusCode.NotFound, Constants.RequestErrorMessages.QuizNotFound);
+            return new RequestError(
+                HttpStatusCode.NotFound, Constants.RequestErrorMessages.QuizNotFound);
         }
 
         var foundedQuestion = foundedQuiz.Questions.FirstOrDefault(q => q.Id == questionId);
         if (foundedQuestion is null)
         {
-            return new RequestError(HttpStatusCode.NotFound, Constants.RequestErrorMessages.QuestionNotFound);
+            return new RequestError(
+                HttpStatusCode.NotFound, Constants.RequestErrorMessages.QuestionNotFound);
         }
 
         var result = _validator.Validate(question);
-        if (result.IsValid)
-        {
-            foundedQuestion = question;
-            return question;
-        }
-
-        return new RequestError(
-            HttpStatusCode.UnprocessableEntity,
-            result.ToString());
+        return result.IsValid
+            ? question
+            : new RequestError(HttpStatusCode.UnprocessableEntity, result.ToString());
     }
 }

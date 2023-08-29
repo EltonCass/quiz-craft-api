@@ -19,17 +19,17 @@ namespace QuizCraft.Persistence.Quizzes;
 
 public class QuizRepository : IQuizRepository
 {
-    private readonly QuizCraftContext _Context;
-    private readonly ICategoryRepository _CategoryRepository;
+    private readonly QuizCraftContext _context;
+    private readonly ICategoryRepository _categoryRepository;
 
     public QuizRepository(
         QuizCraftContext context,
         ICategoryRepository categoryRepository)
     {
-        ArgumentNullException.ThrowIfNull(context, nameof(context));
-        ArgumentNullException.ThrowIfNull(categoryRepository, nameof(categoryRepository));
-        _Context = context;
-        _CategoryRepository = categoryRepository;
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(categoryRepository);
+        _context = context;
+        _categoryRepository = categoryRepository;
     }
 
     public async Task<OneOf<Quiz, RequestError>> CreateQuiz(
@@ -37,18 +37,19 @@ public class QuizRepository : IQuizRepository
     {
         if (!quiz.Categories.Any())
         {
-            await _Context.Quizzes.AddAsync(quiz, cancellationToken);
-            await _Context.SaveChangesAsync(cancellationToken);
+            await _context.Quizzes.AddAsync(quiz, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
             return quiz;
         }
 
-        using var transaction = await _Context.Database
+        using var transaction = await _context.Database
             .BeginTransactionAsync(cancellationToken);
+
         // Adding Categories
         try
         {
             var (existingCategories, newCategories) =
-                await _CategoryRepository.GetCategoriesByNames(
+                await _categoryRepository.GetCategoriesByNames(
                 quiz.Categories.Select(c => c.Name).ToArray(), cancellationToken);
 
             if (!addNewCategories)
@@ -64,7 +65,7 @@ public class QuizRepository : IQuizRepository
 
             if (newCategories.Any())
             {
-                var result = await _CategoryRepository
+                var result = await _categoryRepository
                     .AddCategoriesByNames(newCategories.ToArray(), cancellationToken);
 
                 if (result.IsT1)
@@ -75,8 +76,8 @@ public class QuizRepository : IQuizRepository
                 quiz.Categories.AddRange(result.AsT0);
             }
 
-            await _Context.Quizzes.AddAsync(quiz, cancellationToken);
-            await _Context.SaveChangesAsync(cancellationToken);
+            await _context.Quizzes.AddAsync(quiz, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
 
             return quiz;
@@ -98,22 +99,19 @@ public class QuizRepository : IQuizRepository
             return quizResult;
         }
 
-        _Context.Quizzes.Remove(quizResult.AsT0);
-        var result = await _Context.SaveChangesAsync(cancellationToken);
+        _context.Quizzes.Remove(quizResult.AsT0);
+        var result = await _context.SaveChangesAsync(cancellationToken);
 
-        if (result == 0)
-        {
-            return new RequestError(
-                HttpStatusCode.BadRequest, RequestErrorMessages.NoChanges);
-        }
-
-        return quizResult.AsT0;
+        return result == 0
+            ? new RequestError(
+                HttpStatusCode.BadRequest, RequestErrorMessages.NoChanges)
+            : quizResult.AsT0;
     }
 
     public async Task<OneOf<Quiz, RequestError>> GetQuiz(
         int quizId, CancellationToken cancellationToken, bool useTracking = false)
     {
-        var quizQuery = _Context.Quizzes
+        var quizQuery = _context.Quizzes
             .Where(x => x.Id == quizId);
 
         if (!useTracking)
@@ -137,19 +135,16 @@ public class QuizRepository : IQuizRepository
            })
            .FirstOrDefaultAsync(cancellationToken);
 
-        if (quiz is null)
-        {
-            return new RequestError(HttpStatusCode.NotFound, RequestErrorMessages.QuizNotFound);
-        }
-
-        return quiz;
+        return quiz is null
+            ? new RequestError(HttpStatusCode.NotFound, RequestErrorMessages.QuizNotFound)
+            : quiz;
     }
 
     public async Task<ICollection<Quiz>> GetQuizzes(
         CancellationToken cancellationToken)
     {
-        return await _Context.Quizzes
-            .Select(x => new Quiz 
+        return await _context.Quizzes
+            .Select(x => new Quiz
             {
                 Id = x.Id,
                 CreatedAt = x.CreatedAt,
@@ -166,6 +161,6 @@ public class QuizRepository : IQuizRepository
     }
 
     public Task<OneOf<Quiz, RequestError>> UpdateQuiz(
-        int quizId, Quiz updatedQuiz, CancellationToken cancellationToken)
+        Quiz updatedQuiz, CancellationToken cancellationToken)
         => throw new NotImplementedException();
 }

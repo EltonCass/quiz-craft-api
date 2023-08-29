@@ -1,7 +1,7 @@
 ﻿// Copyright (c) 2023 Elton Cassas. All rights reserved.
 // See LICENSE.txt
 
-using Mapster;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using QuizCraft.Api.Helpers;
 using QuizCraft.Application.Categories;
@@ -15,11 +15,14 @@ namespace QuizCraft.Api.Categories;
 public class CategoriesController : ControllerBase
 {
     private readonly ICategoryHandler _categoryHandler;
+    private readonly IMapper _mapper;
 
-    public CategoriesController(ICategoryHandler category)
+    public CategoriesController(ICategoryHandler category, IMapper mapper)
     {
         ArgumentNullException.ThrowIfNull(category);
+        ArgumentNullException.ThrowIfNull(mapper);
         _categoryHandler = category;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -38,12 +41,9 @@ public class CategoriesController : ControllerBase
         var result = await _categoryHandler
             .RetrieveCategory(id, cancellationToken);
 
-        if (result.IsT0)
-        {
-            return Ok(result.AsT0);
-        }
-
-        return result.HandleError(this);
+        return result.IsT0
+            ? Ok(result.AsT0)
+            : result.HandleError(this);
     }
 
     [HttpPost]
@@ -59,8 +59,10 @@ public class CategoriesController : ControllerBase
             var resourceUrl = Url.Action(
                 "GetCategory",
                 "Categories",
-                new { result.AsT0.Id, cancellationToken }, Request.Scheme);
-            var responseCategory = result.AsT0.Adapt<CategoryForUpsert>();
+                new { result.AsT0.Id, cancellationToken },
+                Request.Scheme);
+            var responseCategory = _mapper
+                .Map<CategoryForUpsert>(result.AsT0);
             return Created(resourceUrl!, responseCategory);
         }
 
@@ -75,12 +77,9 @@ public class CategoriesController : ControllerBase
     {
         var result = await _categoryHandler
             .UpdateCategory(id, category, cancellationToken);
-        if (result.IsT0)
-        {
-            return Ok(result.AsT0);
-        }
-
-        return result.HandleError(this);
+        return result.IsT0
+            ? Ok(result.AsT0)
+            : result.HandleError(this);
     }
 
     [HttpDelete("{id}")]
@@ -90,11 +89,9 @@ public class CategoriesController : ControllerBase
     {
         var result = await _categoryHandler
             .DeleteCategory(id, cancellationToken);
-        if (result.IsT0)
-        {
-            return NoContent();
-        }
-
-        return result.HandleError(this);
+        return
+            result.IsT0
+            ? NoContent()
+            : result.HandleError(this);
     }
 }

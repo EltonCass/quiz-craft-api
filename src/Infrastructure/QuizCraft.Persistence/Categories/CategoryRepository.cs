@@ -15,12 +15,12 @@ namespace QuizCraft.Persistence.Categories;
 
 public class CategoryRepository : ICategoryRepository
 {
-    private readonly QuizCraftContext _Context;
+    private readonly QuizCraftContext _context;
     private readonly IValidator<Category> _validator;
 
     public CategoryRepository(QuizCraftContext context, IValidator<Category> validator)
     {
-        _Context = context;
+        _context = context;
         _validator = validator;
     }
 
@@ -54,19 +54,13 @@ public class CategoryRepository : ICategoryRepository
                 HttpStatusCode.UnprocessableEntity, validationResult.ToString());
         }
 
-        await _Context.Categories
+        await _context.Categories
             .AddAsync(category, cancellationToken);
-        _Context.ChangeTracker.DetectChanges();
-        var debugView = _Context.ChangeTracker.DebugView.ShortView; //TODO Remove once its used
-        var result = await _Context.SaveChangesAsync(cancellationToken);
+        var result = await _context.SaveChangesAsync(cancellationToken);
 
-        if (result == 0)
-        {
-            return new RequestError(
-                HttpStatusCode.BadRequest, RequestErrorMessages.NoChanges);
-        }
-
-        return category;
+        return result == 0
+            ? new RequestError(HttpStatusCode.BadRequest, RequestErrorMessages.NoChanges)
+            : category;
     }
 
     public async Task<OneOf<Category, RequestError>> DeleteCategory(
@@ -79,24 +73,19 @@ public class CategoryRepository : ICategoryRepository
             return foundedCategory;
         }
 
-        _Context.Categories.Remove(foundedCategory.AsT0);
-        _Context.ChangeTracker.DetectChanges();
-        var debugView = _Context.ChangeTracker.DebugView.ShortView; //TODO Remove once its used
-        var result = await _Context.SaveChangesAsync(cancellationToken);
+        _context.Categories.Remove(foundedCategory.AsT0);
+        var result = await _context.SaveChangesAsync(cancellationToken);
 
-        if (result == 0)
-        {
-            return new RequestError(
-                HttpStatusCode.BadRequest, RequestErrorMessages.NoChanges);
-        }
-
-        return foundedCategory;
+        return result == 0
+            ? new RequestError(
+                HttpStatusCode.BadRequest, RequestErrorMessages.NoChanges)
+            : foundedCategory;
     }
-    
+
     public async Task<ICollection<Category>> GetCategories(
         CancellationToken cancellationToken)
     {
-        return await _Context.Categories
+        return await _context.Categories
             .AsNoTracking().ToListAsync(cancellationToken);
     }
 
@@ -104,7 +93,7 @@ public class CategoryRepository : ICategoryRepository
         ICollection<Category> NonMatchingCategories)> GetCategoriesByNames(
         string[] categories, CancellationToken cancellationToken)
     {
-        var matchingCategories = await _Context.Categories.Where(
+        var matchingCategories = await _context.Categories.Where(
             c => categories.Contains(c.Name))
             .ToListAsync(cancellationToken);
 
@@ -126,22 +115,19 @@ public class CategoryRepository : ICategoryRepository
     public async Task<OneOf<Category, RequestError>> GetCategory(
         int categoryId, CancellationToken cancellationToken)
     {
-        var category = await _Context.Categories
+        var category = await _context.Categories
             .Where(x => x.Id == categoryId)
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (category is null)
-        {
-            return new RequestError(HttpStatusCode.NotFound, RequestErrorMessages.CategoryNotFound);
-        }
-
-        return category;
+        return category is null
+            ? new RequestError(HttpStatusCode.NotFound, RequestErrorMessages.CategoryNotFound)
+            : category;
     }
 
     public async Task<OneOf<Category, RequestError>> UpdateCategory(
         Category updatedCategory, CancellationToken cancellationToken)
     {
-        var foundedCategory = await _Context.Categories
+        var foundedCategory = await _context.Categories
             .Where(x => x.Id == updatedCategory.Id)
             .FirstOrDefaultAsync(cancellationToken);
         if (foundedCategory is null)
@@ -160,15 +146,10 @@ public class CategoryRepository : ICategoryRepository
 
         foundedCategory.Name = updatedCategory.Name;
         foundedCategory.Description = updatedCategory.Description;
-        _Context.ChangeTracker.DetectChanges();
-        var debugView = _Context.ChangeTracker.DebugView.ShortView; //TODO Remove once its used
-        var result = await _Context.SaveChangesAsync(cancellationToken);
-        if (result == 0)
-        {
-            return new RequestError(
-                HttpStatusCode.BadRequest, RequestErrorMessages.NoChanges);
-        }
-
-        return updatedCategory;
+        var result = await _context.SaveChangesAsync(cancellationToken);
+        return result == 0
+            ? new RequestError(
+                HttpStatusCode.BadRequest, RequestErrorMessages.NoChanges)
+            : updatedCategory;
     }
 }

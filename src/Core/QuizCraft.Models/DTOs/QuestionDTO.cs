@@ -2,7 +2,7 @@
 
 namespace QuizCraft.Models.DTOs;
 
-public record QuestionDTO(
+public record QuestionForDisplay(
     int Id,
     int QuizId,
     string CorrectAnswer,

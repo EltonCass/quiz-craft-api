@@ -2,10 +2,8 @@
 // See LICENSE.txt
 
 using FluentValidation;
-using Mapster;
 using MapsterMapper;
 using OneOf;
-using QuizCraft.Application.Categories;
 using QuizCraft.Application.Quizzes.Questions;
 using QuizCraft.Models;
 using QuizCraft.Models.DTOs;
@@ -17,28 +15,20 @@ namespace QuizCraft.Application.Quizzes;
 public class QuizHandler : IQuizHandler
 {
     private readonly IValidator<QuizForUpsert> _validator;
-    private readonly ISpecificQuestionHandler<MultipleOptionQuestionDTO> _multipleOptionHandler;
-    private readonly ISpecificQuestionHandler<FillInBlankQuestionDTO> _fillInBlankHandler;
     private readonly IQuizRepository _quizRepository;
-    private readonly IMapper _Mapper;
+    private readonly IMapper _mapper;
 
     public QuizHandler(
         IValidator<QuizForUpsert> validator,
-        ISpecificQuestionHandler<MultipleOptionQuestionDTO> multipleOptionRepository,
-        ISpecificQuestionHandler<FillInBlankQuestionDTO> fillInBlankRepository,
         IQuizRepository quizRepository,
         IMapper mapper)
     {
         ArgumentNullException.ThrowIfNull(validator);
-        ArgumentNullException.ThrowIfNull(multipleOptionRepository);
-        ArgumentNullException.ThrowIfNull(fillInBlankRepository);
         ArgumentNullException.ThrowIfNull(quizRepository);
         ArgumentNullException.ThrowIfNull(mapper);
         _validator = validator;
-        _multipleOptionHandler = multipleOptionRepository;
-        _fillInBlankHandler = fillInBlankRepository;
         _quizRepository = quizRepository;
-        _Mapper = mapper;
+        _mapper = mapper;
     }
 
     public async Task<OneOf<QuizForDisplay, RequestError>> CreateQuiz(
@@ -52,7 +42,7 @@ public class QuizHandler : IQuizHandler
                 result.ToString());
         }
 
-        var quizEntity = _Mapper.Map<Quiz>(newQuiz);
+        var quizEntity = _mapper.Map<Quiz>(newQuiz);
         var createdQuizResult = await _quizRepository
             .CreateQuiz(quizEntity, cancellationToken);
 
@@ -61,21 +51,7 @@ public class QuizHandler : IQuizHandler
             return createdQuizResult.AsT1;
         }
 
-        var newQuizDto = _Mapper.Map<QuizForDisplay>(createdQuizResult.AsT0);
-
-        //foreach (var question in newQuiz.Questions)
-        //{
-        //    if (question.Type is Models.Constants.QuestionType.MultipleOption)
-        //    {
-        //        await _multipleOptionHandler.CreateQuestion(
-        //            newQuiz.Id, (MultipleOptionQuestionDTO)question, cancellationToken);
-        //    }
-        //    else if (question.Type is Models.Constants.QuestionType.FillInBlank)
-        //    {
-        //        await _fillInBlankHandler.CreateQuestion(
-        //            newQuiz.Id, (FillInBlankQuestionDTO)question, cancellationToken);
-        //    }
-        //}
+        var newQuizDto = _mapper.Map<QuizForDisplay>(createdQuizResult.AsT0);
 
         return newQuizDto;
     }
@@ -91,7 +67,7 @@ public class QuizHandler : IQuizHandler
             return quizResult.AsT1;
         }
 
-        var quizDto = _Mapper
+        var quizDto = _mapper
             .Map<QuizForDisplay>(quizResult.AsT0);
         return quizDto;
     }
@@ -107,7 +83,7 @@ public class QuizHandler : IQuizHandler
                 HttpStatusCode.NotFound, Constants.RequestErrorMessages.QuizNotFound);
         }
 
-        var foundedQuiz = _Mapper.Map<QuizForDisplay>(quizResult.AsT0);
+        var foundedQuiz = _mapper.Map<QuizForDisplay>(quizResult.AsT0);
         return foundedQuiz;
     }
 
@@ -116,11 +92,35 @@ public class QuizHandler : IQuizHandler
     {
         var quizzesResult = await _quizRepository
             .GetQuizzes(cancellationToken);
-        var quizzes = _Mapper
+        var quizzes = _mapper
             .Map<ICollection<QuizForDisplay>>(quizzesResult);
         return quizzes;
     }
 
-    public Task<OneOf<QuizForDisplay, RequestError>> UpdateQuiz(
-        QuizForDisplay quiz, CancellationToken cancellationToken) => throw new NotImplementedException();
+    public async Task<OneOf<QuizForDisplay, RequestError>> UpdateQuiz(
+        int id, QuizForUpsert quiz, CancellationToken cancellationToken)
+    {
+        var result = _validator.Validate(quiz);
+        if (!result.IsValid)
+        {
+            return new RequestError(
+                HttpStatusCode.UnprocessableEntity,
+                result.ToString());
+        }
+
+        var quizEntity = _mapper.Map<Quiz>(quiz);
+        quizEntity.Id = id;
+        var updatedQuizResult = await _quizRepository
+            .UpdateQuiz(quizEntity, cancellationToken);
+
+        if (updatedQuizResult.IsT1)
+        {
+            return updatedQuizResult.AsT1;
+        }
+
+        var quizDto = _mapper.Map<QuizForDisplay>(
+            updatedQuizResult.AsT0);
+
+        return quizDto;
+    }
 }

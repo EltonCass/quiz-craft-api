@@ -9,10 +9,12 @@ namespace QuizCraft.Application.Quizzes.Questions;
 
 public interface IQuestionHandler
 {
-    Task<OneOf<IEnumerable<QuestionDTO>, RequestError>> RetrieveQuestions(
+    Task<ICollection<QuestionForDisplay>> RetrieveQuestions(
         int quizId, CancellationToken cancellationToken);
-    Task<OneOf<QuestionDTO, RequestError>> RetrieveQuestion(
+
+    Task<OneOf<QuestionForDisplay, RequestError>> RetrieveQuestion(
         int quizId, int id, CancellationToken cancellationToken);
-    Task<OneOf<QuestionDTO, RequestError>> DeleteQuestion(
+
+    Task<OneOf<QuestionForDisplay, RequestError>> DeleteQuestion(
         int quizId, int id, CancellationToken cancellationToken);
 }

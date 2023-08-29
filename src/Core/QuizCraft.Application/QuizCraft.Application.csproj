@@ -1,17 +1,25 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>$(NetCoreFramework)</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="11.6.0" />
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.6.0" />
-    <PackageReference Include="Mapster" Version="7.3.0" />
-    <PackageReference Include="Mapster.DependencyInjection" Version="1.0.0" />
-    <PackageReference Include="OneOf" Version="3.0.255" />
+    <PackageReference Include="FluentValidation"/>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions"/>
+    <PackageReference Include="Mapster"/>
+    <PackageReference Include="Mapster.DependencyInjection"/>
+    <PackageReference Include="OneOf"/>
+    <PackageReference Include="SonarAnalyzer.CSharp">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="StyleCop.Analyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
