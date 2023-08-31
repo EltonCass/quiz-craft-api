@@ -45,10 +45,6 @@ public class QuizCraftContext : DbContext
             }
         }
 
-        // Should we have logic to auto assing the correct question type here?
-        // foreach (var entry in ChangeTracker.Entries<Question>())
-        // { entry.Entity.QuestionType }
-
         return base.SaveChangesAsync(cancellationToken);
     }
 
@@ -105,7 +101,7 @@ public class QuizCraftContext : DbContext
             new MultipleOptionQuestion()
             {
                 Id = 1,
-                QuestionId = 1
+                QuestionId = 1,
             });
 
         modelBuilder.Entity<FillInBlankQuestion>().HasData(

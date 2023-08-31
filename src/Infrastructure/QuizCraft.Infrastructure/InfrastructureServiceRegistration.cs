@@ -16,11 +16,6 @@ public static class InfrastructureServiceRegistration
     {
         services.AddOptions<EmailSettings>()
             .Bind(configuration.GetSection(nameof(EmailSettings)));
-        //.Validate(a =>
-        //{
-        //    var result = a.Validate(new ValidationContext(a));
-        //    return string.IsNullOrEmpty(result.FirstOrDefault()?.ErrorMessage);
-        //});
 
         services.AddTransient<IEmailService, EmailService>();
 

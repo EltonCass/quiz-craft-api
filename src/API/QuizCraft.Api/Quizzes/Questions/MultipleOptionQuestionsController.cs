@@ -19,7 +19,7 @@ public class MultipleOptionQuestionsController : ControllerBase
     public MultipleOptionQuestionsController(
         ISpecificQuestionHandler<MultipleOptionQuestionDTO> multipleQuestionRepository)
     {
-        ArgumentNullException.ThrowIfNull(multipleQuestionRepository, nameof(multipleQuestionRepository));
+        ArgumentNullException.ThrowIfNull(multipleQuestionRepository);
 
         _multipleQuestionHandler = multipleQuestionRepository;
     }

@@ -11,12 +11,16 @@ public interface IQuizHandler
 {
     Task<IEnumerable<QuizForDisplay>> RetrieveQuizzes(
         CancellationToken cancellationToken);
+
     Task<OneOf<QuizForDisplay, RequestError>> RetrieveQuiz(
         int id, CancellationToken cancellationToken);
+
     Task<OneOf<QuizForDisplay, RequestError>> CreateQuiz(
         QuizForUpsert newQuiz, CancellationToken cancellationToken);
+
     Task<OneOf<QuizForDisplay, RequestError>> UpdateQuiz(
         int id, QuizForUpsert quiz, CancellationToken cancellationToken);
+
     Task<OneOf<QuizForDisplay, RequestError>> DeleteQuiz(
         int id, CancellationToken cancellationToken);
 }
