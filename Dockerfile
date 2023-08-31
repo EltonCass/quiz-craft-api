@@ -18,8 +18,8 @@ RUN dotnet restore "QuizCraft.Application.csproj"
 
 COPY ["src/Infrastructure/QuizCraft.Infrastructure/QuizCraft.Infrastructure.csproj", "."]
 RUN dotnet restore "QuizCraft.Infrastructure.csproj"
-COPY ["src/Infrastructure/QuizCraft.Persistence/QuizCraft.Persistence.csproj", "."]
-RUN dotnet restore "QuizCraft.Persistence.csproj"
+COPY ["src/Infrastructure/QuizCraft.Persistence/QuizCraft.Persistence.Postgresql.csproj", "."]
+RUN dotnet restore "QuizCraft.Persistence.Postgresql.csproj"
 
 COPY ["src/API/QuizCraft.Api/QuizCraft.Api.csproj", "."]
 RUN dotnet restore "QuizCraft.Api.csproj"
@@ -32,8 +32,8 @@ RUN dotnet build "QuizCraft.Application.csproj" -c Release -o /app/build
 
 WORKDIR "/src/Infrastructure/QuizCraft.Infrastructure"
 RUN dotnet build "QuizCraft.Infrastructure.csproj" -c Release -o /app/build
-WORKDIR "/src/Infrastructure/QuizCraft.Persistence"
-RUN dotnet build "QuizCraft.Persistence.csproj" -c Release -o /app/build
+WORKDIR "/src/Infrastructure/QuizCraft.Persistence.Postgresql"
+RUN dotnet build "QuizCraft.Persistence.Postgresql.csproj" -c Release -o /app/build
 
 WORKDIR "/src/API/QuizCraft.Api"
 RUN dotnet build "QuizCraft.Api.csproj" -c Release -o /app/build
