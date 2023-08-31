@@ -1,0 +1,48 @@
+name: Build and Test
+
+on:
+  push:
+      branches:
+        - main
+  workflow_dispatch:
+  
+jobs:
+  restore:
+    name: Restore dependencies
+    runs-on: ubuntu-latest    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Restore dependencies
+      run: dotnet restore
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: restore
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Build
+      run: dotnet build --no-restore
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Test
+      run: dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./TestResults/
+    - name: Upload Test Results
+      uses: actions/upload-artifact@v2
+      with:
+        name: TestResults
+        path: ./TestResults/
+    - name: Upload Code Coverage
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./TestResults/coverage.opencover.xml
+        fail_ci_if_error: true
+        verbose: true
+

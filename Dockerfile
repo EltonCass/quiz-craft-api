@@ -8,6 +8,9 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 
 WORKDIR /src
+COPY Directory.Build.props .
+COPY Directory.Packages.props .
+
 COPY ["src/Core/QuizCraft.Models/QuizCraft.Models.csproj", "."]
 RUN dotnet restore "QuizCraft.Models.csproj"
 COPY ["src/Core/QuizCraft.Application/QuizCraft.Application.csproj", "."]
