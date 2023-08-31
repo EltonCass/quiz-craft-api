@@ -36,6 +36,7 @@ jobs:
                 ConnectionStrings__QuizAPIConnectionString=${{ secrets.QUIZ_DB_CONNECTION_STRING }}
                 ExternalServices__OpenAPIKey=${{ secrets.OPEN_API_KEY }}
                 SecurityToken=${{ secrets.SECURITY_TOKEN }}
+                ConnectionStrings__ApplicationInsights=${{ secrets.APP_INSIGHTS }}
         context: .
         file: ./Dockerfile
 
