@@ -18,7 +18,7 @@ RUN dotnet restore "QuizCraft.Application.csproj"
 
 COPY ["src/Infrastructure/QuizCraft.Infrastructure/QuizCraft.Infrastructure.csproj", "."]
 RUN dotnet restore "QuizCraft.Infrastructure.csproj"
-COPY ["src/Infrastructure/QuizCraft.Persistence/QuizCraft.Persistence.Postgresql.csproj", "."]
+COPY ["src/Infrastructure/QuizCraft.Persistence.Postgresql/QuizCraft.Persistence.Postgresql.csproj", "."]
 RUN dotnet restore "QuizCraft.Persistence.Postgresql.csproj"
 
 COPY ["src/API/QuizCraft.Api/QuizCraft.Api.csproj", "."]
