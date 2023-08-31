@@ -59,6 +59,8 @@ public class Program
         .ValidateOnStart();
          */
         builder.Services.AddHealthChecks();
+        builder.Services.AddApplicationInsightsTelemetry(options =>
+            options.ConnectionString = builder.Configuration.GetConnectionString("ApplicationInsights"));
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
         {
