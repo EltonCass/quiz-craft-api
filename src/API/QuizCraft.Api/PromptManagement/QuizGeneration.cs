@@ -15,7 +15,7 @@ public class QuizGeneration : IQuizGeneration
 
     public QuizGeneration(IConfiguration configuration)
     {
-        ArgumentNullException.ThrowIfNull(configuration, nameof(configuration));
+        ArgumentNullException.ThrowIfNull(configuration);
         var key = configuration["OpenAPIKey"];
         _openApi = new OpenAIAPI(key);
     }

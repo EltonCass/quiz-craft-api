@@ -18,7 +18,7 @@ public class QuestionsController : ControllerBase
     public QuestionsController(
         IQuestionHandler questionHandler)
     {
-        ArgumentNullException.ThrowIfNull(questionHandler, nameof(questionHandler));
+        ArgumentNullException.ThrowIfNull(questionHandler);
         _questionHandler = questionHandler;
     }
 

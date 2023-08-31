@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using QuizCraft.Persistence;
+using QuizCraft.Persistence.Postgresql;
 
 namespace QuizCraft.Integration.Tests;
 
@@ -13,6 +13,7 @@ public class BaseIntegrationTest : IClassFixture<TestWebAppFactory>
     {
         _scope = factory.Services.CreateScope();
         DbContext = _scope.ServiceProvider.GetRequiredService<QuizCraftContext>();
+
         Client = factory.CreateClient();
     }
 }

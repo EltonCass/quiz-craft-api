@@ -30,7 +30,7 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.AzureAppService_ContainerUsername_a7c7da46fa374c2dad471477e7df4475 }}/${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }}
+        tags: ${{ secrets.AzureAppService_ContainerUsername_a7c7da46fa374c2dad471477e7df4475 }}/${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }}
         build-args: |
                 ASPNETCORE_ENVIRONMENT=Production
                 ConnectionStrings__QuizAPIConnectionString=${{ secrets.QUIZ_DB_CONNECTION_STRING }}
@@ -54,4 +54,4 @@ jobs:
         app-name: '${{ env.AZURE_WEBAPP_NAME }}'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_4f844c24975e49e583ecf1c94c412769 }}
-        images: '${{ secrets.DOCKER_REGISTRY }}/${{ secrets.AzureAppService_ContainerUsername_a7c7da46fa374c2dad471477e7df4475 }}/${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }}'
+        images: '${{ secrets.AzureAppService_ContainerUsername_a7c7da46fa374c2dad471477e7df4475 }}/${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }}'

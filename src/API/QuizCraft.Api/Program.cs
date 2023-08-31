@@ -6,7 +6,6 @@ using QuizCraft.Api.PromptManagement;
 using QuizCraft.Api.QuizManagement;
 using QuizCraft.Application;
 using QuizCraft.Infrastructure;
-using QuizCraft.Persistence;
 using QuizCraft.Persistence.Postgresql;
 using Serilog;
 using System.Text.Json;
@@ -21,7 +20,7 @@ public class Program
     {
         Log.Logger = new LoggerConfiguration()
             .WriteTo.Console()
-            .CreateBootstrapLogger();
+            .CreateLogger();
 
         Log.Information("QuizCraft API starting.");
         var builder = WebApplication
