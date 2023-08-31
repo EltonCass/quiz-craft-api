@@ -24,6 +24,5 @@ internal class CategoryServerSideValidator : AbstractValidator<Category>
                 return res;
             })
             .WithMessage(ValidationMessages.NameNotUnique);
-
     }
 }
