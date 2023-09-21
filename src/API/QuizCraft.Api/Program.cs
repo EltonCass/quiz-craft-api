@@ -1,6 +1,7 @@
 // Copyright (c) 2023 Elton Cassas. All rights reserved.
 // See LICENSE.txt
 
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Mvc;
 using QuizCraft.Api.PromptManagement;
 using QuizCraft.Api.QuizManagement;
@@ -26,7 +27,14 @@ public class Program
         var builder = WebApplication
             .CreateBuilder(args);
         builder.Host.UseSerilog((context, loggerConfig) =>
-            loggerConfig.WriteTo.Console().ReadFrom.Configuration(context.Configuration));
+            loggerConfig
+                .ReadFrom.Configuration(context.Configuration)
+                .WriteTo.ApplicationInsights(
+                    new TelemetryConfiguration
+                    {
+                        ConnectionString = context.Configuration["ApplicationInsights:ConnectionString"],
+                    },
+                    TelemetryConverter.Traces));
 
         builder = ConfigureMiddlewarePipelines(builder);
         var app = builder.Build();
@@ -59,8 +67,7 @@ public class Program
         .ValidateOnStart();
          */
         builder.Services.AddHealthChecks();
-        builder.Services.AddApplicationInsightsTelemetry(options =>
-            options.ConnectionString = builder.Configuration.GetConnectionString("ApplicationInsights"));
+        builder.Services.AddApplicationInsightsTelemetry();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
         {

@@ -7,11 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation"/>
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions"/>
-    <PackageReference Include="Mapster"/>
-    <PackageReference Include="Mapster.DependencyInjection"/>
-    <PackageReference Include="OneOf"/>
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+    <PackageReference Include="Mapster" />
+    <PackageReference Include="Mapster.DependencyInjection" />
+    <PackageReference Include="OneOf" />
+    <PackageReference Include="Serilog" />
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="Serilog.Extensions.Logging" />
+    <PackageReference Include="Serilog.Settings.Configuration" />
+    <PackageReference Include="Serilog.Sinks.ApplicationInsights" />
+    <PackageReference Include="Serilog.Sinks.Async" />
+    <PackageReference Include="Serilog.Sinks.File" />
     <PackageReference Include="SonarAnalyzer.CSharp">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

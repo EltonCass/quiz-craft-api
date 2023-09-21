@@ -7,6 +7,7 @@ using QuizCraft.Application.Categories;
 using QuizCraft.Models;
 using QuizCraft.Models.DTOs;
 using QuizCraft.Models.Entities;
+using Serilog;
 
 namespace QuizCraft.Application.Tests;
 
@@ -15,12 +16,14 @@ public class CategoryHandlerTests
     private ICategoryRepository _repository;
     private IMapper _mapper;
     private IValidator<CategoryForUpsert> _validator;
+    private ILogger _logger;
 
     public CategoryHandlerTests()
     {
         _repository = Substitute.For<ICategoryRepository>();
         _mapper = Substitute.For<IMapper>();
         _validator = Substitute.For<IValidator<CategoryForUpsert>>();
+        _logger = Substitute.For<ILogger>();
     }
 
     [Fact]
@@ -83,5 +86,5 @@ public class CategoryHandlerTests
     }
 
     private CategoryHandler HandlerInstace()
-        => new(_validator, _repository, _mapper);
+        => new(_validator, _repository, _mapper, _logger);
 }
