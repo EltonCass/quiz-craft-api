@@ -33,10 +33,8 @@ jobs:
         tags: ${{ secrets.AzureAppService_ContainerUsername_a7c7da46fa374c2dad471477e7df4475 }}/${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }}
         build-args: |
                 ASPNETCORE_ENVIRONMENT=Production
-                ConnectionStrings__QuizAPIConnectionString=${{ secrets.QUIZ_DB_CONNECTION_STRING }}
                 ExternalServices__OpenAPIKey=${{ secrets.OPEN_API_KEY }}
                 SecurityToken=${{ secrets.SECURITY_TOKEN }}
-                ConnectionStrings__ApplicationInsights=${{ secrets.APP_INSIGHTS }}
         context: .
         file: ./Dockerfile
 

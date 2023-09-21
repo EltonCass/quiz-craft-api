@@ -7,6 +7,8 @@ using OneOf;
 using QuizCraft.Models;
 using QuizCraft.Models.DTOs;
 using QuizCraft.Models.Entities;
+using Serilog;
+using Serilog.Core;
 using System.Net;
 
 namespace QuizCraft.Application.Categories;
@@ -16,11 +18,13 @@ public class CategoryHandler : ICategoryHandler
     private readonly IValidator<CategoryForUpsert> _validator;
     private readonly ICategoryRepository _categoryRepository;
     private readonly IMapper _mapper;
+    private readonly ILogger _Logger;
 
     public CategoryHandler(
         IValidator<CategoryForUpsert> validator,
         ICategoryRepository categoryRepository,
-        IMapper mapper)
+        IMapper mapper,
+        ILogger logger)
     {
         ArgumentNullException.ThrowIfNull(validator);
         ArgumentNullException.ThrowIfNull(categoryRepository);
@@ -28,6 +32,7 @@ public class CategoryHandler : ICategoryHandler
         _validator = validator;
         _categoryRepository = categoryRepository;
         _mapper = mapper;
+        _Logger = logger;
     }
 
     public async Task<OneOf<CategoryForDisplay, RequestError>> CreateCategory(
@@ -72,9 +77,11 @@ public class CategoryHandler : ICategoryHandler
     public async Task<IEnumerable<CategoryForDisplay>> RetrieveCategories(
         CancellationToken cancellationToken)
     {
+        _Logger.Information("Retrieving Categories");
         var categories = await _categoryRepository
             .GetCategories(cancellationToken);
 
+        _Logger.Information("{0} categories were retrieved", categories.Count);
         var categoriesDtos = _mapper
             .Map<ICollection<CategoryForDisplay>>(categories);
         return categoriesDtos;
