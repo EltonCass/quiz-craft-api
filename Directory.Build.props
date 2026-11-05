@@ -4,6 +4,6 @@
 		<Authors>Elton Cassas</Authors>
 	</PropertyGroup>
 	<PropertyGroup>
-		<NetCoreFramework>net7.0</NetCoreFramework>
+		<NetCoreFramework>net10.0</NetCoreFramework>
 	</PropertyGroup>
 </Project>
