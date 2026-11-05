@@ -92,6 +92,11 @@ public class Program
             // c.OperationFilter<SecurityOperationFilter>();
         });
 
+        builder.Services
+            .AddMcpServer()
+            .WithHttpTransport(options => options.Stateless = true)
+            .WithToolsFromAssembly();
+
         builder.Services.AddScoped<IQuizGeneration, QuizGeneration>();
         builder.Services.AddApplicationServices();
         builder.Services.AddPostgreSqlPersistenceServices(
@@ -124,6 +129,7 @@ public class Program
             .UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapMcp("/mcp");
                 endpoints.MapHealthChecks("/health");
             });
 
